@@ -1,0 +1,329 @@
+{
+  "v": 3,
+  "assetGroups": {
+    "Other": {
+      "files": {},
+      "name": "Other",
+      "order": []
+    },
+    "Photos~20looks~20-~20Lookbook~20~2b~20shop": {
+      "files": {
+        "Capture~20d~e2~80~99e~cc~81cran~202026-11-12~20a~cc~80~2012.02.35.png": {
+          "blob": "322a3843b5b4b83f99926836eb2f43ba",
+          "name": "Capture d’écran 2026-11-12 à 12.02.35.png",
+          "sha256": "eadab1b3ebd33594f51a008a7203c3ac265919a2019bb4b51082bdd4c76c3cd3",
+          "size": 4850290,
+          "type": "image/png"
+        },
+        "Capture~20d~e2~80~99e~cc~81cran~202026-11-12~20a~cc~80~2012.02.42.png": {
+          "blob": "9a17ae4b16761acaf108abf7170b63a9",
+          "name": "Capture d’écran 2026-11-12 à 12.02.42.png",
+          "sha256": "4bc0072eaa13338ab73b6de8c512e32530822711b481ecc27678fe265d0a9b17",
+          "size": 4479196,
+          "type": "image/png"
+        },
+        "Capture~20d~e2~80~99e~cc~81cran~202026-11-12~20a~cc~80~2012.02.53.png": {
+          "blob": "7f8c774d86b074d38e6473c7da6bc877",
+          "name": "Capture d’écran 2026-11-12 à 12.02.53.png",
+          "sha256": "e0374ad698a678450059f540a8cf194b87e8d6a5b871dc5fbc473b4abcbd0d82",
+          "size": 4510753,
+          "type": "image/png"
+        },
+        "Capture~20d~e2~80~99e~cc~81cran~202026-11-12~20a~cc~80~2012.03.01.png": {
+          "blob": "63f94d5f0a8ca0a87aa51eb237ec2d7e",
+          "name": "Capture d’écran 2026-11-12 à 12.03.01.png",
+          "sha256": "6df6191c660dbcece7364dcc8b733385e7a6d9b9de5a628f06b90e445f1893b4",
+          "size": 4153060,
+          "type": "image/png"
+        },
+        "Capture~20d~e2~80~99e~cc~81cran~202026-11-12~20a~cc~80~2012.03.10.png": {
+          "blob": "a61f6621bb708b9860d6e64c7ebf65ab",
+          "name": "Capture d’écran 2026-11-12 à 12.03.10.png",
+          "sha256": "b2595fa52811f2e7f4fb738712731ba93b6710b2943c36711e9bd73aaed1b2e0",
+          "size": 4764922,
+          "type": "image/png"
+        },
+        "Capture~20d~e2~80~99e~cc~81cran~202026-11-12~20a~cc~80~2012.07.38.png": {
+          "blob": "dfd78cb1eee0cd998de826440ec8d5ba",
+          "name": "Capture d’écran 2026-11-12 à 12.07.38.png",
+          "sha256": "44fe4a90dd32a35417d29970cf151fbdfb8ada9f3d8c3ae35a551cd0fe8b461c",
+          "size": 4729169,
+          "type": "image/png"
+        },
+        "Capture~20d~e2~80~99e~cc~81cran~202026-11-12~20a~cc~80~2012.07.49.png": {
+          "blob": "ab4687782d95c6b47d65fd0e80450d71",
+          "name": "Capture d’écran 2026-11-12 à 12.07.49.png",
+          "sha256": "d600b75b39fd3f3de3f008f348f9b08e7939c09c0bcea6158bf017fd4b004413",
+          "size": 3870850,
+          "type": "image/png"
+        },
+        "Capture~20d~e2~80~99e~cc~81cran~202026-11-12~20a~cc~80~2012.07.53.png": {
+          "blob": "50c21c76e7e73f35a3955b2ba4b24ce9",
+          "name": "Capture d’écran 2026-11-12 à 12.07.53.png",
+          "sha256": "7794aec1df0d76c88227cd4b6b2bb01bcde9e7afbe58c59628c524ddf8a063cc",
+          "size": 3624074,
+          "type": "image/png"
+        }
+      },
+      "name": "Photos looks - Lookbook + shop",
+      "order": []
+    },
+    "logo~20inspi": {
+      "files": {
+        "Capture~20d~e2~80~99e~cc~81cran~202026-11-12~20a~cc~80~2010.58.39.png": {
+          "blob": "82e66459eca7001231b435467a1925c0",
+          "name": "Capture d’écran 2026-11-12 à 10.58.39.png",
+          "sha256": "dd7fb7c83275e37626b6f9ec638a82265b0b481f6b27e3ace4a7e62ab03eec74",
+          "size": 2873259,
+          "type": "image/png"
+        },
+        "Capture~20d~e2~80~99e~cc~81cran~202026-11-12~20a~cc~80~2010.58.45.png": {
+          "blob": "f9115dd82b924a64e4bc8d101b8a4abc",
+          "name": "Capture d’écran 2026-11-12 à 10.58.45.png",
+          "sha256": "c189bd6e403e7c2bf47674c20bcc3150d7a6101848394e611c4d3ba83490b3ed",
+          "size": 3363999,
+          "type": "image/png"
+        },
+        "Capture~20d~e2~80~99e~cc~81cran~202026-11-12~20a~cc~80~2010.58.50.png": {
+          "blob": "dd6f61bc2011b426a8081ec6cb7cc1ce",
+          "name": "Capture d’écran 2026-11-12 à 10.58.50.png",
+          "sha256": "dc9c1ea6870f80bcd7cd53c2cf7bc07394f0e2bb00ba6e952bea911824dee3f3",
+          "size": 2817191,
+          "type": "image/png"
+        }
+      },
+      "name": "logo inspi",
+      "order": []
+    },
+    "Photos~20produits": {
+      "name": "Photos produits",
+      "order": [
+        "bottes-a.jpg",
+        "chemise-a.jpg",
+        "debardeur-a.jpg",
+        "fourrure-a.jpg",
+        "gilet-a.jpg",
+        "gilet-b.jpg",
+        "jupe-voile-a.jpg",
+        "jupe-voile-b.jpg",
+        "look-1.jpg",
+        "look-2.jpg",
+        "look-3.jpg",
+        "look-4.jpg",
+        "look-5.jpg",
+        "look-6.jpg",
+        "look-7.jpg",
+        "look-8.jpg",
+        "maryjane-kaki-a.jpg",
+        "maryjane-kaki-b.jpg",
+        "maryjane-noir-a.jpg",
+        "orteils-a.jpg",
+        "orteils-b.jpg",
+        "panier-a.jpg",
+        "panier-b.jpg",
+        "sac-a.jpg",
+        "sac-b.jpg",
+        "tweed-a.jpg",
+        "tweed-b.jpg"
+      ],
+      "files": {
+        "bottes-a.jpg": {
+          "name": "bottes-a.jpg",
+          "blob": "a96ee4ba574717a64a4238dfa8fb9c82",
+          "size": 89437,
+          "type": "image/jpeg"
+        },
+        "chemise-a.jpg": {
+          "name": "chemise-a.jpg",
+          "blob": "3f258ded0223542438fb57f177650f40",
+          "size": 101358,
+          "type": "image/jpeg"
+        },
+        "debardeur-a.jpg": {
+          "name": "debardeur-a.jpg",
+          "blob": "52a2af6fc94785d830ee46f31cabf4a8",
+          "size": 80322,
+          "type": "image/jpeg"
+        },
+        "fourrure-a.jpg": {
+          "name": "fourrure-a.jpg",
+          "blob": "a1fc45c068ec9de82a798871d59243e4",
+          "size": 84849,
+          "type": "image/jpeg"
+        },
+        "gilet-a.jpg": {
+          "name": "gilet-a.jpg",
+          "blob": "f01fb37cb64ce8827d7c1f27c68fb219",
+          "size": 103488,
+          "type": "image/jpeg"
+        },
+        "gilet-b.jpg": {
+          "name": "gilet-b.jpg",
+          "blob": "2e3956b8b96ae29f926f07a2c0d01d40",
+          "size": 84015,
+          "type": "image/jpeg"
+        },
+        "jupe-voile-a.jpg": {
+          "name": "jupe-voile-a.jpg",
+          "blob": "b5b24c117f496a2cfea4a5cc9fceba3d",
+          "size": 89814,
+          "type": "image/jpeg"
+        },
+        "jupe-voile-b.jpg": {
+          "name": "jupe-voile-b.jpg",
+          "blob": "db0b5c347908f5b753e4cebb100f74bf",
+          "size": 82815,
+          "type": "image/jpeg"
+        },
+        "look-1.jpg": {
+          "name": "look-1.jpg",
+          "blob": "a4ffed76cc4fab9e30ccef1f6f268084",
+          "size": 157468,
+          "type": "image/jpeg"
+        },
+        "look-2.jpg": {
+          "name": "look-2.jpg",
+          "blob": "6b93c55bffcc00bca798e8979add6d3e",
+          "size": 128238,
+          "type": "image/jpeg"
+        },
+        "look-3.jpg": {
+          "name": "look-3.jpg",
+          "blob": "f62641df0aa554cf926c4b5ca588a0bd",
+          "size": 134141,
+          "type": "image/jpeg"
+        },
+        "look-4.jpg": {
+          "name": "look-4.jpg",
+          "blob": "11fa8e3702ba635cc23eb5baeca1722e",
+          "size": 132494,
+          "type": "image/jpeg"
+        },
+        "look-5.jpg": {
+          "name": "look-5.jpg",
+          "blob": "cd2f27678b6a2a148f4587492fc40f51",
+          "size": 156510,
+          "type": "image/jpeg"
+        },
+        "look-6.jpg": {
+          "name": "look-6.jpg",
+          "blob": "ea0911459f51022fb60a73ce1455f217",
+          "size": 135498,
+          "type": "image/jpeg"
+        },
+        "look-7.jpg": {
+          "name": "look-7.jpg",
+          "blob": "7021afba37b3bdd214d8e2427bf9d4b4",
+          "size": 48677,
+          "type": "image/jpeg"
+        },
+        "look-8.jpg": {
+          "name": "look-8.jpg",
+          "blob": "5e44de2358d34a8dc08efec7b41f48c4",
+          "size": 39929,
+          "type": "image/jpeg"
+        },
+        "maryjane-kaki-a.jpg": {
+          "name": "maryjane-kaki-a.jpg",
+          "blob": "1e79bf90dbf6e5016ac7f7aa1ec80abf",
+          "size": 85247,
+          "type": "image/jpeg"
+        },
+        "maryjane-kaki-b.jpg": {
+          "name": "maryjane-kaki-b.jpg",
+          "blob": "c7ece93d6c9d766c7e4a6c5ab3820cfb",
+          "size": 78539,
+          "type": "image/jpeg"
+        },
+        "maryjane-noir-a.jpg": {
+          "name": "maryjane-noir-a.jpg",
+          "blob": "7af5b659b150b6f4eff08919b66930fc",
+          "size": 82446,
+          "type": "image/jpeg"
+        },
+        "orteils-a.jpg": {
+          "name": "orteils-a.jpg",
+          "blob": "2ebab65e3d0f3205f075c0177f319fee",
+          "size": 76537,
+          "type": "image/jpeg"
+        },
+        "orteils-b.jpg": {
+          "name": "orteils-b.jpg",
+          "blob": "83def38e6db4dcb554674493691ac3ff",
+          "size": 88768,
+          "type": "image/jpeg"
+        },
+        "panier-a.jpg": {
+          "name": "panier-a.jpg",
+          "blob": "569e77d0a84f1ee9b06b4e87d36b6225",
+          "size": 52566,
+          "type": "image/jpeg"
+        },
+        "panier-b.jpg": {
+          "name": "panier-b.jpg",
+          "blob": "1a86cc92e62dd9ee77545b6223b40eee",
+          "size": 45782,
+          "type": "image/jpeg"
+        },
+        "sac-a.jpg": {
+          "name": "sac-a.jpg",
+          "blob": "b6fce6bd5d32faf49cc23cbf51d7fa05",
+          "size": 101549,
+          "type": "image/jpeg"
+        },
+        "sac-b.jpg": {
+          "name": "sac-b.jpg",
+          "blob": "6cde01ae319422f20ca1ab39093c6533",
+          "size": 87329,
+          "type": "image/jpeg"
+        },
+        "tweed-a.jpg": {
+          "name": "tweed-a.jpg",
+          "blob": "2ea009bb06a6e48112cc50942133245e",
+          "size": 86908,
+          "type": "image/jpeg"
+        },
+        "tweed-b.jpg": {
+          "name": "tweed-b.jpg",
+          "blob": "878490a9d9cec438f78b0cd610ea8b14",
+          "size": 78840,
+          "type": "image/jpeg"
+        }
+      }
+    }
+  },
+  "blobs": {
+    "assets/Sime~cc~81~20Archives~20~c2~b7~20Cahier~20des~20charges.pdf": {
+      "blob": "5990cb7a5a3c419700d3ebb620d786b3",
+      "name": "assets/Simé Archives · Cahier des charges.pdf",
+      "sha256": "79a5ff64cd66eca2bbd3def7f27b27220034dbdf517d91e0cc381fbde72cd837",
+      "size": 960450,
+      "type": "application/pdf"
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-11-12T09:54:31.214Z",
+    "v": 1
+  },
+  "docs": {
+    "readme": "project/README.md",
+    "sections": []
+  },
+  "groups": [
+    "Other",
+    "logo~20inspi",
+    "Photos~20looks~20-~20Lookbook~20~2b~20shop",
+    "Photos~20produits"
+  ],
+  "lastChange": {
+    "by": "Laury",
+    "at": "2026-11-12T12:20:00Z",
+    "via": "Cowork",
+    "note": "Photos du shoot dans tout le site (12 pièces), fond blanc des packshots, logos V2 d'après le board"
+  },
+  "layout": "files",
+  "libraries": [],
+  "namespace": "SimeArchives",
+  "sections": {},
+  "title": "Simé Archives"
+}

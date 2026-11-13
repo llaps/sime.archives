@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Aide · Simé Archives</title><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="bundle.js"></script>
+<style>html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}
+.ai{display:grid;grid-template-columns:1fr 2fr;gap:var(--space-6);padding-top:72px;padding-bottom:96px}
+.ai h1{margin:var(--space-2) 0 0;font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-weight:500;font-size:44px;line-height:1}
+.ai nav{display:grid;gap:8px;margin-top:var(--space-5);font-size:14px}.ai nav a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.ai section{scroll-margin-top:90px}.ai .sa-acc__inner p{margin:0 0 10px;max-width:62ch}
+@media (max-width:900px){.ai{grid-template-columns:1fr;padding-top:40px}}
+</style></head>
+<body class="sa"><div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives;
+var SECS = [
+  ["livraison", "Livraison et retours", "<p>Les pièces achetées partent dans toute la France, Outre-mer compris. La location se fait à Paris uniquement pour l’instant, en retrait à l’atelier ou par coursier. Chaque pièce part sous 48 h, dans du papier de soie, avec un tampon au monogramme et une carte qui renvoie à sa fiche d’archive.</p><p>Vous avez 14 jours pour changer d’avis. La pièce revient dans l’état où elle est partie, étiquette Simé comprise.</p>"],
+  ["mesures", "Guide des mesures", "<p>Une pièce vintage ne suit pas les tailles d’aujourd’hui : chaque fiche donne les mesures à plat, en centimètres (aisselles, taille, longueur).</p><p>Pour comparer, posez à plat un vêtement à vous qui tombe bien, et mesurez-le de la même façon. La ligne mannequin vous dit aussi qui porte la pièce et dans quelle taille.</p>"],
+  ["location", "Conditions de location", "<p>Simé loue des looks complets, stylés par Lou-Ann. Les pièces à l’unité sont réservées aux pros (stylistes, artistes, marques) avec la formule Shoot pro, sur devis. Une pièce en vente se loue tant qu’elle n’est pas vendue.</p><p>Le prix se calcule en pourcentage de la valeur des pièces : 15 % pour 3 jours, 25 % pour une semaine, 35 % pour deux semaines, 20 % par jour pour un shoot pro, jamais moins de 30 €.</p><p>La caution est une empreinte bancaire du montant de la valeur, sans débit, libérée sous 48 h après le retour. Le nettoyage est inclus. Un rappel part la veille du retour.</p>"],
+  ["codes", "Codes promo", "<p>Les codes se saisissent dans le panier, rubrique Code promo, et s’appliquent avant le paiement. Ils arrivent avec la lettre des récoltes et la liste « Amis proches » sur Instagram.</p><p>Un code par commande, non cumulable.</p>"],
+  ["contact", "Contact", "<p>Une question sur une pièce, une mesure ou une location : écrivez à Simé en message privé sur Instagram, @sime.archives. Réponse sous 48 h.</p><p>Pour un shoot, un clip ou une campagne, passez par la demande pro de la page Location & RP.</p>"]
+];
+document.getElementById("r").innerHTML = S.announcementBar() + S.header() +
+  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span>Aide</span></nav></div>' +
+  '<div class="ai sa-wrap"><div><span class="sa-mono sa-muted">AIDE</span><h1>Avant, pendant, après</h1><nav aria-label="Sujets">' + SECS.map(function (s) { return '<a href="#' + s[0] + '" data-sec="' + s[0] + '">' + s[1] + '</a>'; }).join("") + '</nav><p class="sa-muted" style="font-size:13px;margin-top:24px">Textes de maquette, à relire par l’équipe.</p></div>' +
+  '<div>' + SECS.map(function (s, i) { return '<section id="' + s[0] + '">' + S.accordion([{ title: s[1], open: i === 0, html: s[2] }]) + '</section>'; }).join("") + '</div></div>' +
+  S.footer() + S.cartDrawer();
+S.init(document);
+document.querySelector(".ai nav").addEventListener("click", function (e) {
+  var a = e.target.closest("[data-sec]"); if (!a) return; e.preventDefault();
+  var s = document.getElementById(a.dataset.sec); s.scrollIntoView({ behavior: "smooth", block: "start" });
+  var acc = s.querySelector(".sa-acc"); if (acc && !acc.classList.contains("is-open")) s.querySelector("button").click();
+});
+</script><script src="proto.js"></script></body></html>

@@ -1,0 +1,47 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Simé Archives</title>
+<style>
+  html, body { margin: 0; height: 100%; }
+  body { background: var(--paper); color: var(--ink); overflow: hidden; }
+  .cover { position: relative; width: 960px; height: 288px; }
+  svg { position: absolute; inset: 0; }
+  .ink { fill: var(--ink); } .lav { fill: var(--accent); } .kraft { fill: var(--kraft); }
+  .deep { fill: var(--paper-deep); } .jaune { fill: var(--jaune); }
+  .rule { stroke: var(--photocopy); stroke-width: 1; }
+  .rule-ink { stroke: var(--ink); stroke-width: 1; }
+  .tile { rx: var(--radius-none); }
+  .text { position: absolute; left: 40px; bottom: 32px; max-width: 440px; }
+  .name { margin: 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 600; font-size: 78px; line-height: .95; letter-spacing: -.03em; }
+  .tag { margin: 12px 0 0; font-family: var(--font-sans); font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+</style>
+</head>
+<body>
+<div class="cover">
+  <svg viewBox="0 0 960 288" width="960" height="288" aria-hidden="true">
+    <!--
+      blocks: ink 120×240 (space-8 × 2), accent/lavande 200×160, kraft 120×120, paper-deep 120×168, jaune 64×48 (space-7 × 48)
+      arrangement: staggered herbarium plate, ink slab and kraft bleeding off the top, paper-deep off the bottom-right
+      pattern: editorial row, "borders not shadows": three photocopy hairlines + one ink rule, like an inventory sheet
+      steps: space-8 120, space-7 64, space-6 40; radius-none on every tile
+    -->
+    <rect class="ink tile" x="520" y="0" width="120" height="240"/>
+    <rect class="lav tile" x="640" y="40" width="200" height="160"/>
+    <rect class="kraft tile" x="840" y="0" width="120" height="120"/>
+    <rect class="deep tile" x="840" y="120" width="120" height="168"/>
+    <rect class="jaune tile" x="640" y="200" width="64" height="48"/>
+    <line class="rule" x1="480" y1="40" x2="960" y2="40"/>
+    <line class="rule" x1="480" y1="200" x2="960" y2="200"/>
+    <line class="rule" x1="480" y1="248" x2="960" y2="248"/>
+    <line class="rule-ink" x1="760" y1="0" x2="760" y2="288"/>
+  </svg>
+  <div class="text">
+    <h1 class="name">Simé<br>Archives</h1>
+    <p class="tag">Ce qui a été semé revient autrement.</p>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!-- @dsCard group="Archives" height=900 width=1280 page subtitle="Archivée le 12 novembre : Location & RP tout sur une page (version 1). Remplacée par LocationPageB2" -->
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Location & RP</title>
+<style>
+  html, body { margin: 0; background: var(--paper); }
+  .sa-page { height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative; }
+  .lc-hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 0; border-bottom: 1px solid var(--photocopy); }
+  .lc-hero__txt { padding: var(--space-7) var(--space-6); display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-6); }
+  .lc-hero h1 { margin: var(--space-3) 0 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 64px; line-height: .95; letter-spacing: -.02em; }
+  .lc-hero p { margin: var(--space-4) 0 0; max-width: 460px; }
+  .lc-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--photocopy); }
+  .lc-steps a { padding: var(--space-3) 0; display: grid; gap: 2px; }
+  .lc-steps a + a { padding-left: var(--space-3); border-left: 1px solid var(--photocopy); }
+  .lc-hero__img { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .lc-hero__img img { width: 100%; height: 100%; object-fit: cover; min-height: 420px; }
+  .lc-main { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: var(--space-6); align-items: start; padding-top: var(--space-6); padding-bottom: var(--space-7); }
+  .lc-step { padding-bottom: var(--space-7); scroll-margin-top: 80px; }
+  .lc-step__head { display: flex; align-items: baseline; gap: var(--space-3); margin-bottom: var(--space-5); }
+  .lc-step__no { font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+  .lc-step__head h2 { margin: 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 32px; line-height: 1.05; }
+  .lc-step__head p { margin: 0 0 0 auto; font-size: 13px; color: var(--ink-muted); }
+  /* Packs */
+  .lc-packs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); }
+  .lc-pack { position: relative; display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-5) var(--space-4) var(--space-4); border: 1px solid var(--rule-strong); background: var(--paper); cursor: pointer; text-align: left; min-height: 300px; }
+  .lc-pack:hover { border-color: var(--ink); }
+  .lc-pack[aria-checked="true"] { border: 2px solid var(--ink); padding: calc(var(--space-5) - 1px) calc(var(--space-4) - 1px) calc(var(--space-4) - 1px); }
+  .lc-pack__badge { position: absolute; top: -11px; left: var(--space-4); background: var(--accent); padding: 2px 8px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+  .lc-pack h3 { margin: 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 24px; line-height: 1.1; }
+  .lc-pack ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13px; line-height: 18px; }
+  .lc-pack li { display: flex; gap: 8px; }
+  .lc-pack li::before { content: ""; flex: none; width: 6px; height: 6px; margin-top: 6px; background: var(--ink); }
+  .lc-pack li.off { color: var(--ink-muted); }
+  .lc-pack li.off::before { background: transparent; border: 1px solid var(--rule-strong); }
+  .lc-pack__price { margin-top: auto; padding-top: var(--space-3); border-top: 1px solid var(--photocopy); display: grid; gap: 2px; }
+  .lc-pack__price b { font-family: var(--font-mono); font-weight: 500; font-size: 18px; }
+  .lc-pack__radio { position: absolute; top: var(--space-4); right: var(--space-4); width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--rule-strong); }
+  .lc-pack[aria-checked="true"] .lc-pack__radio { border-color: var(--ink); box-shadow: inset 0 0 0 4px var(--paper); background: var(--ink); }
+  /* Segmented */
+  .lc-seg { display: inline-flex; border: 1px solid var(--ink); margin-bottom: var(--space-4); }
+  .lc-seg button { padding: 10px 16px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .lc-seg button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
+  /* Looks / pièces */
+  .lc-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4) var(--space-3); }
+  .lc-item { position: relative; display: grid; gap: 6px; text-align: left; cursor: pointer; }
+  .lc-item__img { position: relative; aspect-ratio: 3/4; overflow: hidden; background: var(--packshot, #fff); outline: 2px solid transparent; outline-offset: 2px; }
+  .lc-item__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(.2,.7,.2,1); }
+  .lc-item:hover .lc-item__img img { transform: scale(1.03); }
+  .lc-item[aria-pressed="true"] .lc-item__img { outline-color: var(--ink); }
+  .lc-item__check { position: absolute; top: var(--space-2); right: var(--space-2); width: 28px; height: 28px; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--rule-strong); font-family: var(--font-mono); font-size: 14px; }
+  .lc-item[aria-pressed="true"] .lc-item__check { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+  .lc-item__avail { position: absolute; left: var(--space-2); bottom: var(--space-2); background: var(--paper); padding: 2px 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+  .lc-item__avail.is-busy { background: var(--ink); color: var(--on-ink); }
+  .lc-item[aria-disabled="true"] { cursor: not-allowed; }
+  .lc-item[aria-disabled="true"] img { filter: grayscale(1); opacity: .6; }
+  .lc-item h3 { margin: 0; font-size: 14px; line-height: 20px; font-weight: 400; }
+  .lc-item__meta { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+  /* Dates */
+  .lc-dates { display: grid; grid-template-columns: 220px 1fr; gap: var(--space-5); align-items: end; }
+  .lc-dates label { display: grid; gap: 6px; }
+  .lc-dates input[type="date"] { font: 15px/24px var(--font-sans); color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid var(--ink); padding: 10px 0; border-radius: 0; }
+  .lc-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .lc-chip { padding: 10px 14px; border: 1px solid var(--rule-strong); display: grid; gap: 2px; text-align: left; min-width: 130px; }
+  .lc-chip b { font-weight: 600; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+  .lc-chip span { font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); }
+  .lc-chip[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--on-ink); }
+  .lc-chip[aria-pressed="true"] span { color: var(--on-ink); }
+  .lc-chip[disabled] { opacity: .45; cursor: not-allowed; }
+  .lc-note { margin: var(--space-3) 0 0; font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+  /* Options */
+  .lc-opts { display: grid; gap: 0; border-top: 1px solid var(--photocopy); }
+  .lc-opt { display: grid; grid-template-columns: 24px 1fr auto; gap: var(--space-4); align-items: start; padding: var(--space-4) 0; border-bottom: 1px solid var(--photocopy); cursor: pointer; }
+  .lc-opt input { appearance: none; width: 18px; height: 18px; margin: 2px 0 0; border: 1px solid var(--rule-strong); display: grid; place-items: center; }
+  .lc-opt input:checked { background: var(--ink); border-color: var(--ink); }
+  .lc-opt input:checked::after { content: ""; width: 9px; height: 5px; border-left: 1.5px solid var(--on-ink); border-bottom: 1.5px solid var(--on-ink); transform: rotate(-45deg) translate(1px, -1px); }
+  .lc-opt input[type="radio"] { border-radius: 50%; }
+  .lc-opt input[type="radio"]:checked { box-shadow: inset 0 0 0 4px var(--paper); }
+  .lc-opt input[type="radio"]:checked::after { display: none; }
+  .lc-opt input:disabled { opacity: 1; background: var(--ink); }
+  .lc-opt b { display: block; font-weight: 500; }
+  .lc-opt small { display: block; font-size: 13px; line-height: 19px; color: var(--ink-muted); }
+  .lc-opt .sa-price { white-space: nowrap; }
+  .lc-opt__inc { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+  .lc-subhead { margin: var(--space-5) 0 var(--space-2); }
+  /* Récap */
+  .lc-recap { position: sticky; top: 76px; border: 1px solid var(--ink); background: var(--paper); }
+  .lc-recap__head { padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--photocopy); display: flex; justify-content: space-between; align-items: baseline; }
+  .lc-recap__body { padding: var(--space-4) var(--space-5); display: grid; gap: var(--space-3); }
+  .lc-recap__row { display: flex; justify-content: space-between; gap: var(--space-3); font-size: 14px; line-height: 20px; }
+  .lc-recap__row span:last-child { font-family: var(--font-mono); font-size: 13px; white-space: nowrap; }
+  .lc-recap__row.is-muted { color: var(--ink-muted); }
+  .lc-recap__thumbs { display: flex; gap: 4px; flex-wrap: wrap; }
+  .lc-recap__thumbs img { width: 44px; height: 58px; object-fit: cover; }
+  .lc-recap__total { padding: var(--space-4) var(--space-5); border-top: 1px solid var(--ink); display: grid; gap: var(--space-3); }
+  .lc-recap__total .lc-recap__row { font-weight: 600; font-size: 15px; }
+  .lc-recap__total .lc-recap__row span:last-child { font-size: 18px; }
+  .lc-recap__warn { font-size: 12px; line-height: 18px; color: var(--ink-muted); }
+  .lc-recap__warn.is-on { color: var(--ink); }
+  .lc-recap__mini { display: none; }
+  /* Pros, FAQ */
+  .lc-pro { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); padding: var(--space-6); background: var(--paper-deep); }
+  .lc-pro h2 { margin: var(--space-2) 0 var(--space-3); font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 32px; line-height: 1.05; }
+  .lc-form { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3) var(--space-4); }
+  .lc-form label { display: grid; gap: 4px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .lc-form input, .lc-form select, .lc-form textarea { font: 15px/22px var(--font-sans); letter-spacing: 0; text-transform: none; color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--ink); padding: 8px 0; border-radius: 0; }
+  .lc-form .full { grid-column: 1 / -1; }
+  .lc-form textarea { min-height: 70px; resize: vertical; }
+  .lc-faq { display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-6); padding-top: var(--space-7); padding-bottom: var(--space-7); }
+  .lc-faq h2 { margin: var(--space-2) 0 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 32px; line-height: 1.05; }
+  @media (max-width: 1100px) { .lc-packs { grid-template-columns: repeat(2, minmax(0, 1fr)); } .lc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 900px) {
+    .lc-hero, .lc-main, .lc-pro, .lc-faq, .lc-form { grid-template-columns: 1fr; }
+    .lc-hero h1 { font-size: 44px; } .lc-hero__img img { min-height: 260px; }
+    .lc-steps { grid-template-columns: repeat(2, 1fr); }
+    .lc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lc-dates { grid-template-columns: 1fr; }
+    .lc-recap { position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 25; border-width: 1px 0 0; }
+    .lc-recap__head, .lc-recap__body { display: none; }
+    .lc-recap__total { border-top: 0; grid-template-columns: 1fr auto; align-items: center; padding: var(--space-3) var(--space-4); }
+    .lc-recap__total .lc-recap__warn { display: none; }
+  }
+</style>
+</head>
+<body class="sa">
+<div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives;
+var P = S.photos, find = S.find;
+
+/* ── Offre (cahier des charges) ── */
+var DUR = [
+  { id: "3j", label: "3 jours", pct: 15, note: "minimum" },
+  { id: "1s", label: "1 semaine", pct: 25, note: "" },
+  { id: "2s", label: "2 semaines", pct: 35, note: "vacances" },
+  { id: "pro", label: "Shoot pro · 1 jour", pct: 20, note: "crédit @sime.archives" }
+];
+var FLOOR = 30, STYLE = 250, PHOTO = 250;
+var PACKS = [
+  { id: "look", name: "Le look", tag: "", desc: "Pour un vernissage, un mariage, un voyage.", inc: ["Un look complet ou des pièces à l'unité", "Nettoyage inclus", "Retrait à l'atelier ou envoi"], off: ["Stylisme", "Photo de la soirée"], style: false, photo: false, durs: ["3j", "1s", "2s"] },
+  { id: "style", name: "Look + stylisme", tag: "", desc: "Lou-Ann compose le look avec vous.", inc: ["Le look", "Séance de stylisme avec Lou-Ann", "Retouches d'ajustement"], off: ["Photo de la soirée"], style: true, photo: false, durs: ["3j", "1s", "2s"] },
+  { id: "soiree", name: "Soirée complète", tag: "Le plus complet", desc: "Le look, le stylisme et Laury photographie votre soirée.", inc: ["Le look", "Stylisme avec Lou-Ann", "Photo par Laury, 2 à 3 h", "8 photos retouchées"], off: [], style: true, photo: true, durs: ["3j", "1s", "2s"] },
+  { id: "pro", name: "Shoot pro", tag: "Stylistes, marques", desc: "Pour un éditorial, une campagne, un clip.", inc: ["Looks à la journée", "Crédit « RP : @sime.archives »", "Devis possible pour plusieurs jours"], off: [], style: false, photo: false, durs: ["pro"] }
+];
+var LOOKS = [
+  { id: "L1", name: "Nylon et voile", photo: P.look1, pieces: ["SA-001", "SA-002", "SA-003", "SA-004"], busy: [] },
+  { id: "L2", name: "Peau lainée et tweed", photo: P.look4, pieces: ["SA-007", "SA-006", "SA-008"], busy: [] },
+  { id: "L3", name: "Mary Jane kaki", photo: P.look2, pieces: ["SA-005", "SA-006"], busy: ["2026-11-20", "2026-11-21", "2026-11-22"] },
+  { id: "L4", name: "Plissé vert d'eau", photo: P.look6, pieces: ["SA-010", "SA-011"], busy: [] },
+  { id: "L5", name: "Panier paille", photo: P.look8, pieces: ["SA-012"], busy: [] }
+];
+LOOKS.forEach(function (l) { l.value = l.pieces.reduce(function (s, id) { return s + find(id).price; }, 0); });
+var PIECES = S.products.filter(function (p) { return !p.sold; });
+
+var st = { pack: "soiree", mode: "look", sel: ["L1"], dur: "3j", date: "", opts: { style: true, photo: true, extra: false }, delivery: "atelier" };
+
+function value() {
+  if (st.mode === "look") return st.sel.reduce(function (s, id) { var l = LOOKS.filter(function (x) { return x.id === id; })[0]; return s + (l ? l.value : 0); }, 0);
+  return st.sel.reduce(function (s, id) { return s + find(id).price; }, 0);
+}
+function durOf(id) { return DUR.filter(function (d) { return d.id === id; })[0]; }
+function rental() { var v = value(); if (!v) return 0; return Math.max(FLOOR, Math.round(v * durOf(st.dur).pct) / 100); }
+function packOf(id) { return PACKS.filter(function (p) { return p.id === id; })[0]; }
+function busy(item) { return st.date && item.busy && item.busy.indexOf(st.date) > -1; }
+
+function packCard(p) {
+  var minDur = durOf(p.durs[0]);
+  var from = FLOOR + (p.style ? STYLE : 0) + (p.photo ? PHOTO : 0);
+  return '<button class="lc-pack" role="radio" aria-checked="' + (st.pack === p.id) + '" data-pack="' + p.id + '">' + (p.tag ? '<span class="lc-pack__badge">' + p.tag + '</span>' : '') + '<span class="lc-pack__radio" aria-hidden="true"></span>' +
+    '<span class="sa-mono sa-muted">' + (p.id === "pro" ? "20 % DE LA VALEUR / JOUR" : "DÈS " + minDur.pct + " % DE LA VALEUR") + '</span><h3>' + p.name + '</h3><span style="font-size:13px;line-height:19px">' + p.desc + '</span>' +
+    '<ul>' + p.inc.map(function (t) { return '<li>' + t + '</li>'; }).join("") + p.off.map(function (t) { return '<li class="off">' + t + ' en option</li>'; }).join("") + '</ul>' +
+    '<span class="lc-pack__price"><span class="sa-mono sa-muted">À PARTIR DE</span><b>' + S.euro(from) + '</b></span></button>';
+}
+
+function itemCard(it, isLook) {
+  var on = st.sel.indexOf(it.id) > -1, b = isLook && busy(it), price = Math.max(FLOOR, Math.round((isLook ? it.value : it.price) * durOf(st.dur).pct) / 100);
+  var img = isLook ? it.photo : S.img(it, "a"), name = isLook ? it.name : it.name, sub = isLook ? it.pieces.length + " pièces · " + it.pieces.join(", ") : it.id + " · " + it.size;
+  return '<button class="lc-item" data-item="' + it.id + '" aria-pressed="' + on + '"' + (b ? ' aria-disabled="true"' : '') + '><span class="lc-item__img"><img src="' + img + '" alt="' + name + '"><span class="lc-item__check" aria-hidden="true">' + (on ? "✓" : "+") + '</span>' +
+    '<span class="lc-item__avail' + (b ? ' is-busy' : '') + '">' + (b ? "Pris à ces dates" : "Disponible") + '</span></span>' +
+    '<h3>' + name + '</h3><span class="lc-item__meta"><span>' + sub + '</span></span><span class="lc-item__meta"><span>Valeur ' + S.euro(isLook ? it.value : it.price) + '</span><span style="color:var(--ink)">' + S.euro(price) + '</span></span></button>';
+}
+
+function optRow(id, title, desc, price, opts) {
+  opts = opts || {};
+  return '<label class="lc-opt"><input type="' + (opts.radio ? "radio" : "checkbox") + '" name="' + (opts.name || id) + '" value="' + id + '"' + (opts.checked ? " checked" : "") + (opts.locked ? " disabled" : "") + ' data-opt="' + id + '"><span><b>' + title + '</b><small>' + desc + '</small></span>' +
+    (opts.locked ? '<span class="lc-opt__inc">Inclus</span>' : '<span class="sa-price">' + price + '</span>') + '</label>';
+}
+
+function render() {
+  var pk = packOf(st.pack);
+  if (pk.durs.indexOf(st.dur) < 0) st.dur = pk.durs[0];
+  if (pk.style) st.opts.style = true; if (pk.photo) st.opts.photo = true;
+  var items = st.mode === "look" ? LOOKS : PIECES;
+  document.getElementById("packs").innerHTML = PACKS.map(packCard).join("");
+  document.getElementById("seg").innerHTML = '<button data-mode="look" aria-pressed="' + (st.mode === "look") + '">Un look complet</button><button data-mode="piece" aria-pressed="' + (st.mode === "piece") + '">Des pièces à l\'unité</button>';
+  document.getElementById("items").innerHTML = items.map(function (it) { return itemCard(it, st.mode === "look"); }).join("");
+  document.getElementById("durs").innerHTML = DUR.map(function (d) { var ok = pk.durs.indexOf(d.id) > -1; return '<button class="lc-chip" data-dur="' + d.id + '" aria-pressed="' + (st.dur === d.id) + '"' + (ok ? "" : " disabled") + '><b>' + d.label + '</b><span>' + d.pct + ' % de la valeur' + (d.note ? " · " + d.note : "") + '</span></button>'; }).join("");
+  document.getElementById("opts").innerHTML =
+    optRow("style", "Stylisme avec Lou-Ann", "Une séance pour composer et ajuster le look, à l'atelier ou en visio.", "dès " + S.euro(STYLE), { checked: st.opts.style, locked: pk.style }) +
+    optRow("photo", "Photo de la soirée par Laury", "2 à 3 h de couverture, 8 photos retouchées. Simé garde les droits et peut publier.", "dès " + S.euro(PHOTO), { checked: st.opts.photo, locked: pk.photo }) +
+    optRow("extra", "Une journée de plus", "Ajoutez 24 h à votre location, sur le même calcul.", "+5 % de la valeur", { checked: st.opts.extra });
+  document.getElementById("deliv").innerHTML =
+    optRow("atelier", "Retrait à l'atelier, Paris", "Essayage possible sur rendez-vous.", "Offert", { radio: true, name: "deliv", checked: st.delivery === "atelier" }) +
+    optRow("coursier", "Coursier dans Paris", "Livraison et reprise le jour choisi.", "à confirmer", { radio: true, name: "deliv", checked: st.delivery === "coursier" }) +
+    optRow("envoi", "Envoi France et Antilles-Guyane", "Colis suivi, étiquette retour fournie.", "à confirmer", { radio: true, name: "deliv", checked: st.delivery === "envoi" });
+  renderRecap();
+}
+
+function renderRecap() {
+  var pk = packOf(st.pack), v = value(), loc = rental(), d = durOf(st.dur);
+  var extra = st.opts.extra && v ? Math.round(v * 5) / 100 : 0;
+  var sty = st.opts.style ? STYLE : 0, pho = st.opts.photo ? PHOTO : 0, total = loc + extra + sty + pho;
+  var thumbs = st.sel.map(function (id) { var l = LOOKS.filter(function (x) { return x.id === id; })[0]; return '<img src="' + (l ? l.photo : S.img(find(id), "a")) + '" alt="">'; }).join("");
+  var anyBusy = st.mode === "look" && st.sel.some(function (id) { return busy(LOOKS.filter(function (x) { return x.id === id; })[0]); });
+  var row = function (a, b, m) { return '<div class="lc-recap__row' + (m ? " is-muted" : "") + '"><span>' + a + '</span><span>' + b + '</span></div>'; };
+  document.getElementById("recap").innerHTML =
+    '<div class="lc-recap__head"><span class="sa-label">Votre location</span><span class="sa-mono sa-muted">' + pk.name + '</span></div>' +
+    '<div class="lc-recap__body">' +
+      (st.sel.length ? '<div class="lc-recap__thumbs">' + thumbs + '</div>' : '<p class="lc-recap__warn is-on" style="margin:0">Choisissez un look ou des pièces.</p>') +
+      row((st.mode === "look" ? st.sel.length + " look" + (st.sel.length > 1 ? "s" : "") : st.sel.length + " pièce" + (st.sel.length > 1 ? "s" : "")) + " · valeur", S.euro(v), true) +
+      row("Location " + d.label.toLowerCase() + " · " + d.pct + " %", S.euro(loc)) +
+      (extra ? row("Journée en plus", S.euro(extra)) : "") +
+      (st.opts.style ? row("Stylisme" + (pk.style ? " (inclus au pack)" : ""), S.euro(STYLE)) : "") +
+      (st.opts.photo ? row("Photo de soirée" + (pk.photo ? " (inclus au pack)" : ""), S.euro(PHOTO)) : "") +
+      row(st.delivery === "atelier" ? "Retrait à l'atelier" : st.delivery === "coursier" ? "Coursier Paris" : "Envoi suivi", st.delivery === "atelier" ? "Offert" : "à confirmer", true) +
+      row("Dates", st.date ? new Date(st.date + "T12:00").toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) + " · " + d.label : "à choisir", !st.date) +
+    '</div>' +
+    '<div class="lc-recap__total">' + row("Total", S.euro(total)) +
+      '<p class="lc-recap__warn' + (anyBusy || !st.date ? " is-on" : "") + '" style="margin:0">' + (anyBusy ? "Un look choisi est pris à ces dates : changez de date ou de look." : !st.date ? "Choisissez une date de début pour réserver." : "Caution : empreinte bancaire de " + S.euro(v) + ", libérée sous 48 h après le retour. Plancher " + S.euro(FLOOR) + " par location.") + '</p>' +
+      (st.pack === "pro" ? S.button("Demander un devis pro", { block: true, action: "quote" }) : S.button("Réserver", { block: true, action: "book", disabled: !st.sel.length || !st.date || anyBusy })) +
+    '</div>';
+}
+
+document.getElementById("r").innerHTML =
+  S.announcementBar() + S.header({ active: "location" }) +
+  '<section class="lc-hero"><div class="lc-hero__txt"><div><span class="sa-mono sa-muted">LOCATION & RP · LOOKS DU SHOOT</span><h1>Porter un look Simé, le temps d\'une soirée</h1><p>Choisissez un pack, un look complet ou des pièces à l\'unité, vos dates, puis vos options. Le prix se calcule en direct, en pourcentage de la valeur des pièces.</p></div>' +
+    '<nav class="lc-steps" aria-label="Étapes">' + [["01", "Pack", "#s-pack"], ["02", "Looks ou pièces", "#s-items"], ["03", "Dates", "#s-dates"], ["04", "Options", "#s-opts"]].map(function (s) { return '<a href="' + s[2] + '"><span class="sa-mono sa-muted">' + s[0] + '</span><span class="sa-label">' + s[1] + '</span></a>'; }).join("") + '</nav></div>' +
+    '<div class="lc-hero__img"><img src="' + P.look4 + '" alt="Look de location : gilet peau lainée et mini-jupe tweed"><img src="' + P.look7 + '" alt="Look de location : blazer beige et panier paille"></div></section>' +
+  '<div class="lc-main sa-wrap"><div>' +
+    '<section class="lc-step" id="s-pack"><div class="lc-step__head"><span class="lc-step__no">01</span><h2>Choisir un pack</h2><p>Les services inclus sont cochés d\'office plus bas.</p></div><div class="lc-packs" role="radiogroup" aria-label="Packs" id="packs"></div></section>' +
+    '<section class="lc-step" id="s-items"><div class="lc-step__head"><span class="lc-step__no">02</span><h2>Ce que vous louez</h2><p>Prix affiché pour la durée choisie.</p></div><div class="lc-seg" id="seg" role="group" aria-label="Type de location"></div><div class="lc-grid" id="items"></div></section>' +
+    '<section class="lc-step" id="s-dates"><div class="lc-step__head"><span class="lc-step__no">03</span><h2>Vos dates</h2></div><div class="lc-dates"><label class="sa-label">Début de la location<input type="date" id="date" min="2026-11-13"></label><div class="lc-chips" id="durs" role="group" aria-label="Durée"></div></div><p class="lc-note">Exemple : le look « Mary Jane kaki » est pris du 20 au 22 novembre.</p></section>' +
+    '<section class="lc-step" id="s-opts"><div class="lc-step__head"><span class="lc-step__no">04</span><h2>Options</h2></div><div class="lc-opts" id="opts"></div><h3 class="sa-label lc-subhead">Retrait ou livraison</h3><div class="lc-opts" id="deliv"></div></section>' +
+  '</div><aside class="lc-recap" id="recap" aria-live="polite"></aside></div>' +
+  '<section class="sa-wrap" style="padding-bottom:64px"><div class="lc-pro" id="s-pro"><div><span class="sa-mono sa-muted">PROS · STYLISTES, ARTISTES, MARQUES</span><h2>Un shoot, un clip, une campagne ?</h2><p style="margin:0;max-width:420px">Dites-nous le projet, les dates et les looks qui vous intéressent. Réponse sous 48 h. En retour, un crédit « RP : @sime.archives ».</p></div>' +
+    '<form class="lc-form" data-sa="quote"><label>Nom<input required></label><label>E-mail<input type="email" required></label><label>Projet<select><option>Éditorial</option><option>Campagne</option><option>Clip, scène</option><option>Événement de marque</option></select></label><label>Dates<input placeholder="ex. 3 et 4 décembre"></label><label class="full">Looks ou pièces souhaités<textarea placeholder="ex. Nylon et voile, SA-007"></textarea></label><div class="full">' + S.button("Envoyer la demande", { variant: "secondary" }) + '</div></form></div></section>' +
+  '<section class="lc-faq sa-wrap" style="border-top:1px solid var(--photocopy)"><div><span class="sa-mono sa-muted">QUESTIONS</span><h2>Avant de réserver</h2></div><div>' + S.accordion([
+    { title: "Comment est calculé le prix ?", html: "En pourcentage de la valeur estimée des pièces : 15 % pour 3 jours, 25 % pour une semaine, 35 % pour deux semaines, 20 % par jour pour un shoot pro. Jamais moins de 30 € par location." },
+    { title: "La caution", html: "Une empreinte bancaire du montant de la valeur, sans débit. Elle est libérée sous 48 h après le contrôle de la pièce." },
+    { title: "Nettoyage et petits accrocs", html: "Le nettoyage est inclus. En cas de dommage, un devis de réparation est fait avant toute retenue." },
+    { title: "Les photos de la soirée", html: "8 photos retouchées livrées. Simé garde les droits et peut les publier, nous ne faisons pas de création de contenu pour les clientes." },
+    { title: "Rendre en retard", html: "Un rappel part la veille du retour. Chaque jour de retard est compté au tarif de la journée supplémentaire." }
+  ]) + '</div></section>' +
+  S.footer() + S.cartDrawer();
+S.init(document);
+render();
+
+document.querySelector(".lc-main").addEventListener("click", function (e) {
+  var b;
+  if ((b = e.target.closest("[data-pack]"))) { st.pack = b.dataset.pack; var pk = packOf(st.pack); st.opts.style = pk.style; st.opts.photo = pk.photo; render(); return; }
+  if ((b = e.target.closest("[data-mode]"))) { if (st.mode !== b.dataset.mode) { st.mode = b.dataset.mode; st.sel = []; } render(); return; }
+  if ((b = e.target.closest("[data-item]"))) { if (b.getAttribute("aria-disabled") === "true") return; var id = b.dataset.item, i = st.sel.indexOf(id); if (i > -1) st.sel.splice(i, 1); else st.sel.push(id); render(); return; }
+  if ((b = e.target.closest("[data-dur]"))) { if (!b.disabled) { st.dur = b.dataset.dur; render(); } return; }
+  if ((b = e.target.closest("[data-action='book']"))) { var t = document.querySelector(".sa-toast") || document.body.appendChild(Object.assign(document.createElement("div"), { className: "sa-toast" })); t.textContent = "Prototype : la réservation passe par l'app de location Shopify"; t.classList.add("is-on"); setTimeout(function () { t.classList.remove("is-on"); }, 2200); }
+  if ((b = e.target.closest("[data-action='quote']"))) { document.getElementById("s-pro").scrollIntoView({ behavior: "smooth" }); }
+});
+document.querySelector(".lc-main").addEventListener("change", function (e) {
+  if (e.target.id === "date") { st.date = e.target.value; render(); return; }
+  if (e.target.dataset.opt === "style" || e.target.dataset.opt === "photo" || e.target.dataset.opt === "extra") { st.opts[e.target.dataset.opt] = e.target.checked; renderRecap(); return; }
+  if (e.target.name === "deliv") { st.delivery = e.target.value; renderRecap(); }
+});
+document.querySelector("[data-sa='quote']").addEventListener("submit", function (e) { e.preventDefault(); e.target.innerHTML = '<p class="sa-mono full" style="margin:0">Demande envoyée. Réponse sous 48 h.</p>'; });
+</script>
+</body>
+</html>

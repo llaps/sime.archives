@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+<head><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="bundle.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pièce · Simé Archives</title>
+<style>html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}
+.sa-pdpb { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(360px, 1fr); gap: 0; }
+.sa-pdpb__gallery { padding: 0 var(--space-6) var(--space-6); display: grid; gap: var(--space-3); align-content: start; position: sticky; top: 57px; align-self: start; }
+.sa-pdpb__main { position: relative; margin: 0; height: max(440px, calc(100vh - 250px)); background: var(--packshot, #fff); overflow: hidden; cursor: zoom-in; }
+.sa-pdpb__main img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .35s ease, transform .5s ease; }
+.sa-pdpb__main img.is-out { opacity: 0; }
+.sa-pdpb__main.is-zoom { cursor: zoom-out; }
+.sa-pdpb__main.is-zoom img { transform: scale(2); }
+.sa-pdpb__nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; display: grid; place-items: center; background: var(--paper); z-index: 2; }
+.sa-pdpb__nav--prev { left: var(--space-3); } .sa-pdpb__nav--next { right: var(--space-3); }
+.sa-pdpb__nav--prev .sa-icon { transform: rotate(180deg); }
+.sa-pdpb__count { position: absolute; left: var(--space-3); bottom: var(--space-3); z-index: 2; background: var(--paper); padding: 2px 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; }
+.sa-pdpb__cap { position: absolute; right: var(--space-3); bottom: var(--space-3); z-index: 2; background: var(--paper); padding: 2px 8px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.sa-pdpb__thumbs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+.sa-pdpb__thumbs button { display: block; width: 100%; aspect-ratio: 3/4; position: relative; background: var(--packshot, #fff); outline-offset: 2px; }
+.sa-pdpb__thumbs img { width: 100%; height: 100%; object-fit: cover; opacity: .62; transition: opacity .2s; }
+.sa-pdpb__thumbs button:hover img, .sa-pdpb__thumbs button[aria-current="true"] img { opacity: 1; }
+.sa-pdpb__thumbs button[aria-current="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; background: var(--ink); }
+.sa-pdpb .sa-pdp__panel { position: static; padding: 0 var(--space-6) var(--space-6) 0; }
+@media (max-width: 900px) {
+  .sa-pdpb { grid-template-columns: 1fr; }
+  .sa-pdpb__gallery { position: static; padding: 0 0 var(--space-4); }
+  .sa-pdpb__main { height: auto; aspect-ratio: 4/5; }
+  .sa-pdpb__thumbs { grid-template-columns: repeat(6, 56px); overflow-x: auto; padding: 0 var(--space-4) 8px; }
+  .sa-pdpb .sa-pdp__panel { padding: 0 var(--space-4) var(--space-6); }
+}
+</style></head>
+<body class="sa">
+<div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives;
+
+var p = S.find((location.hash || "").replace("#", "")) || S.find("SA-001");
+var GILET = p.id === "SA-001";
+/* Vues : gros plan sur la pièce d'abord, puis le look complet, puis les autres photos du shoot */
+var V = [[p.photos[0],"La pièce"],[S.lookOf(p),"Le look"],[p.photos[1],"Portée"],[S.photos.look3,"Lookbook"],[S.photos.look5,"Lookbook"],[S.photos.look2,"Lookbook"]];
+document.getElementById("r").innerHTML =
+  S.announcementBar() + S.header({active:"shop"}) +
+  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Shop</a><span>' + p.type + '</span><span>'+p.id+'</span></nav></div>' +
+  '<div class="sa-pdpb"><div class="sa-pdpb__gallery" data-gallery>' +
+    '<figure class="sa-pdpb__main" data-main><img src="'+V[0][0]+'" alt="'+p.name+', '+V[0][1].toLowerCase()+'">' +
+      '<button class="sa-pdpb__nav sa-pdpb__nav--prev" data-go="-1" aria-label="Photo précédente">'+S.icon("arrow")+'</button>' +
+      '<button class="sa-pdpb__nav sa-pdpb__nav--next" data-go="1" aria-label="Photo suivante">'+S.icon("arrow")+'</button>' +
+      '<span class="sa-pdpb__count" data-count>01 / '+String(V.length).padStart(2,"0")+'</span><span class="sa-pdpb__cap" data-cap>'+V[0][1]+'</span></figure>' +
+    '<ul class="sa-pdpb__thumbs" aria-label="Toutes les photos">' + V.map(function(v,i){return '<li><button data-thumb="'+i+'" aria-label="Photo '+(i+1)+' : '+v[1]+'" aria-current="'+(i===0)+'"><img src="'+v[0]+'" alt=""></button></li>'}).join("") + '</ul>' +
+  '</div><div class="sa-pdp__panel">' +
+    S.inventoryLabel(p, {compact:true}) +
+    '<span class="sa-label">'+p.brand+'</span><h1 class="sa-pdp__title">'+p.name+'</h1>' +
+    (p.tier === "Archive" ? '<div class="sa-pdp__price"><span class="sa-label">Fonds Archives</span><span class="sa-mono sa-muted">Location uniquement</span></div>' : '<div class="sa-pdp__price"><span class="sa-price" style="font-size:16px">'+S.euro(p.price)+'</span><span class="sa-mono sa-muted">TVA sur marge</span></div>') +
+    '<p style="margin:0">' + (GILET ? 'Un nylon gris qui froisse comme une enveloppe. Col montant zippé, cordon à la taille, emmanchures nettes.' : p.name + '. ' + p.material + ', ' + p.era.toLowerCase() + '.') + ' <a href="#" style="text-decoration:underline;text-underline-offset:3px">Lire la fiche d’archive</a></p>' +
+    '<div class="sa-pdp__size"><span class="sa-card__size">'+p.size+'</span><span class="sa-mono sa-muted">Aisselles 46 cm · Longueur 58 cm</span></div>' +
+    S.modelLine(p) +
+    (p.tier === "Archive" ? '<span class="sa-pdp__unique">Pièce d’archive · elle ne se vend pas, elle se loue</span>' : '<span class="sa-pdp__unique">Pièce unique · une taille, une seule fois</span>') +
+    '<div class="sa-pdp__actions">' + (function () {
+      var lk = S.lookFor(p.id), rentLook = lk ? S.button("Louer le look · dès " + S.euro(S.lookPrice(lk)), { variant: p.tier === "Archive" ? "primary" : "secondary", block: true, action: "rent" }).replace("<button ", '<button data-look="' + lk.id + '" ') : "";
+      var pro = '<a class="sa-btn sa-btn--link" href="#" data-action="rent-pro" data-id="' + p.id + '">Une demande pro ? Louer cette pièce seule</a>';
+      if (p.tier === "Archive") return rentLook + pro;
+      return S.button("Ajouter au panier",{block:true,action:"add",id:p.id}) + (p.sold ? "" : rentLook + pro);
+    })() + '</div>' +
+    '<div>' + S.accordion([
+      {title:"La pièce",open:true,html:(GILET ? "Gilet sans manches, col montant. Nylon, zip court, cordon de serrage à la taille." : p.name + ". " + p.material + ", " + p.era.toLowerCase() + ".")},
+      {title:"Mesures à plat",html:'<span class="sa-mono">Aisselles 46 cm · Taille 44 cm · Longueur 58 cm</span>'},
+      {title:"État",html:"Très bon état. Légère trace sur le zip, visible en photo 02. Une patine d’usage, rien qui ne se voie porté."},
+      {title:"Livraison et retours",html:"Envoi soigné dans toute la France, Outre-mer compris, papier de soie et tampon au monogramme. 14 jours pour changer d’avis."}
+    ]) + '</div>' +
+  '</div></div>' +
+  '<section class="sa-section sa-wrap" style="border-top:1px solid var(--photocopy);display:grid;grid-template-columns:1fr;justify-items:center">' + S.archiveChapters(p) + '</section>' +
+  '<section class="sa-section sa-wrap" style="border-top:1px solid var(--photocopy)">' + S.related(p) + '</section>' +
+  S.footer() + S.cartDrawer();
+S.init(document);
+(function () {
+  var g = document.querySelector("[data-gallery]"), main = g.querySelector("[data-main]"), im = main.querySelector("img"), cur = 0;
+  var thumbs = g.querySelectorAll("[data-thumb]");
+  function show(i) {
+    cur = (i + V.length) % V.length;
+    main.classList.remove("is-zoom");
+    im.classList.add("is-out");
+    setTimeout(function () { im.src = V[cur][0]; im.alt = p.name + ", " + V[cur][1].toLowerCase(); im.classList.remove("is-out"); }, 180);
+    g.querySelector("[data-count]").textContent = String(cur + 1).padStart(2, "0") + " / " + String(V.length).padStart(2, "0");
+    g.querySelector("[data-cap]").textContent = V[cur][1];
+    thumbs.forEach(function (t, k) { t.setAttribute("aria-current", k === cur); });
+  }
+  g.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-thumb]"); if (t) { show(+t.dataset.thumb); return; }
+    var n = e.target.closest("[data-go]"); if (n) { show(cur + +n.dataset.go); return; }
+    if (e.target.closest("[data-main]")) {
+      var r = main.getBoundingClientRect();
+      im.style.transformOrigin = ((e.clientX - r.left) / r.width * 100) + "% " + ((e.clientY - r.top) / r.height * 100) + "%";
+      main.classList.toggle("is-zoom");
+    }
+  });
+  main.addEventListener("mousemove", function (e) {
+    if (!main.classList.contains("is-zoom")) return;
+    var r = main.getBoundingClientRect();
+    im.style.transformOrigin = ((e.clientX - r.left) / r.width * 100) + "% " + ((e.clientY - r.top) / r.height * 100) + "%";
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.target.closest("input, textarea")) return;
+    if (e.key === "ArrowRight") show(cur + 1);
+    if (e.key === "ArrowLeft") show(cur - 1);
+  });
+})();
+</script>
+<script src="proto.js"></script>
+</body>
+</html>
