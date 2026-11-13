@@ -24,6 +24,12 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # Ajoute un numéro de version aux fichiers partagés pour que les
+      # navigateurs chargent toujours la dernière version publiée.
+      - name: Version des fichiers
+        run: |
+          v="${GITHUB_SHA::7}"
+          sed -i -E "s/(href|src)=\"(tokens\.css|bundle\.css|bundle\.js|proto\.js)\"/\1=\"\2?v=$v\"/g" prototype/*.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
