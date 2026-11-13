@@ -1,0 +1,330 @@
+<!-- @dsCard group="Site" height=900 width=1280 page subtitle="Location & RP, proposition 3 : le look d'abord, tout se règle dans un panneau latéral" -->
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Location & RP · le look d'abord</title>
+<style>
+  html, body { margin: 0; background: var(--paper); }
+  .sa-page { height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative; }
+  .lc-hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 0; border-bottom: 1px solid var(--photocopy); }
+  .lc-hero__txt { padding: var(--space-7) var(--space-6); display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-6); }
+  .lc-hero h1 { margin: var(--space-3) 0 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 64px; line-height: .95; letter-spacing: -.02em; }
+  .lc-hero p { margin: var(--space-4) 0 0; max-width: 460px; }
+  .lc-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--photocopy); }
+  .lc-steps a { padding: var(--space-3) 0; display: grid; gap: 2px; }
+  .lc-steps a + a { padding-left: var(--space-3); border-left: 1px solid var(--photocopy); }
+  .lc-hero__img { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .lc-hero__img img { width: 100%; height: 100%; object-fit: cover; min-height: 420px; }
+  .lc-main { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: var(--space-6); align-items: start; padding-top: var(--space-6); padding-bottom: var(--space-7); }
+  .lc-step { padding-bottom: var(--space-7); scroll-margin-top: 80px; }
+  .lc-pro-wrap { margin-top: var(--space-7); padding-top: var(--space-6); padding-bottom: 64px; border-top: 1px solid var(--ink); }
+  .lc-pro-sep { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-5); }
+  #s-pro { scroll-margin-top: 112px; }
+  .lb-bar { transition: transform .25s, opacity .25s; }
+  body.is-pro-view .lb-bar { transform: translateY(100%); opacity: 0; pointer-events: none; } /* l'en-tête collant ne recouvre plus le titre du bloc pro */
+  .lc-step__head { display: flex; align-items: baseline; gap: var(--space-3); margin-bottom: var(--space-5); }
+  .lc-step__no { font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+  .lc-step__head h2 { margin: 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 32px; line-height: 1.05; }
+  .lc-step__head p { margin: 0 0 0 auto; font-size: 13px; color: var(--ink-muted); }
+  /* Packs */
+  .lc-packs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); }
+  .lc-pack { position: relative; display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-5) var(--space-4) var(--space-4); border: 1px solid var(--rule-strong); background: var(--paper); cursor: pointer; text-align: left; min-height: 300px; }
+  .lc-pack:hover { border-color: var(--ink); }
+  .lc-pack[aria-checked="true"] { border: 2px solid var(--ink); padding: calc(var(--space-5) - 1px) calc(var(--space-4) - 1px) calc(var(--space-4) - 1px); }
+  .lc-pack__badge { position: absolute; top: -11px; left: var(--space-4); background: var(--accent); padding: 2px 8px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+  .lc-pack h3 { margin: 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 24px; line-height: 1.1; }
+  .lc-pack ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13px; line-height: 18px; }
+  .lc-pack li { display: flex; gap: 8px; }
+  .lc-pack li::before { content: ""; flex: none; width: 6px; height: 6px; margin-top: 6px; background: var(--ink); }
+  .lc-pack li.off { color: var(--rule-strong); }
+  .lc-pack li.off::before { background: transparent; border: 1px solid var(--photocopy); }
+  .lc-pack__price { margin-top: auto; padding-top: var(--space-3); border-top: 1px dashed var(--rule-strong); display: grid; gap: 2px; }
+  .lc-pack__price b { font-family: var(--font-mono); font-weight: 500; font-size: 18px; }
+  .lc-pack__radio { position: absolute; top: var(--space-4); right: var(--space-4); width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--rule-strong); }
+  .lc-pack[aria-checked="true"] .lc-pack__radio { border-color: var(--ink); box-shadow: inset 0 0 0 4px var(--paper); background: var(--ink); }
+  /* Segmented */
+  .lc-seg { display: inline-flex; border: 1px solid var(--ink); margin-bottom: var(--space-4); }
+  .lc-seg button { padding: 10px 16px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .lc-seg button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
+  /* Looks / pièces */
+  .lc-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4) var(--space-3); }
+  .lc-item { position: relative; display: grid; gap: 6px; text-align: left; cursor: pointer; }
+  .lc-item__img { position: relative; aspect-ratio: 3/4; overflow: hidden; background: var(--packshot, #fff); outline: 2px solid transparent; outline-offset: 2px; }
+  .lc-item__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(.2,.7,.2,1); }
+  .lc-item:hover .lc-item__img img { transform: scale(1.03); }
+  .lc-item[aria-pressed="true"] .lc-item__img { outline-color: var(--ink); }
+  .lc-item__check { position: absolute; top: var(--space-2); right: var(--space-2); width: 28px; height: 28px; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--rule-strong); font-family: var(--font-mono); font-size: 14px; }
+  .lc-item[aria-pressed="true"] .lc-item__check { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+  .lc-item__avail { position: absolute; left: var(--space-2); bottom: var(--space-2); background: var(--paper); padding: 2px 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+  .lc-item__avail.is-busy { background: var(--ink); color: var(--on-ink); }
+  .lc-item[aria-disabled="true"] { cursor: not-allowed; }
+  .lc-item[aria-disabled="true"] img { filter: grayscale(1); opacity: .6; }
+  .lc-item h3 { margin: 0; font-size: 14px; line-height: 20px; font-weight: 400; }
+  .lc-item__meta { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+  /* Dates */
+  .lc-dates { display: grid; grid-template-columns: 220px 1fr; gap: var(--space-5); align-items: end; }
+  .lc-dates label { display: grid; gap: 6px; }
+  .lc-dates input[type="date"] { font: 15px/24px var(--font-sans); color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid var(--ink); padding: 10px 0; border-radius: 0; }
+  .lc-dates input[type="date"] { color-scheme: light; }
+  .lc-dates input[type="date"]::-webkit-calendar-picker-indicator { opacity: 1; width: 20px; height: 20px; padding: 4px; cursor: pointer; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' stroke='%231C1A18' stroke-width='1.6'%3E%3Crect x='2.5' y='4' width='15' height='13.5'/%3E%3Cpath d='M2.5 8.5h15M6.5 2v4M13.5 2v4'/%3E%3C/svg%3E") center / 20px no-repeat; }
+  .lc-dates input[type="date"]::-webkit-calendar-picker-indicator:hover { background-color: var(--paper-deep); }
+  .lc-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .lc-chip { padding: 10px 14px; border: 1px solid var(--rule-strong); display: grid; gap: 2px; text-align: left; min-width: 130px; }
+  .lc-chip b { font-weight: 600; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+  .lc-chip span { font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); }
+  .lc-chip[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--on-ink); }
+  .lc-chip[aria-pressed="true"] span { color: var(--on-ink); }
+  .lc-chip[disabled] { opacity: .45; cursor: not-allowed; }
+  .lc-note { margin: var(--space-3) 0 0; font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+  /* Options */
+  .lc-opts { display: grid; gap: 0; border-top: 1px solid var(--photocopy); }
+  .lc-opt { display: grid; grid-template-columns: 24px 1fr auto; gap: var(--space-4); align-items: start; padding: var(--space-4) 0; border-bottom: 1px solid var(--photocopy); cursor: pointer; }
+  .lc-opt input { appearance: none; width: 18px; height: 18px; margin: 2px 0 0; border: 1px solid var(--rule-strong); display: grid; place-items: center; }
+  .lc-opt input:checked { background: var(--ink); border-color: var(--ink); }
+  .lc-opt input:checked::after { content: ""; width: 9px; height: 5px; border-left: 1.5px solid var(--on-ink); border-bottom: 1.5px solid var(--on-ink); transform: rotate(-45deg) translate(1px, -1px); }
+  .lc-opt input[type="radio"] { border-radius: 50%; }
+  .lc-opt input[type="radio"]:checked { box-shadow: inset 0 0 0 4px var(--paper); }
+  .lc-opt input[type="radio"]:checked::after { display: none; }
+  .lc-opt input:disabled { opacity: 1; background: var(--ink); }
+  .lc-opt b { display: block; font-weight: 500; }
+  .lc-opt small { display: block; font-size: 13px; line-height: 19px; color: var(--ink-muted); }
+  .lc-opt .sa-price { white-space: nowrap; }
+  .lc-opt__inc { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+  .lc-subhead { margin: var(--space-5) 0 var(--space-2); }
+  /* Récap */
+  .lc-recap { position: sticky; top: 76px; border: 1px solid var(--ink); background: var(--paper); }
+  .lc-recap__head { padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--photocopy); display: flex; justify-content: space-between; align-items: baseline; }
+  .lc-recap__body { padding: var(--space-4) var(--space-5); display: grid; gap: var(--space-3); }
+  .lc-recap__row { display: flex; justify-content: space-between; gap: var(--space-3); font-size: 14px; line-height: 20px; }
+  .lc-recap__row span:last-child { font-family: var(--font-mono); font-size: 13px; white-space: nowrap; }
+  .lc-recap__row.is-muted { color: var(--ink-muted); }
+  .lc-recap__thumbs { display: flex; gap: 4px; flex-wrap: wrap; }
+  .lc-recap__thumbs img { width: 44px; height: 58px; object-fit: cover; }
+  .lc-recap__total { padding: var(--space-4) var(--space-5); border-top: 1px solid var(--ink); display: grid; gap: var(--space-3); }
+  .lc-recap__total .lc-recap__row { font-weight: 600; font-size: 15px; }
+  .lc-recap__total .lc-recap__row span:last-child { font-size: 18px; }
+  .lc-recap__warn { font-size: 12px; line-height: 18px; color: var(--ink-muted); }
+  .lc-recap__warn.is-on { color: var(--ink); }
+  .lc-recap__mini { display: none; }
+  /* Pros, FAQ */
+  .lc-pro { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); padding: var(--space-6); background: var(--paper-deep); }
+  .lc-pro h2 { margin: var(--space-2) 0 var(--space-3); font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 32px; line-height: 1.05; }
+  .lc-form { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3) var(--space-4); }
+  .lc-form label { display: grid; gap: 4px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .lc-form input, .lc-form select, .lc-form textarea { font: 15px/22px var(--font-sans); letter-spacing: 0; text-transform: none; color: var(--ink); background: transparent; border: 0; border-bottom: 1px dashed var(--rule-strong); padding: 8px 0; border-radius: 0; }
+  .lc-form .full { grid-column: 1 / -1; }
+.lc-form input:focus, .lc-form select:focus, .lc-form textarea:focus { outline: none; border-bottom: 1px solid var(--ink); }
+  .lc-form textarea { min-height: 70px; resize: vertical; }
+  .lc-faq { display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-6); padding-top: var(--space-7); padding-bottom: var(--space-7); }
+  .lc-faq h2 { margin: var(--space-2) 0 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 32px; line-height: 1.05; }
+  @media (max-width: 1100px) { .lc-packs { grid-template-columns: repeat(2, minmax(0, 1fr)); } .lc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 900px) {
+    .lc-hero, .lc-main, .lc-pro, .lc-faq, .lc-form { grid-template-columns: 1fr; }
+    .lc-hero h1 { font-size: 44px; } .lc-hero__img img { min-height: 260px; }
+    .lc-steps { grid-template-columns: repeat(2, 1fr); }
+    .lc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lc-dates { grid-template-columns: 1fr; }
+    .lc-recap { position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 25; border-width: 1px 0 0; }
+    .lc-recap__head, .lc-recap__body { display: none; }
+    .lc-recap__total { border-top: 0; grid-template-columns: 1fr auto; align-items: center; padding: var(--space-3) var(--space-4); }
+    .lc-recap__total .lc-recap__warn { display: none; }
+  }
+
+
+  .lv-top { padding-top: var(--space-6); padding-bottom: var(--space-5); display: grid; grid-template-columns: 1fr auto; gap: var(--space-5); align-items: end; border-bottom: 1px solid var(--photocopy); }
+  .lv-top h1 { margin: var(--space-2) 0 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 44px; line-height: 1; letter-spacing: -.02em; }
+  .lv-top p { margin: var(--space-3) 0 0; max-width: 560px; color: var(--ink-muted); }
+  .lv-how { display: flex; gap: var(--space-5); font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+  .lv-how b { color: var(--ink); font-weight: 500; }
+  .lv-bar { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); padding-top: var(--space-5); padding-bottom: var(--space-4); }
+  .lv-bar .lc-seg { margin: 0; }
+  .lv-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6) var(--space-4); padding-bottom: var(--space-7); }
+  .lv-grid.is-pieces { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .lv-card { display: grid; gap: var(--space-2); text-align: left; cursor: pointer; }
+  .lv-card__img { position: relative; aspect-ratio: 4/5; overflow: hidden; background: var(--packshot, #fff); }
+  .lv-card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(.2,.7,.2,1); }
+  .lv-card:hover .lv-card__img img { transform: scale(1.03); }
+  .lv-card h3 { margin: 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 20px; line-height: 1.15; }
+  .lv-card__meta { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+  .lv-card__meta b { color: var(--ink); font-weight: 500; }
+  .lv-card__cta { position: absolute; left: var(--space-3); right: var(--space-3); bottom: var(--space-3); background: var(--paper); text-align: center; padding: 10px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .2s; }
+  .lv-card:hover .lv-card__cta, .lv-card:focus-visible .lv-card__cta { opacity: 1; transform: none; }
+  .lv-services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); padding-top: var(--space-6); padding-bottom: var(--space-7); border-top: 1px solid var(--photocopy); }
+  .lv-services h2 { grid-column: 1 / -1; margin: 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 30px; }
+  .lv-serv { border-top: 1px solid var(--ink); padding-top: var(--space-3); display: grid; gap: 6px; align-content: start; }
+  .lv-serv b { font-weight: 500; font-size: 17px; } .lv-serv span { font-size: 14px; color: var(--ink-muted); }
+  /* Tiroir de réservation */
+  .lv-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(480px, 100%); z-index: 40; background: var(--paper); box-shadow: var(--shadow-drawer); display: flex; flex-direction: column; transform: translateX(105%); visibility: hidden; transition: transform var(--duration-drawer) cubic-bezier(.2,.7,.2,1), visibility 0s var(--duration-drawer); }
+  .lv-drawer.is-open { transform: none; visibility: visible; transition: transform var(--duration-drawer) cubic-bezier(.2,.7,.2,1); }
+  .lv-scrim { position: fixed; inset: 0; z-index: 39; background: rgba(28,26,24,.28); opacity: 0; pointer-events: none; transition: opacity .3s; }
+  .lv-scrim.is-on { opacity: 1; pointer-events: auto; }
+  .lv-d__head { display: grid; grid-template-columns: 72px 1fr auto; gap: var(--space-3); align-items: center; padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--photocopy); }
+  .lv-d__head img { width: 72px; height: 90px; object-fit: cover; }
+  .lv-d__head h2 { margin: 2px 0 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 20px; line-height: 1.15; }
+  .lv-d__body { flex: 1; overflow-y: auto; padding: 0 var(--space-5) var(--space-5); }
+  .lv-d__sec { padding-top: var(--space-5); display: grid; gap: var(--space-3); }
+  .lv-d__sec > .sa-label { display: flex; justify-content: space-between; }
+  .lv-d__body .lc-chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lv-d__body .lc-chip { min-width: 0; padding: 10px; }
+  .lv-d__body input[type="date"] { font: 15px/24px var(--font-sans); color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid var(--ink); padding: 8px 0; border-radius: 0; width: 100%; }
+  .lv-d__foot { border-top: 1px solid var(--ink); padding: var(--space-4) var(--space-5); display: grid; gap: var(--space-3); }
+  @media (max-width: 900px) { .lv-top { grid-template-columns: 1fr; } .lv-top h1 { font-size: 34px; } .lv-grid, .lv-grid.is-pieces { grid-template-columns: repeat(2, minmax(0, 1fr)); } .lv-services { grid-template-columns: 1fr; } .lv-how { flex-wrap: wrap; } }
+
+</style>
+</head>
+<body class="sa">
+<div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives;
+var P = S.photos, find = S.find;
+/* ── Tarifs (cahier des charges) ── */
+var DUR = [
+  { id: "3j", label: "3 jours", pct: 15, note: "minimum" },
+  { id: "1s", label: "1 semaine", pct: 25, note: "" },
+  { id: "2s", label: "2 semaines", pct: 35, note: "vacances" },
+  { id: "pro", label: "Shoot pro · 1 jour", pct: 20, note: "shoot, clip, campagne" }
+];
+var FLOOR = 30, STYLE = 250, PHOTO = 250;
+var PACKS = [
+  { id: "look", name: "Le look", tag: "", desc: "Pour un vernissage, un mariage, un voyage.", inc: ["Un look complet, stylé par Lou-Ann", "Nettoyage inclus", "Retrait à l'atelier ou coursier dans Paris"], off: ["Stylisme", "Photo de la soirée"], style: false, photo: false, durs: ["3j", "1s", "2s"] },
+  { id: "style", name: "Look + stylisme", tag: "", desc: "Lou-Ann compose le look avec vous.", inc: ["Le look", "Séance de stylisme avec Lou-Ann", "Retouches d'ajustement"], off: ["Photo de la soirée"], style: true, photo: false, durs: ["3j", "1s", "2s"] },
+  { id: "soiree", name: "Soirée complète", tag: "Le plus complet", desc: "Le look, le stylisme et Laury photographie votre soirée.", inc: ["Le look", "Stylisme avec Lou-Ann", "Photo par Laury, 2 à 3 h", "8 photos retouchées"], off: [], style: true, photo: true, durs: ["3j", "1s", "2s"] },
+  { id: "pro", name: "Shoot pro", tag: "Stylistes, marques", desc: "Pour un éditorial, une campagne, un clip.", inc: ["Looks ou pièces à l'unité, à la journée", "Devis possible pour plusieurs jours"], off: [], style: false, photo: false, durs: ["pro"] }
+];
+var LOOKS = [
+  { id: "L1", name: "Nylon et voile", photo: P.look1, pieces: ["SA-001", "SA-002", "SA-013", "SA-003", "SA-004"], busy: [] },
+  { id: "L2", name: "Peau lainée et sequins", photo: P.look4, pieces: ["SA-007", "SA-006"], busy: [] },
+  { id: "L3", name: "Mary Jane kaki", photo: P.look2, pieces: ["SA-005", "SA-006"], busy: ["2026-11-20", "2026-11-21", "2026-11-22"] },
+  { id: "L4", name: "Plissé vert d'eau", photo: P.look6, pieces: ["SA-010", "SA-011"], busy: [] },
+  { id: "L5", name: "Panier paille", photo: P.look8, pieces: ["SA-012"], busy: [] }
+];
+LOOKS.forEach(function (l) { l.value = l.pieces.reduce(function (s, id) { return s + find(id).price; }, 0); });
+var PIECES = S.products.filter(function (p) { return !p.sold; });
+
+var st = { pack: "soiree", mode: "look", sel: ["L1"], dur: "3j", date: "", opts: { style: true, photo: true, extra: false }, delivery: "atelier" };
+
+function value() {
+  if (st.mode === "look") return st.sel.reduce(function (s, id) { var l = LOOKS.filter(function (x) { return x.id === id; })[0]; return s + (l ? l.value : 0); }, 0);
+  return st.sel.reduce(function (s, id) { return s + find(id).price; }, 0);
+}
+function durOf(id) { return DUR.filter(function (d) { return d.id === id; })[0]; }
+function rental() { var v = value(); if (!v) return 0; return Math.max(FLOOR, Math.round(v * durOf(st.dur).pct) / 100); }
+function packOf(id) { return PACKS.filter(function (p) { return p.id === id; })[0]; }
+function busy(item) { return st.date && item.busy && item.busy.indexOf(st.date) > -1; }
+
+function packCard(p) {
+  var minDur = durOf(p.durs[0]);
+  var from = FLOOR + (p.style ? STYLE : 0) + (p.photo ? PHOTO : 0);
+  return '<button class="lc-pack" role="radio" aria-checked="' + (st.pack === p.id) + '" data-pack="' + p.id + '">' + (p.tag ? '<span class="lc-pack__badge">' + p.tag + '</span>' : '') + '<span class="lc-pack__radio" aria-hidden="true"></span>' +
+    '<span class="sa-mono sa-muted">' + (p.id === "pro" ? "20 % DE LA VALEUR / JOUR" : "DÈS " + minDur.pct + " % DE LA VALEUR") + '</span><h3>' + p.name + '</h3><span style="font-size:13px;line-height:19px">' + p.desc + '</span>' +
+    '<ul>' + p.inc.map(function (t) { return '<li>' + t + '</li>'; }).join("") + p.off.map(function (t) { return '<li class="off">' + t + ' en option</li>'; }).join("") + '</ul>' +
+    '<span class="lc-pack__price"><span class="sa-mono sa-muted">À PARTIR DE</span><b>' + S.euro(from) + '</b></span></button>';
+}
+
+function itemCard(it, isLook) {
+  var on = st.sel.indexOf(it.id) > -1, b = isLook && busy(it), price = Math.max(FLOOR, Math.round((isLook ? it.value : it.price) * durOf(st.dur).pct) / 100);
+  var img = isLook ? it.photo : S.img(it, "a"), name = isLook ? it.name : it.name, sub = isLook ? it.pieces.length + " pièces · " + it.pieces.join(", ") : it.id + " · " + it.size;
+  return '<button class="lc-item" data-item="' + it.id + '" aria-pressed="' + on + '"' + (b ? ' aria-disabled="true"' : '') + '><span class="lc-item__img"><img src="' + img + '" alt="' + name + '"><span class="lc-item__check" aria-hidden="true">' + (on ? "✓" : "+") + '</span>' +
+    '<span class="lc-item__avail' + (b ? ' is-busy' : '') + '">' + (b ? "Pris à ces dates" : (isLook ? find(it.pieces[0]).drop : it.drop)) + '</span></span>' +
+    '<h3>' + name + '</h3><span class="lc-item__meta"><span>' + sub + '</span></span><span class="lc-item__meta"><span>Valeur ' + S.euro(isLook ? it.value : it.price) + '</span><span style="color:var(--ink)">' + S.euro(price) + '</span></span></button>';
+}
+
+function optRow(id, title, desc, price, opts) {
+  opts = opts || {};
+  return '<label class="lc-opt"><input type="' + (opts.radio ? "radio" : "checkbox") + '" name="' + (opts.name || id) + '" value="' + id + '"' + (opts.checked ? " checked" : "") + (opts.locked ? " disabled" : "") + ' data-opt="' + id + '"><span><b>' + title + '</b><small>' + desc + '</small></span>' +
+    (opts.locked ? '<span class="lc-opt__inc">Inclus</span>' : '<span class="sa-price">' + price + '</span>') + '</label>';
+}
+
+
+function totals() {
+  var v = value(), loc = rental(), extra = st.opts.extra && v ? Math.round(v * 5) / 100 : 0;
+  var sty = st.opts.style ? STYLE : 0, pho = st.opts.photo ? PHOTO : 0;
+  return { v: v, loc: loc, extra: extra, sty: sty, pho: pho, total: loc + extra + sty + pho };
+}
+function selLabel() { return st.sel.length ? (st.mode === "look" ? st.sel.length + " look" + (st.sel.length > 1 ? "s" : "") : st.sel.length + " pièce" + (st.sel.length > 1 ? "s" : "")) : "Rien de choisi"; }
+function anyBusy() { return st.mode === "look" && st.sel.some(function (id) { return busy(LOOKS.filter(function (x) { return x.id === id; })[0]); }); }
+function toast(msg) { var t = document.querySelector(".sa-toast") || document.body.appendChild(Object.assign(document.createElement("div"), { className: "sa-toast", role: "status" })); t.textContent = msg; t.classList.add("is-on"); setTimeout(function () { t.classList.remove("is-on"); }, 2200); }
+var FAQ = S.accordion([
+  { title: "Peut-on louer une seule pièce ?", html: "Pour l’instant, Simé loue des looks complets, stylés par Lou-Ann. Les pièces à l’unité sont réservées aux pros (stylistes, artistes, marques) avec la formule Shoot pro, sur devis." },
+  { title: "Comment est calculé le prix ?", html: "En pourcentage de la valeur estimée des pièces : 15 % pour 3 jours, 25 % pour une semaine, 35 % pour deux semaines, 20 % par jour pour un shoot pro. Jamais moins de 30 € par location." },
+  { title: "La caution", html: "Une empreinte bancaire du montant de la valeur, sans débit. Elle est libérée sous 48 h après le contrôle de la pièce." },
+  { title: "Nettoyage et petits accrocs", html: "Le nettoyage est inclus. En cas de dommage, un devis de réparation est fait avant toute retenue." },
+  { title: "Les photos de la soirée", html: "8 photos retouchées livrées. Simé garde les droits et peut les publier." }
+]);
+var PRO = '<section class="sa-wrap lc-pro-wrap"><div class="lc-pro-sep"><span class="sa-label">Vous êtes pro ?</span><span class="sa-mono sa-muted">Hors réservation en ligne · demande sur devis</span></div><div class="lc-pro" id="s-pro"><div><span class="sa-mono sa-muted">PROS · STYLISTES, ARTISTES, MARQUES</span><h2>Un shoot, un clip, une campagne ?</h2><p style="margin:0;max-width:420px">Racontez-nous le projet, les dates et les silhouettes qui vous parlent. Réponse sous 48 h.</p></div>' +
+  '<form class="lc-form" data-sa="quote"><label>Nom<input required></label><label>E-mail<input type="email" required></label><label>Projet<select><option>Éditorial</option><option>Campagne</option><option>Clip, scène</option><option>Événement de marque</option><option>Autre</option></select></label><label>Dates<input placeholder="ex. 3 et 4 décembre"></label><label class="full">Looks ou pièces souhaités<textarea placeholder="ex. Nylon et voile, SA-007"></textarea></label><div class="full">' + S.button("Envoyer la demande", { variant: "secondary" }) + '</div></form></div></section>';
+
+var st = { pack: "look", mode: "look", sel: [], dur: "3j", date: "", opts: { style: false, photo: false, extra: false }, delivery: "atelier" };
+function card(it, isLook) {
+  var price = Math.max(FLOOR, Math.round((isLook ? it.value : it.price) * 15) / 100);
+  return '<button class="lv-card" data-open="' + it.id + '"><span class="lv-card__img"><img src="' + (isLook ? it.photo : S.img(it, "a")) + '" alt="' + it.name + '"><span class="lv-card__cta">Louer ' + (isLook ? "ce look" : "cette pièce") + '</span></span>' +
+    '<h3>' + it.name + '</h3><span class="lv-card__meta"><span>' + (isLook ? it.pieces.length + (it.pieces.length > 1 ? " pièces" : " pièce") : it.id + " · " + it.size) + '</span><span>dès <b>' + S.euro(price) + '</b> · 3 jours</span></span></button>';
+}
+function renderGrid() {
+  var isLook = st.mode === "look", g = document.getElementById("grid");
+  g.className = "lv-grid sa-wrap" + (isLook ? "" : " is-pieces");
+  g.innerHTML = (isLook ? LOOKS : PIECES).map(function (it) { return card(it, isLook); }).join("");
+  document.getElementById("seg").innerHTML = '<button data-mode="look" aria-pressed="' + isLook + '">Looks complets</button><button data-mode="piece" aria-pressed="' + !isLook + '">Pièces à l\'unité</button>';
+}
+var PRESETS = [["look", "Le look seul", false, false], ["style", "+ stylisme", true, false], ["soiree", "Soirée complète", true, true]];
+function renderDrawer() {
+  var id = st.sel[0]; if (!id) return;
+  var isLook = st.mode === "look", it = isLook ? LOOKS.filter(function (x) { return x.id === id; })[0] : find(id);
+  var t = totals(), d = durOf(st.dur), b = anyBusy();
+  var row = function (a, x, m) { return '<div class="lc-recap__row' + (m ? " is-muted" : "") + '"><span>' + a + '</span><span>' + x + '</span></div>'; };
+  document.getElementById("drawer").innerHTML =
+    '<div class="lv-d__head"><img src="' + (isLook ? it.photo : S.img(it, "a")) + '" alt=""><div><span class="sa-mono sa-muted">' + (isLook ? "LOOK · " + it.pieces.join(", ") : it.id) + '</span><h2>' + it.name + '</h2><span class="sa-mono sa-muted">Valeur ' + S.euro(t.v) + '</span></div><button data-action="dclose" aria-label="Fermer">' + S.icon("close") + '</button></div>' +
+    '<div class="lv-d__body">' +
+      '<div class="lv-d__sec"><span class="sa-label">1 · Durée</span><div class="lc-chips">' + DUR.filter(function (x) { return x.id !== "pro"; }).map(function (x) { return '<button class="lc-chip" data-dur="' + x.id + '" aria-pressed="' + (st.dur === x.id) + '"><b>' + x.label + '</b><span>' + S.euro(Math.max(FLOOR, Math.round(t.v * x.pct) / 100)) + '</span></button>'; }).join("") + '</div></div>' +
+      '<div class="lv-d__sec"><label class="sa-label" for="date">2 · Début</label><input type="date" id="date" min="2026-11-13" value="' + st.date + '">' + (b ? '<p class="lc-recap__warn is-on" style="margin:0">Ce look est pris à ces dates, choisissez-en une autre.</p>' : '') + '</div>' +
+      '<div class="lv-d__sec"><span class="sa-label">3 · Avec ou sans nous<span class="sa-mono sa-muted" style="letter-spacing:0;text-transform:none;font-weight:400">facultatif</span></span><div class="lc-chips">' + PRESETS.map(function (p) { var on = st.opts.style === p[2] && st.opts.photo === p[3]; return '<button class="lc-chip" data-preset="' + p[0] + '" aria-pressed="' + on + '"><b>' + p[1] + '</b><span>' + (p[2] || p[3] ? "+" + S.euro((p[2] ? STYLE : 0) + (p[3] ? PHOTO : 0)) : "sans service") + '</span></button>'; }).join("") + '</div><p class="lc-note" style="margin:0">' + (st.opts.photo ? "Stylisme avec Lou-Ann, et Laury photographie votre soirée : 8 photos retouchées." : st.opts.style ? "Une séance avec Lou-Ann pour composer et ajuster le look." : "Vous portez le look à votre façon.") + '</p></div>' +
+      '<div class="lv-d__sec"><span class="sa-label">4 · Retrait ou livraison</span><div class="lc-opts">' +
+        optRow("atelier", "Retrait à l'atelier, Paris", "Essayage possible sur rendez-vous.", "Offert", { radio: true, name: "deliv", checked: st.delivery === "atelier" }) +
+        optRow("coursier", "Coursier dans Paris", "Livraison et reprise le jour choisi.", "à confirmer", { radio: true, name: "deliv", checked: st.delivery === "coursier" }) + '</div></div>' +
+    '</div>' +
+    '<div class="lv-d__foot">' + row("Location " + d.label.toLowerCase(), S.euro(t.loc), true) + (t.sty ? row("Stylisme", S.euro(t.sty), true) : "") + (t.pho ? row("Photo", S.euro(t.pho), true) : "") +
+      '<div class="lc-recap__row" style="font-weight:600"><span>Total</span><span style="font-family:var(--font-mono);font-size:18px">' + S.euro(t.total) + '</span></div>' +
+      '<p class="lc-recap__warn" style="margin:0">Caution par empreinte bancaire, sans débit. Nettoyage inclus.</p>' +
+      S.button(st.date ? "Réserver" : "Choisissez une date", { block: true, action: "book", disabled: !st.date || b }) + '</div>';
+}
+function openFor(id) { st.sel = [id]; renderDrawer(); document.getElementById("drawer").classList.add("is-open"); document.getElementById("lvscrim").classList.add("is-on"); var f = document.querySelector("#drawer [data-dur]"); if (f) f.focus({ preventScroll: true }); }
+function closeD() { document.getElementById("drawer").classList.remove("is-open"); document.getElementById("lvscrim").classList.remove("is-on"); }
+
+document.getElementById("r").innerHTML =
+  S.announcementBar() + S.header({ active: "location" }) +
+  '<section class="lv-top sa-wrap"><div><span class="sa-mono sa-muted">LOCATION & RP</span><h1>Louer un look Simé</h1><p>Le vestiaire de nos shoots, le temps d\'une soirée. Choisissez un look ou une pièce, le reste se règle dans un seul panneau.</p></div>' +
+    '<div class="lv-how"><span><b>3 jours</b> · 15 %</span><span><b>1 semaine</b> · 25 %</span><span><b>2 semaines</b> · 35 %</span><span>de la valeur, dès 30 €</span></div></section>' +
+  '<div class="lv-bar sa-wrap"><div class="lc-seg" id="seg" role="group" aria-label="Looks ou pièces"></div><a class="sa-btn sa-btn--link" href="#s-pro">Shoot pro, devis</a></div>' +
+  '<div id="grid"></div>' +
+  '<section class="lv-services sa-wrap"><h2>Avec ou sans nous</h2>' +
+    '<div class="lv-serv"><span class="sa-mono">01</span><b>Le look seul</b><span>Vous le portez à votre façon. Nettoyage inclus.</span></div>' +
+    '<div class="lv-serv"><span class="sa-mono">02</span><b>Avec le stylisme de Lou-Ann</b><span>Une séance pour composer et ajuster le look. Dès ' + S.euro(STYLE) + '.</span></div>' +
+    '<div class="lv-serv"><span class="sa-mono">03</span><b>Soirée complète</b><span>Le look, le stylisme, et Laury photographie votre soirée. 8 photos retouchées.</span></div></section>' +
+  PRO + '<section class="lc-faq sa-wrap" style="border-top:1px solid var(--photocopy)"><div><span class="sa-mono sa-muted">QUESTIONS</span><h2>Avant de réserver</h2></div><div>' + FAQ + '</div></section>' +
+  S.footer() + S.cartDrawer() +
+  '<div class="lv-scrim" id="lvscrim" data-action="dclose"></div><aside class="lv-drawer" id="drawer" role="dialog" aria-label="Votre location"></aside>';
+S.init(document);
+renderGrid();
+var root = document.getElementById("r");
+root.addEventListener("click", function (e) {
+  var b;
+  if ((b = e.target.closest("[data-mode]"))) { st.mode = b.dataset.mode; renderGrid(); return; }
+  if ((b = e.target.closest("[data-open]"))) { openFor(b.dataset.open); return; }
+  if ((b = e.target.closest("[data-action='dclose']"))) { closeD(); return; }
+  if ((b = e.target.closest("[data-dur]"))) { st.dur = b.dataset.dur; renderDrawer(); return; }
+  if ((b = e.target.closest("[data-preset]"))) { var p = PRESETS.filter(function (x) { return x[0] === b.dataset.preset; })[0]; st.opts.style = p[2]; st.opts.photo = p[3]; renderDrawer(); return; }
+  if ((b = e.target.closest("[data-action='book']"))) { if (!b.disabled) toast("Prototype : la réservation passe par l'app de location Shopify"); return; }
+});
+root.addEventListener("change", function (e) {
+  if (e.target.id === "date") { st.date = e.target.value; renderDrawer(); return; }
+  if (e.target.dataset.opt === "style" || e.target.dataset.opt === "photo") { st.opts[e.target.dataset.opt] = e.target.checked; renderDrawer(); return; }
+  if (e.target.name === "deliv") { st.delivery = e.target.value; renderDrawer(); }
+});
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeD(); });
+
+document.querySelector("[data-sa='quote']").addEventListener("submit", function (e) { e.preventDefault(); e.target.innerHTML = '<p class="sa-mono full" style="margin:0">Mèsi. Simé revient vers vous sous 48 h.</p>'; });
+</script>
+</body>
+</html>

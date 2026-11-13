@@ -1,0 +1,90 @@
+<!-- @dsCard group="Site" height=900 width=1280 page subtitle="Page récolte, deux statuts : avant la récolte (compte à rebours et pièces encore disponibles des récoltes précédentes) et récolte ouverte (uniquement les pièces de la récolte en cours)" -->
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Récolte 04</title>
+<style>
+html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}
+/* Sélecteur de statut : outil de maquette, absent du site */
+.dp-proto{position:sticky;top:0;z-index:35;display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 16px;background:var(--paper-deep);border-bottom:1px dashed var(--rule-strong);font-family:var(--font-mono);font-size:11px;letter-spacing:.04em}
+.dp-proto .lc-seg{margin:0;display:inline-flex;border:1px solid var(--ink)}
+.dp-proto button{padding:6px 12px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.dp-proto button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+/* Bandeau d'explication */
+.dp-note{margin:8px 0 0;font-size:13px;line-height:19px;color:var(--ink-muted)}
+.dp-note b{font-weight:500;color:var(--ink)}
+/* En-tête récolte ouverte */
+.dp-open{display:grid;grid-template-columns:1.2fr 1fr;min-height:480px}
+.dp-open__img{position:relative;overflow:hidden}.dp-open__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dp-open__txt{padding:var(--space-7) var(--space-6);display:flex;flex-direction:column;justify-content:space-between;gap:var(--space-6);border-left:1px solid var(--photocopy)}
+.dp-live{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;letter-spacing:.06em}
+.dp-live::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--jaune);animation:dp-pulse 1.6s ease-in-out infinite}
+@keyframes dp-pulse{50%{opacity:.25}}
+.dp-open h1{margin:var(--space-3) 0 0;font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-weight:600;font-size:64px;line-height:.95;letter-spacing:-.025em}
+.dp-open p{margin:var(--space-4) 0 0;max-width:400px}
+.dp-stock{font-family:var(--font-mono);font-size:28px}.dp-stock small{display:block;font-size:11px;letter-spacing:.06em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:6px}
+.dp-empty{padding:var(--space-6);border:1px dashed var(--rule-strong);text-align:center;color:var(--ink-muted)}
+.sa-ig{position:relative;display:block;overflow:hidden}.sa-ig img{display:block;aspect-ratio:3/4;width:100%;object-fit:cover;transition:transform 1s cubic-bezier(.2,.7,.2,1)}.sa-ig:hover img{transform:scale(1.04)}
+.sa-ig__cta{position:absolute;left:8px;right:8px;bottom:8px;background:var(--paper);text-align:center;padding:8px;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s}.sa-ig:hover .sa-ig__cta,.sa-ig:focus-visible .sa-ig__cta{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.dp-live::before{animation:none}}
+@media (max-width:900px){.dp-open{grid-template-columns:1fr}.dp-open__img{height:360px}.dp-open__txt{padding:var(--space-6) var(--space-4)}.dp-open h1{font-size:44px}}
+</style></head>
+<body class="sa">
+<div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives, P = S.photos;
+var CURRENT = "Récolte 04";
+var strip = [P.look6, P.look2, P.look7, P.look4, P.look5, P.look8];
+/* En production, le statut vient de Shopify : la collection de la récolte est publiée à l'heure d'ouverture.
+   Avant : compte à rebours + pièces encore disponibles des récoltes précédentes. Ouvert : uniquement les pièces de la récolte en cours. */
+var state = "avant";
+try { state = new URLSearchParams(location.search).get("statut") === "ouvert" ? "ouvert" : "avant"; } catch (e) {}
+
+function grid(list) { return '<div class="sa-grid" data-cols="4">' + list.map(S.productCard).join("") + '</div>'; }
+function editos() {
+  return '<section class="sa-section sa-wrap" style="border-top:1px solid var(--photocopy)"><div class="sa-section__head"><div><span class="sa-mono sa-muted">INSTAGRAM · @SIME.ARCHIVES · ' + CURRENT.toUpperCase() + '</span><h2>La récolte en images</h2></div><a class="sa-btn sa-btn--link" href="https://www.instagram.com/sime.archives/" target="_blank" rel="noopener">Suivre @sime.archives</a></div><div class="sa-strip">' +
+    strip.map(function (u, i) { return '<a class="sa-ig" href="https://www.instagram.com/sime.archives/" target="_blank" rel="noopener" aria-label="Voir l’édito ' + (i + 1) + ' sur Instagram (nouvel onglet)"><img src="' + u + '" alt="" loading="lazy"><span class="sa-ig__cta sa-label">Voir le post</span></a>'; }).join("") + '</div></section>';
+}
+
+function before() {
+  var left = S.shopProducts.filter(function (p) { return p.drop !== CURRENT && !p.sold; });
+  var drops = left.map(function (p) { return p.drop; }).filter(function (d, i, a) { return a.indexOf(d) === i; }).sort().reverse();
+  return S.dropCountdown() +
+    '<section class="sa-section sa-wrap"><div class="sa-section__head"><div><span class="sa-mono sa-muted">EN ATTENDANT LA ' + CURRENT.toUpperCase() + '</span><h2>Encore disponibles</h2></div><a class="sa-btn sa-btn--link" href="#">Tout le Shop</a></div>' +
+    '<p class="dp-note">Les dernières pièces des récoltes précédentes (' + (drops.join(", ") || "aucun") + '). La ' + CURRENT + ' se dévoile jeudi à 19 h.</p>' +
+    '<div style="margin-top:24px">' + (left.length ? grid(left) : '<p class="dp-empty">Tout est parti. Rendez-vous jeudi à 19 h pour la ' + CURRENT + '.</p>') + '</div></section>' +
+    editos();
+}
+
+function open() {
+  var cur = S.shopProducts.filter(function (p) { return p.drop === CURRENT; });
+  var avail = cur.filter(function (p) { return !p.sold; }).length;
+  var cards = cur.map(S.productCard);
+  return '<section class="dp-open"><div class="dp-open__img"><img src="' + P.look3 + '" alt="' + CURRENT + ' : gilet nylon gris, jupe voile et sac filet anis"></div>' +
+      '<div class="dp-open__txt"><div><span class="dp-live">' + CURRENT.toUpperCase() + ' · OUVERTE</span><h1>Technique <em>et</em> légère</h1><p>La récolte est ouverte. Chaque pièce n’existe qu’en un exemplaire : quand elle part, elle rejoint les récoltes passées.</p></div>' +
+      '<div class="dp-stock"><small>Encore disponibles</small>' + avail + ' pièce' + (avail > 1 ? "s" : "") + ' sur ' + cur.length + '</div></div></section>' +
+    '<section class="sa-section sa-wrap"><div class="sa-section__head"><div><span class="sa-mono sa-muted">' + CURRENT.toUpperCase() + ' · UNIQUEMENT LES PIÈCES DE CETTE RÉCOLTE</span><h2>Les pièces de la récolte</h2></div><a class="sa-btn sa-btn--link" href="#">Récoltes passées</a></div>' +
+      S.noteLine("Note d’archiviste", "« Technique en haut, voile en bas. L’hybridation, sans costume. »", "Lou-Ann") +
+      '<div style="margin-top:8px"><div class="sa-grid" data-cols="4">' + cards.join("") + '</div></div></section>' +
+    editos();
+}
+
+document.getElementById("r").innerHTML =
+  '<div class="dp-proto" role="group" aria-label="Statut de la page (maquette)"><span>MAQUETTE · STATUT DE LA PAGE</span><span class="lc-seg"><button data-st="avant" aria-pressed="' + (state === "avant") + '">1 · Avant la récolte</button><button data-st="ouvert" aria-pressed="' + (state === "ouvert") + '">2 · Récolte ouverte</button></span></div>' +
+  '<div data-state="avant"' + (state === "avant" ? '' : ' hidden') + '>' + S.announcementBar() + '</div>' +
+  '<div data-state="ouvert"' + (state === "ouvert" ? '' : ' hidden') + '>' + S.announcementBar([CURRENT + " ouverte · une pièce, une seule fois", "Envoi dans toute la France et les Outre-mer", "Pièces uniques, chinées partout dans le monde"]) + '</div>' +
+  S.header({ active: "shop" }) +
+  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span><a href="#">Shop</a></span><span>' + CURRENT + '</span></nav></div>' +
+  '<div data-state="avant"' + (state === "avant" ? '' : ' hidden') + '>' + before() + '</div>' +
+  '<div data-state="ouvert"' + (state === "ouvert" ? '' : ' hidden') + '>' + open() + '</div>' +
+  S.footer() + S.cartDrawer();
+S.init(document);
+document.querySelector(".dp-proto").addEventListener("click", function (e) {
+  var b = e.target.closest("[data-st]"); if (!b) return;
+  state = b.dataset.st;
+  document.querySelectorAll("[data-st]").forEach(function (x) { x.setAttribute("aria-pressed", x.dataset.st === state); });
+  document.querySelectorAll("[data-state]").forEach(function (x) { x.hidden = x.dataset.state !== state; });
+  document.getElementById("r").scrollTo(0, 0);
+});
+</script>
+</body>
+</html>

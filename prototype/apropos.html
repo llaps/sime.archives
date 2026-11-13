@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>À propos · Simé Archives</title><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="bundle.js"></script>
+<style>html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}
+.ap-hero{position:relative;height:56vh;min-height:360px;overflow:hidden}.ap-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.ap-txt{display:grid;grid-template-columns:1fr 2fr;gap:var(--space-6);padding-top:96px;padding-bottom:96px}
+.ap-txt p{margin:0 0 var(--space-4);font-size:18px;line-height:1.6;max-width:62ch}
+.ap-txt h1{margin:0;font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-weight:500;font-size:44px;line-height:1}
+.ap-team{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5);padding-bottom:96px}
+.ap-team div{border-top:1px solid var(--ink);padding-top:var(--space-3)}.ap-team b{display:block;font-size:20px;font-weight:500}
+.ap-ig{display:inline-block;margin-top:6px;font-family:var(--font-mono);font-size:13px;color:var(--ink);text-decoration:underline;text-underline-offset:3px}.ap-ig:hover{text-decoration-thickness:2px}
+@media (max-width:900px){.ap-txt,.ap-team{grid-template-columns:1fr}.ap-txt{padding-top:56px;padding-bottom:56px}}
+</style></head>
+<body class="sa"><div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives, P = S.photos;
+document.getElementById("r").innerHTML = S.announcementBar() + S.header({ active: "about" }) +
+  '<figure class="ap-hero" style="margin:0"><img src="' + P.look5 + '" alt="Lookbook Simé, Paris"></figure>' +
+  '<section class="ap-txt sa-wrap"><div><span class="sa-mono sa-muted">À PROPOS</span><h1>L’histoire de Simé</h1></div><div>' +
+  '<p>Simé est l’initiative de trois femmes originaires de la Caraïbe, passionnées de mode chacune à sa façon. Laury la regarde à travers l’objectif, Lou-Ann la compose en silhouettes, Vanina la déniche là où personne ne pense à chercher.</p>' +
+  '<p>Simé veut dire « semé » en créole. C’est le titre du premier livre photo de Laury, sorti en 2023 avec l’exposition qui a lancé Jardin Créole. Le livre était la graine, Jardin Créole ce qui a poussé. Simé Archives, c’est la récolte : ce qui se garde, se transmet et se porte à nouveau.</p>' +
+  '<p>Simé chine des pièces d’archive et les mêle à des pièces contemporaines, choisies parce qu’elles dialoguent avec l’archive. De cette hybridation naissent les looks : technique et fourrure, sport et élégance, tradition et futur. Une récolte par mois, des pièces uniques, et un vestiaire à louer pour les soirées, les shoots et les scènes.</p>' +
+  '<p class="sa-muted" style="font-size:14px">Texte de maquette, tiré du cahier des charges, à relire par l’équipe.</p></div></section>' +
+  '<section class="ap-team sa-wrap">' + [["DIRECTION ARTISTIQUE, PHOTO", "Laury", "kahlory_"], ["STYLISME", "Lou-Ann", "louannsaliou"], ["SOURCING", "Vanina", "giochinini"]].map(function (m) { return '<div><span class="sa-mono sa-muted">' + m[0] + '</span><b>' + m[1] + '</b><a class="ap-ig" href="https://www.instagram.com/' + m[2] + '/" target="_blank" rel="noopener" aria-label="Instagram de ' + m[1] + ', @' + m[2] + ' (nouvel onglet)">@' + m[2] + ' ↗</a></div>'; }).join("") + '</section>' +
+  S.footer() + S.cartDrawer();
+S.init(document);
+</script><script src="proto.js"></script></body></html>

@@ -1,0 +1,294 @@
+<!-- @dsCard group="Workflow" height=1800 width=1200 page subtitle="Valider le benchmark et les étapes du Workflow : cocher, tester, annoter, envoyer ses retours" -->
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchmark et Workflow · validation</title>
+<style>
+  html, body { margin: 0; background: var(--paper); }
+  .br { padding: 40px 40px 120px; }
+  .br-head { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; padding-bottom: 24px; border-bottom: 1px solid var(--ink); }
+  .br-head h1 { margin: 8px 0 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 600; font-size: 44px; line-height: 1; letter-spacing: -.03em; }
+  .br-head p { margin: 12px 0 0; max-width: 620px; font-size: 14px; line-height: 21px; }
+  .br-count { display: flex; gap: 20px; font-family: var(--font-mono); font-size: 12px; }
+  .br-count b { display: block; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-size: 32px; font-weight: 600; line-height: 1; }
+  .br-filters { display: flex; gap: 8px; flex-wrap: wrap; padding: 16px 0; }
+  .br-filters button { height: 32px; padding: 0 12px; border: 1px solid var(--rule-strong); font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+  .br-filters button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; padding: 10px 10px 10px 0; border-bottom: 1px solid var(--ink); white-space: nowrap; }
+  td { padding: 12px 10px 12px 0; border-bottom: 1px solid var(--photocopy); vertical-align: top; font-size: 14px; line-height: 20px; }
+  td.no, td.step { font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); white-space: nowrap; }
+  td.idea b { display: block; font-weight: 500; }
+  td.idea small { display: block; color: var(--ink-muted); font-size: 12px; line-height: 17px; margin-top: 2px; }
+  td.seen { font-size: 13px; color: var(--ink-muted); }
+  .st { display: inline-block; padding: 2px 8px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--rule-strong); white-space: nowrap; }
+  .st--int { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+  .st--done { border-style: dashed; }
+  .st--out { color: var(--ink-muted); }
+  .ck { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; white-space: nowrap; }
+  .ck input { appearance: none; width: 20px; height: 20px; margin: 0; border: 1.5px solid var(--rule-strong); display: grid; place-items: center; background: var(--paper); cursor: pointer; }
+  .ck input:checked { background: var(--ink); border-color: var(--ink); }
+  .ck input:checked::after { content: ""; width: 10px; height: 5px; border-left: 2px solid var(--on-ink); border-bottom: 2px solid var(--on-ink); transform: rotate(-45deg) translate(1px, -1px); }
+  .ck input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  tr.is-on td { background: rgba(142,148,200,.12); }
+  td.note input { width: 100%; min-width: 160px; box-sizing: border-box; border: 0; border-bottom: 1px solid var(--rule-strong); background: transparent; font: 13px/20px var(--font-sans); color: var(--ink); padding: 4px 0; }
+  td.note input:focus { outline: none; border-color: var(--focus); }
+  tr.is-hidden { display: none; }
+  .br-bar { position: sticky; bottom: 0; z-index: 5; margin-top: 24px; background: var(--paper); border-top: 1px solid var(--ink); padding: 16px 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .br-bar p { margin: 0; font-size: 13px; color: var(--ink-muted); }
+  .br-done { display: none; margin-top: 24px; border: 1px solid var(--ink); padding: 24px; gap: 14px; }
+  .br-done.is-on { display: grid; }
+  .br-done h2 { margin: 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 600; font-size: 26px; }
+  .br-done textarea { width: 100%; box-sizing: border-box; min-height: 220px; font: 12px/18px var(--font-mono); color: var(--ink); background: var(--paper-deep); border: 0; padding: 12px; resize: vertical; }
+  .br-done .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .br-toc { display: flex; gap: 24px; flex-wrap: wrap; padding: 16px 0 0; font-family: var(--font-mono); font-size: 12px; }
+  .br-toc a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .br-sec { padding-top: 48px; }
+  .br-sec__head { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; padding-bottom: 16px; border-bottom: 1px solid var(--ink); }
+  .br-sec__head h2 { margin: 6px 0 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 600; font-size: 30px; line-height: 1.05; letter-spacing: -.02em; }
+  .br-sec__head p { margin: 8px 0 0; max-width: 640px; font-size: 13px; line-height: 19px; color: var(--ink-muted); }
+  .st--place { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+  .st--todo { border-style: dashed; }
+  td.where { font-family: var(--font-mono); font-size: 11px; white-space: nowrap; }
+  .seg { display: inline-flex; border: 1px solid var(--rule-strong); }
+  .seg button { height: 30px; padding: 0 10px; font-size: 12px; white-space: nowrap; }
+  .seg button + button { border-left: 1px solid var(--rule-strong); }
+  .seg button[aria-pressed="true"][data-v="ok"] { background: var(--ink); color: var(--on-ink); }
+  .seg button[aria-pressed="true"][data-v="ko"] { background: var(--paper-deep); text-decoration: line-through; text-decoration-thickness: 1px; }
+  .seg button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  tr.is-ok td { background: rgba(142,148,200,.12); }
+  tr.is-ko td { color: var(--ink-muted); }
+  .br-stamp { font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); }
+</style>
+</head>
+<body class="sa">
+<main class="br">
+  <header class="br-head">
+    <div>
+      <span class="sa-mono sa-muted">WORKFLOW · BENCHMARK · VALIDATION</span>
+      <h1>Ce qu'on valide</h1>
+      <p>Deux tableaux : les idées du benchmark, puis les étapes du Workflow avec leur statut. Coche, teste dans le composant indiqué, tranche, ajoute une note si besoin, puis clique sur « Valider mes retours » en bas : un seul récapitulatif reprend les deux.</p><nav class="br-toc" aria-label="Sommaire"><a href="#sec-bench">01 · Benchmark (<span id="toc-b"></span>)</a><a href="#sec-wf">02 · Étapes du Workflow (<span id="toc-w"></span>)</a></nav>
+    </div>
+    <div class="br-count" aria-live="polite"><span><b id="n-yes">0</b>à intégrer</span><span><b id="n-no">0</b>non retenues</span></div>
+  </header>
+  <section class="br-sec" id="sec-bench" style="padding-top:24px"><div class="br-sec__head"><div><span class="sa-mono sa-muted">01 · BENCHMARK</span><h2>Les idées repérées</h2><p>Coche « Intégrer » pour chaque idée que tu veux dans le site. Une idée non cochée compte comme non retenue. Le détail est dans la section Benchmark du guide.</p></div></div>
+  <div class="br-filters" role="group" aria-label="Filtrer par statut" id="filters"></div>
+  <table>
+    <thead><tr><th>#</th><th>Idée</th><th>Vu chez</th><th>Étape</th><th>Statut</th><th>Intégrer</th><th>Note</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table></section>
+  <section class="br-sec" id="sec-wf"><div class="br-sec__head"><div><span class="sa-mono sa-muted">02 · WORKFLOW</span><h2>Les étapes du parcours</h2><p>Chaque élément <b>En place</b>, <b>À valider</b> ou <b>À faire</b> du Workflow. Ouvre le composant indiqué dans « Où tester », coche « Testé », puis choisis Valider ou À revoir. Une ligne sans choix reste sans décision.</p></div>
+    <div class="br-count" aria-live="polite"><span><b id="w-ok">0</b>validés</span><span><b id="w-ko">0</b>à revoir</span><span><b id="w-none">0</b>sans décision</span></div></div>
+  <div class="br-filters" role="group" aria-label="Filtrer les étapes" id="wfilters"></div>
+  <table>
+    <thead><tr><th>Étape</th><th>Élément</th><th>Statut</th><th>Où tester</th><th>Testé</th><th>Décision</th><th>Note</th></tr></thead>
+    <tbody id="wrows"></tbody>
+  </table></section>
+  <div class="br-bar"><p id="hint">Rien n'est envoyé tant que tu n'as pas validé.</p><button class="sa-btn sa-btn--primary" id="validate">Valider mes retours</button></div>
+  <section class="br-done" id="done" aria-live="polite">
+    <h2>Retours validés</h2>
+    <p style="margin:0">Dernière étape : copie ce récapitulatif et colle-le dans un commentaire « Envoyer à Claude » sur ce design system, ou dans la conversation. J'intègre les idées retenues, je reprends les étapes à revoir et je mets à jour les statuts du Workflow.</p>
+    <textarea id="summary" readonly aria-label="Récapitulatif des retours"></textarea>
+    <div class="row"><button class="sa-btn sa-btn--primary" id="copy">Copier le récapitulatif</button><button class="sa-btn sa-btn--secondary" id="edit">Modifier mes choix</button><span class="br-stamp" id="stamp"></span></div>
+  </section>
+</main>
+<script>
+(function () {
+  var IDEAS = [
+    ["Suivre une marque : alerte quand elle arrive dans une récolte", "Vogue Runway, Margiela", "W-03, W-07", "int", "Top 15"],
+    ["Chaque récolte numérotée et nommée, anciennes récoltes consultables comme des saisons", "Hyein Seo, Simone Rocha", "W-04, Journaling", "int", "Top 15"],
+    ["Accès à la récolte par mot de passe obtenu en s'inscrivant", "Nhogirl", "W-03, W-04", "test", "Top 15"],
+    ["Guide cadeaux par budget (moins de 65, 100, 150 €)", "Lacoste", "W-05", "int", "Top 15"],
+    ["Badges éditoriaux sur les vignettes (Vu en défilé, Pop-up, Exclusivité)", "Prada, Kiko Kostadinov", "W-06", "int", "Top 15"],
+    ["Taille toujours visible sur la vignette", "Post Archive Faction", "W-06", "int", "Top 15"],
+    ["Accordéons Entretien et Origine, texte sur la patine", "Girbaud", "W-07", "int", "Top 15"],
+    ["Rangée « Vu récemment » sous la fiche produit", "Collina Strada", "W-07", "int", "Top 15"],
+    ["Intro éditoriale en tête de liste et newsletter dans la grille", "Miu Miu, Kiko Kostadinov", "W-05", "int", "Top 15"],
+    ["Essayage sur rendez-vous à l'atelier", "Issey Miyake", "L-03", "int", "Top 15"],
+    ["Planches de looks enregistrées et partageables", "Vogue Runway", "W-07, L-02", "test", "Top 15"],
+    ["Journaling classé « À porter / À regarder », légendes d'une ligne", "Tomikana", "Journaling", "int", "Top 15"],
+    ["Mention d'authenticité sur les pièces Archive de créateur", "Vibram", "W-07", "int", "Top 15"],
+    ["Archive Sale pour les pièces non vendues après plusieurs récoltes", "ROA", "W-05", "test", "Top 15"],
+    ["Programme membre : avant-premières, anniversaire, retouches", "Lacoste", "W-10", "test", "Top 15"],
+    ["Prix tout compris (droits et taxes) pour les envois hors UE", "Kiko Kostadinov, ROA", "W-05, W-09", "int", "Liste"],
+    ["Guide des tailles en lien à côté des tailles", "Girbaud, Lacoste", "W-07", "int", "Fiche"],
+    ["Intro par type de pièce (glossaire, savoir-faire)", "Margiela (Tabi)", "W-05", "int", "Éditorial"],
+    ["Concept de marque expliqué dans À propos", "Issey Miyake, Collina Strada", "À propos", "int", "Éditorial"],
+    ["Page Lookbook en grille d'images sans texte, index numéroté", "Comme des Garçons", "Journaling", "test", "Navigation"],
+    ["Collaborations dans le menu (créateurs caribéens)", "Andersson Bell, ROA", "Navigation", "test", "Récoltes"],
+    ["Filtre par occasion (Soirée, Shoot, Quotidien)", "Vibram", "W-05, L-02", "test", "Liste"],
+    ["Filtre « Disponible au pop-up » pendant les pop-ups", "Margiela", "W-05", "test", "Liste"],
+    ["Nommage des pièces : NOM, puis couleur après un tiret", "Kiko Kostadinov", "B-02", "test", "Liste"],
+    ["Page lieu pour les pop-ups, avec dates", "Issey Miyake", "W-01", "test", "Éditorial"],
+    ["Film court pour les collaborations", "ROA", "Journaling", "test", "Services"],
+    ["Offre de bienvenue (−10 %) contre l'e-mail", "Collina Strada", "W-03", "out", "Services"],
+    ["Menu Restock", "Andersson Bell, Hyein Seo", "Navigation", "out", "Récoltes"]
+  ];
+  /* Étapes du Workflow (workflow.md) : [étape, élément, statut place/val/todo, où tester] */
+  var WF = [
+    ["W-01", "Barre d'annonce rotative qui reprend le message de la récolte", "place", "AnnouncementBar"],
+    ["W-01", "Page d'atterrissage dédiée par récolte, plutôt que l'accueil", "val", "HomePage"],
+    ["W-02", "Récolte en cours : photo, titre, compte à rebours jeudi 19 h", "place", "DropCountdown"],
+    ["W-02", "Deux portes séparées Shop / Location & RP sur l'accueil", "place", "HomePage"],
+    ["W-02", "Accueil : seulement les pièces en vente, le teasing reste sur Instagram", "place", "HomePage"],
+    ["W-03", "Champ e-mail unique pour l'accès anticipé, confirmation en mono", "place", "DropCountdown"],
+    ["W-03", "Téléphone en option pour un rappel SMS", "val", "DropCountdown"],
+    ["W-04", "Collection programmée dans Shopify, pièces à stock 1", "place", "Shopify"],
+    ["W-04", "Pièces qui passent en « Vendue » en direct pendant la récolte", "todo", "ShopPage"],
+    ["W-05", "Shop : barre d'outils collante (filtrer, trier, 2 / 3 / 4 colonnes)", "place", "ShopPage"],
+    ["W-05", "Filtres alimentés par les fiches : type, marque, époque, matière, disponibilité", "place", "FilterDrawer"],
+    ["W-05", "Filtre « Ma taille » mémorisé", "val", "FilterDrawer"],
+    ["W-06", "Vignette : gros plan sur la pièce, look complet au survol, ajout rapide, favoris", "place", "ProductCard"],
+    ["W-06", "État de la pièce (Très bon, Bon) dès la vignette", "val", "ProductCard"],
+    ["W-07", "Fiche produit : grande photo, miniatures cliquables, flèches, zoom", "place", "ProductPageB"],
+    ["W-07", "Ligne mannequin sous la taille (« Alima mesure 1,80 m… »)", "place", "ProductPageB"],
+    ["W-07", "Deux rangées de recommandations : même type, même marque, disponibles", "place", "ProductPageB"],
+    ["W-07", "Fiche d'archive en chapitres visibles, sans onglets", "place", "ProductPageB"],
+    ["W-07", "Bouton d'ajout fixé en bas d'écran sur mobile", "val", "ProductPageB"],
+    ["W-07", "Alerte « pièces similaires » quand une pièce est vendue", "val", "ProductPageB"],
+    ["W-08", "Panier en tiroir, réservation 15 min", "place", "CartDrawer"],
+    ["W-08", "Code promo replié dans le panier", "place", "CartDrawer"],
+    ["W-08", "Montant du seuil de livraison offerte", "val", "CartDrawer"],
+    ["W-08", "Durée de réservation du panier", "val", "CartDrawer"],
+    ["W-09", "Checkout Shopify aux couleurs du système", "todo", "Shopify"],
+    ["W-10", "Séquence d'e-mails après l'achat", "todo", "Userflows"],
+    ["W-10", "Politique de retour lisible (14 jours)", "todo", "Footer"],
+    ["L-01", "Méga-menu Location & RP : Louer, Tarifs et options, Journaling", "place", "Header"],
+    ["L-01", "Page Location en 4 étapes avec récapitulatif fixe", "place", "LocationPage"],
+    ["L-02", "Grille des looks, bascule look complet / pièces, badge de disponibilité", "place", "LocationPage"],
+    ["L-03", "Dates et durées en boutons, prix et caution en direct, plancher 30 €", "place", "LocationPage"],
+    ["L-03", "Vrai calendrier relié à l'app de location", "todo", "LocationPage"],
+    ["L-04", "4 packs, services inclus verrouillés, options, retrait ou coursier", "place", "LocationPage"],
+    ["L-04", "Prix réels du stylisme et de la photo", "val", "LocationPage"],
+    ["L-04", "Tarif du coursier dans Paris", "val", "LocationPage"],
+    ["L-05", "Formulaire court pour les pros", "place", "LocationPage"],
+    ["L-06", "Récapitulatif avec caution par empreinte, Réserver actif seulement si tout est rempli", "place", "LocationPage"],
+    ["L-06", "Écran de confirmation après réservation", "todo", "LocationPage"],
+    ["B-05", "La liste de contrôle bloque la publication (pas de pièce sans marque, mesures ou gros plan)", "val", "Workflow"],
+    ["Nav", "Menu mobile et pied de page alignés sur les trois entrées de l'en-tête", "place", "Header, Footer"]
+  ];
+  var WST = { place: ["En place", "st--place"], val: ["À valider", ""], todo: ["À faire", "st--todo"] };
+  var wfilter = "all";
+  var ST = { int: ["À intégrer", "st--int"], test: ["À tester", ""], out: ["Écarté", "st--out"] };
+  var KEY = "sime-bench-review-v1", state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { state = {}; }
+  state.items = state.items || {}; state.wf = state.wf || {};
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var filter = "all";
+
+  function render() {
+    document.getElementById("rows").innerHTML = IDEAS.map(function (it, i) {
+      var id = String(i + 1).padStart(2, "0"), s = state.items[id] || {}, st = ST[it[3]];
+      var hidden = filter !== "all" && filter !== it[3];
+      return '<tr data-id="' + id + '" class="' + (s.on ? "is-on" : "") + (hidden ? " is-hidden" : "") + '"><td class="no">' + id + '</td>' +
+        '<td class="idea"><b>' + esc(it[0]) + '</b><small>' + esc(it[4]) + '</small></td><td class="seen">' + esc(it[1]) + '</td><td class="step">' + esc(it[2]) + '</td>' +
+        '<td><span class="st ' + st[1] + '">' + st[0] + '</span></td>' +
+        '<td><label class="ck"><input type="checkbox" data-ck="' + id + '"' + (s.on ? " checked" : "") + ' aria-label="Intégrer l\'idée ' + id + '">Intégrer</label></td>' +
+        '<td class="note"><input data-note="' + id + '" value="' + esc(s.note || "") + '" placeholder="Note (optionnel)" aria-label="Note pour l\'idée ' + id + '"></td></tr>';
+    }).join("");
+    count();
+  }
+  function count() {
+    var yes = IDEAS.filter(function (it, i) { var s = state.items[String(i + 1).padStart(2, "0")]; return s && s.on; }).length;
+    document.getElementById("n-yes").textContent = yes; document.getElementById("n-no").textContent = IDEAS.length - yes;
+  }
+  function renderFilters() {
+    var f = [["all", "Toutes (" + IDEAS.length + ")"], ["int", "À intégrer"], ["test", "À tester"], ["out", "Écartées"]];
+    document.getElementById("filters").innerHTML = f.map(function (x) { return '<button data-f="' + x[0] + '" aria-pressed="' + (filter === x[0]) + '">' + x[1] + '</button>'; }).join("");
+  }
+  function wid(i) { return "w" + String(i + 1).padStart(2, "0"); }
+  function renderWF() {
+    document.getElementById("wrows").innerHTML = WF.map(function (it, i) {
+      var id = wid(i), s = state.wf[id] || {}, st = WST[it[2]];
+      var hidden = wfilter !== "all" && (wfilter === "none" ? !!s.d : wfilter !== it[2]);
+      return '<tr data-w="' + id + '" class="' + (s.d === "ok" ? "is-ok" : s.d === "ko" ? "is-ko" : "") + (hidden ? " is-hidden" : "") + '"><td class="step">' + it[0] + '</td>' +
+        '<td class="idea"><b>' + esc(it[1]) + '</b></td><td><span class="st ' + st[1] + '">' + st[0] + '</span></td><td class="where">' + esc(it[3]) + '</td>' +
+        '<td><label class="ck"><input type="checkbox" data-wt="' + id + '"' + (s.t ? " checked" : "") + ' aria-label="Testé : ' + esc(it[0]) + '">Testé</label></td>' +
+        '<td><span class="seg" role="group" aria-label="Décision ' + esc(it[0]) + '"><button data-wd="' + id + '" data-v="ok" aria-pressed="' + (s.d === "ok") + '">Valider</button><button data-wd="' + id + '" data-v="ko" aria-pressed="' + (s.d === "ko") + '">À revoir</button></span></td>' +
+        '<td class="note"><input data-wn="' + id + '" value="' + esc(s.n || "") + '" placeholder="Note (optionnel)" aria-label="Note ' + esc(it[0]) + '"></td></tr>';
+    }).join("");
+    countWF();
+  }
+  function countWF() {
+    var ok = 0, ko = 0;
+    WF.forEach(function (it, i) { var s = state.wf[wid(i)]; if (s && s.d === "ok") ok++; else if (s && s.d === "ko") ko++; });
+    document.getElementById("w-ok").textContent = ok; document.getElementById("w-ko").textContent = ko; document.getElementById("w-none").textContent = WF.length - ok - ko;
+  }
+  function renderWFilters() {
+    var f = [["all", "Tous (" + WF.length + ")"], ["place", "En place"], ["val", "À valider"], ["todo", "À faire"], ["none", "Sans décision"]];
+    document.getElementById("wfilters").innerHTML = f.map(function (x) { return '<button data-wf="' + x[0] + '" aria-pressed="' + (wfilter === x[0]) + '">' + x[1] + '</button>'; }).join("");
+  }
+  function wfSummary() {
+    var g = { ok: [], ko: [], none: [] };
+    WF.forEach(function (it, i) {
+      var s = state.wf[wid(i)] || {};
+      g[s.d || "none"].push(it[0] + " · " + it[1] + " [" + WST[it[2]][0] + (s.t ? ", testé" : "") + "]" + (s.n ? " · Note : " + s.n : ""));
+    });
+    return "\n\n— WORKFLOW —\nVALIDÉS (" + g.ok.length + ")\n" + (g.ok.join("\n") || "aucun") +
+      "\n\nÀ REVOIR (" + g.ko.length + ")\n" + (g.ko.join("\n") || "aucun") +
+      "\n\nSANS DÉCISION (" + g.none.length + ")\n" + (g.none.join("\n") || "aucun");
+  }
+  function summary() {
+    var d = new Date(state.validatedAt), yes = [], no = [];
+    IDEAS.forEach(function (it, i) {
+      var id = String(i + 1).padStart(2, "0"), s = state.items[id] || {};
+      var line = "#" + id + " " + it[0] + " (" + it[2] + ")" + (s.note ? " · Note : " + s.note : "");
+      (s.on ? yes : no).push(line);
+    });
+    return "RETOURS BENCHMARK ET WORKFLOW · SIMÉ ARCHIVES · " + d.toLocaleDateString("fr-FR") + " " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) +
+      "\n\n— BENCHMARK —\nÀ INTÉGRER (" + yes.length + ")\n" + (yes.join("\n") || "aucune") +
+      "\n\nNON RETENUES (" + no.length + ")\n" + (no.join("\n") || "aucune") + wfSummary();
+  }
+  function showDone() {
+    var box = document.getElementById("done");
+    document.getElementById("summary").value = summary();
+    document.getElementById("stamp").textContent = "Validé le " + new Date(state.validatedAt).toLocaleString("fr-FR");
+    box.classList.add("is-on");
+    document.getElementById("hint").textContent = "Retours validés. Tu peux encore modifier tes choix puis valider à nouveau.";
+  }
+
+  document.addEventListener("change", function (e) {
+    var w = e.target.dataset.wt;
+    if (w) { state.wf[w] = state.wf[w] || {}; state.wf[w].t = e.target.checked; save(); return; }
+    var id = e.target.dataset.ck; if (!id) return;
+    state.items[id] = state.items[id] || {}; state.items[id].on = e.target.checked;
+    e.target.closest("tr").classList.toggle("is-on", e.target.checked); save(); count();
+  });
+  document.addEventListener("input", function (e) {
+    var w = e.target.dataset.wn;
+    if (w) { state.wf[w] = state.wf[w] || {}; state.wf[w].n = e.target.value; save(); return; }
+    var id = e.target.dataset.note; if (!id) return;
+    state.items[id] = state.items[id] || {}; state.items[id].note = e.target.value; save();
+  });
+  document.getElementById("filters").addEventListener("click", function (e) { var b = e.target.closest("[data-f]"); if (!b) return; filter = b.dataset.f; renderFilters(); render(); });
+  document.getElementById("wfilters").addEventListener("click", function (e) { var b = e.target.closest("[data-wf]"); if (!b) return; wfilter = b.dataset.wf; renderWFilters(); renderWF(); });
+  document.getElementById("wrows").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-wd]"); if (!b) return;
+    var id = b.dataset.wd; state.wf[id] = state.wf[id] || {};
+    state.wf[id].d = state.wf[id].d === b.dataset.v ? "" : b.dataset.v; save();
+    var tr = b.closest("tr"), d = state.wf[id].d;
+    tr.classList.toggle("is-ok", d === "ok"); tr.classList.toggle("is-ko", d === "ko");
+    tr.querySelectorAll("[data-wd]").forEach(function (x) { x.setAttribute("aria-pressed", x.dataset.v === d); });
+    countWF();
+  });
+  document.getElementById("validate").addEventListener("click", function () {
+    state.validatedAt = Date.now(); save(); showDone();
+    document.getElementById("done").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  document.getElementById("copy").addEventListener("click", function () {
+    var ta = document.getElementById("summary"), b = this; ta.select();
+    try { navigator.clipboard.writeText(ta.value).then(function () { b.textContent = "Copié"; }, function () { document.execCommand("copy"); b.textContent = "Copié"; }); }
+    catch (x) { document.execCommand("copy"); b.textContent = "Copié"; }
+  });
+  document.getElementById("edit").addEventListener("click", function () { document.querySelector(".br-head").scrollIntoView({ behavior: "smooth" }); });
+
+  document.getElementById("toc-b").textContent = IDEAS.length; document.getElementById("toc-w").textContent = WF.length;
+  renderFilters(); render(); renderWFilters(); renderWF();
+  if (state.validatedAt) showDone();
+})();
+</script>
+</body>
+</html>

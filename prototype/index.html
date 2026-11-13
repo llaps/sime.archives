@@ -1,0 +1,130 @@
+<title>Simé Archives</title>
+<meta name="description" content="Prototype navigable du site Simé Archives">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="bundle.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}
+/* Ouverture plein écran */
+.hm-hero{position:relative;height:62vh;min-height:420px;max-height:640px;overflow:hidden;background:var(--ink)}
+.hm-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;transform:scale(1.08);animation:hm-in 2.4s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes hm-in{to{transform:scale(1)}}
+.hm-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(28,26,24,0) 30%,rgba(28,26,24,.72) 100%)}
+.hm-hero__txt{position:absolute;left:var(--space-6);right:var(--space-6);bottom:var(--space-7);z-index:1;color:var(--on-ink);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-6);align-items:end}
+.hm-hero__txt .sa-mono{color:var(--on-ink);opacity:.8;font-size:12px;letter-spacing:.08em}
+.hm-hero h1{margin:var(--space-3) 0 0;font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-weight:500;font-size:clamp(36px,4.6vw,64px);line-height:.98;letter-spacing:-.025em;max-width:14ch}
+.hm-hero__sub{margin:var(--space-3) 0 0;max-width:46ch;font-size:15px;line-height:22px;opacity:.9}
+.hm-hero__gloss{display:block;margin-top:var(--space-3);font-family:var(--font-mono);font-size:12px;opacity:.8}
+.hm-hero__cta{display:flex;gap:var(--space-2)}
+.hm-btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 24px;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--on-ink);color:var(--on-ink)}
+.hm-btn--solid{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.hm-btn:hover{background:var(--on-ink);color:var(--ink)}
+/* Manifeste */
+.hm-mani{padding-top:72px;padding-bottom:72px;display:grid;grid-template-columns:1fr 2fr;gap:var(--space-6)}
+.hm-mani p{margin:0;font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-weight:400;font-size:clamp(16px,1.5vw,20px);line-height:1.4;max-width:640px;letter-spacing:-.01em}
+.hm-mani p em{font-style:italic}
+.hm-mani__sign{margin-top:var(--space-5);display:block;font-family:var(--font-mono);font-size:12px;color:var(--ink-muted)}
+/* Récolte en cours, sans les pièces */
+.hm-drop{display:grid;grid-template-columns:1.2fr 1fr;min-height:620px;border-top:1px solid var(--ink)}
+.hm-drop__img{position:relative;overflow:hidden}
+.hm-drop__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+.hm-drop:hover .hm-drop__img img{transform:scale(1.03)}
+.hm-drop__txt{padding:var(--space-7) var(--space-6);display:flex;flex-direction:column;justify-content:space-between;gap:var(--space-6);background:var(--paper)}
+.hm-drop h2{margin:var(--space-3) 0 0;font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-weight:600;font-size:56px;line-height:.98;letter-spacing:-.025em}
+.hm-drop p{margin:var(--space-4) 0 0;max-width:400px}
+.hm-when{font-family:var(--font-mono);font-size:clamp(17px,4.6vw,28px);letter-spacing:-.01em;white-space:nowrap}
+.hm-drop__cta{display:flex;gap:8px;margin-top:24px;flex-wrap:wrap}
+.hm-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted)}
+.hm-tag--live{color:var(--ink)}.hm-tag--live::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--jaune);animation:hm-pulse 1.6s ease-in-out infinite}
+@keyframes hm-pulse{50%{opacity:.35}}@media (prefers-reduced-motion: reduce){.hm-tag--live::before{animation:none}}
+.hm-next{padding-top:var(--space-6);border-top:1px dashed var(--rule-strong)}.hm-next .hm-when{margin-top:var(--space-3)}.hm-next .hm-when small{margin-bottom:4px}.hm-next .hm-drop__cta{margin-top:var(--space-5)}.hm-next p{font-size:14px;color:var(--ink-muted)}
+.hm-steps{list-style:none;margin:var(--space-5) 0 0;padding:0;display:grid;gap:var(--space-3);max-width:440px;font-size:14px;line-height:20px}
+.hm-steps li{display:grid;grid-template-columns:72px 1fr;gap:12px}
+.hm-steps span{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);padding-top:2px}
+.hm-steps a{text-decoration:underline;text-underline-offset:3px}
+.hm-when small{display:block;white-space:normal;font-size:11px;letter-spacing:.06em;color:var(--ink-muted);margin-bottom:6px;text-transform:uppercase}
+/* Récolte : les pièces directement */
+.hm-rec__head{display:flex;justify-content:space-between;align-items:end;gap:var(--space-5);flex-wrap:wrap;margin-bottom:var(--space-5)}
+.hm-rec__all{margin-left:auto}
+.hm-rec__head h2{margin:var(--space-3) 0 0;font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-weight:600;font-size:clamp(28px,3vw,40px);line-height:1;letter-spacing:-.02em}
+.hm-rec .hm-next{margin-top:var(--space-6);padding-top:var(--space-5);display:grid;grid-template-columns:auto 1fr auto;gap:var(--space-6);align-items:start}
+.hm-rec .hm-next .hm-when{margin-top:var(--space-2);font-size:clamp(17px,2vw,22px)}
+.hm-rec .hm-steps{margin:0}
+.hm-rec .hm-next .hm-drop__cta{margin-top:0}
+/* Récolte à venir : lecture et action à gauche, compte à rebours à droite */
+.hm-upwrap{padding-top:var(--space-6);padding-bottom:var(--space-6)}
+.hm-up{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--space-7);align-items:center;background:var(--paper-deep);padding:var(--space-6)}
+.hm-up h2{margin:var(--space-3) 0 0;font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-weight:600;font-size:clamp(28px,3vw,40px);line-height:1;letter-spacing:-.02em}
+.hm-up__link{display:inline-flex;gap:.3em;align-items:baseline;text-decoration:none;color:inherit}.hm-up__link span{transition:transform .2s}.hm-up__link:hover{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}.hm-up__link:hover span{transform:translateX(4px)}
+.hm-up__ig{margin:var(--space-4) 0 0;max-width:42ch;font-size:15px;line-height:22px}.hm-up__ig a{text-decoration:underline;text-underline-offset:3px}
+.hm-up__early{margin:var(--space-5) 0 0;max-width:42ch;font-size:15px;line-height:22px}.hm-up__early .sa-label{display:block;margin-bottom:4px}
+.hm-up__form{margin-top:var(--space-3);max-width:440px}
+.hm-up__form .sa-field button{padding:0 0 0 var(--space-4);white-space:nowrap}
+.hm-up__clock .sa-count__num{font-size:clamp(36px,4.4vw,60px)}
+.hm-up__clock .sa-count__cell{min-width:0;padding:var(--space-4) var(--space-2) var(--space-3)}
+.hm-up__date{margin:var(--space-3) 0 0;font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);text-align:right}
+@media (max-width:900px){.hm-up{grid-template-columns:minmax(0,1fr);gap:var(--space-5);padding:var(--space-5) var(--space-4)}.hm-up__clock{order:-1}.hm-up .sa-count{gap:4px}.hm-up__date{text-align:left}.hm-up__form .sa-field button{padding-left:var(--space-3)}}
+/* Portes compactes */
+.hm-svc .sa-door{aspect-ratio:16/10}.hm-svc .sa-door img{object-position:center 30%}
+@media (max-width:900px){.hm-svc .sa-door{aspect-ratio:auto}.hm-svc .sa-door img{position:relative;display:block;height:220px}.hm-svc .sa-door__cap{position:static;padding:var(--space-4) 0}.hm-hero__cta{flex-direction:column;align-items:stretch}.hm-btn{padding:0 16px}}
+/* Bandeau photo */
+.hm-band{position:relative;height:70vh;min-height:420px;max-height:720px;overflow:hidden}
+.hm-band img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%}
+.hm-band blockquote{position:absolute;left:var(--space-6);bottom:var(--space-6);margin:0;max-width:520px;background:var(--paper);padding:var(--space-5)}
+.hm-band blockquote p{margin:0;font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-style:italic;font-size:24px;line-height:1.25}
+.hm-band blockquote span{display:block;margin-top:var(--space-3)}
+/* Nos éditos */
+.sa-ig{position:relative;display:block;overflow:hidden}.sa-ig img{display:block;aspect-ratio:3/4;width:100%;object-fit:cover;transition:transform 1s cubic-bezier(.2,.7,.2,1)}.sa-ig:hover img{transform:scale(1.04)}
+.sa-ig__cta{position:absolute;left:8px;right:8px;bottom:8px;background:var(--paper);text-align:center;padding:8px;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s}.sa-ig:hover .sa-ig__cta,.sa-ig:focus-visible .sa-ig__cta{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.hm-hero img{animation:none;transform:none}}
+@media (max-width:900px){
+  .hm-hero{height:78vh;min-height:460px}.hm-hero__txt{grid-template-columns:1fr;left:var(--space-4);right:var(--space-4);bottom:var(--space-5)}
+  .hm-mani{grid-template-columns:1fr;gap:var(--space-4);padding-top:48px;padding-bottom:48px}
+  .hm-drop{grid-template-columns:1fr}.hm-drop__img{height:420px}.hm-drop__txt{padding:var(--space-6) var(--space-4)}.hm-drop h2{font-size:40px}.hm-drop__cta{flex-direction:column}.hm-drop__cta .sa-btn{width:100%}
+  .hm-band blockquote{left:var(--space-4);right:var(--space-4);bottom:var(--space-4)}
+  .hm-rec .hm-next{grid-template-columns:1fr;gap:var(--space-4)}.hm-rec .hm-next .sa-btn{width:100%}
+}
+</style>
+<script>document.body.classList.add("sa")</script>
+<div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives, P = S.photos;
+var strip = [P.look6, P.look2, P.look7, P.look4, P.look5, P.look8];
+/* Prochain jeudi 19 h : la page d'accueil annonce la récolte, la page récolte montre le compte à rebours et les pièces */
+function nextDrop() { return S.nextRecolte(); } /* premier jeudi du mois, 19 h */
+var nd = nextDrop();
+var cur = S.shopProducts.filter(function (p) { return p.drop === "Récolte 04" && !p.sold; });
+
+document.getElementById("r").innerHTML =
+  S.announcementBar() + S.header() +
+  '<section class="hm-hero"><img src="' + P.look1 + '" alt="Look Simé : gilet nylon, jupe voile et sac filet anis, assise contre une grille parisienne">' +
+    '<div class="hm-hero__txt"><div><span class="sa-mono">SIMÉ ARCHIVES · PARIS</span><h1>Une récolte mensuelle de ce qui a été semé.</h1><p class="hm-hero__sub">Pièces d’archive et pièces d’aujourd’hui, chinées une à une, à acheter ou à louer.</p></div>' +
+    '<div class="hm-hero__cta"><a class="hm-btn hm-btn--solid" href="#">La récolte en cours</a><a class="hm-btn" href="#">Louer un look</a></div></div></section>' +
+
+  '<section class="sa-section sa-wrap hm-rec">' +
+    '<div class="hm-rec__head"><div><span class="hm-tag hm-tag--live">En ce moment · récolte ouverte</span><h2>Récolte 04 · Technique et légère</h2></div><a class="sa-btn sa-btn--link hm-rec__all" href="#">Toute la récolte →</a></div>' +
+    '<div class="sa-grid" data-cols="4">' + cur.slice(0, 4).map(S.productCard).join("") + '</div>' +
+  '</section>' +
+
+  '<section class="sa-wrap hm-upwrap"><div class="hm-up">' +
+    '<div class="hm-up__txt"><span class="hm-tag">À venir · Récolte 05</span><h2><a class="hm-up__link" href="#">La prochaine récolte <span aria-hidden="true">→</span></a></h2>' +
+      '<p class="hm-up__ig">Les pièces sont présentées sur <a href="https://www.instagram.com/sime.archives/" target="_blank" rel="noopener">@sime.archives</a> avant l’ouverture.</p><p class="hm-up__early"><span class="sa-label">Accès anticipé · 18 h</span>Entrez une heure avant tout le monde.</p>' +
+      '<form class="sa-form hm-up__form" data-sa="early"><label class="sa-sr" for="home-mail">E-mail</label><div class="sa-field"><input id="home-mail" type="email" placeholder="Votre e-mail" required><button class="sa-label" type="submit">Recevoir mon accès</button></div><p class="sa-form-ok">Mèsi. Votre lien d’accès arrivera jeudi à 18 h.</p></form>' +
+    '</div>' +
+    '<div class="hm-up__clock">' +
+      '<div class="sa-count" data-sa="count" role="timer" aria-label="Temps avant l’ouverture de la prochaine récolte">' + ["Jours", "Heures", "Min", "Sec"].map(function (u, i) { return '<div class="sa-count__cell"><span class="sa-count__num" data-u="' + i + '">00</span><span class="sa-count__unit">' + u + '</span></div>'; }).join("") + '</div>' +
+      '<p class="hm-up__date">Ouverture à tous · ' + nd.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }) + ', 19 h (Paris)</p>' +
+    '</div>' +
+  '</div></section>' +
+
+  '<section class="sa-section sa-wrap hm-svc" style="border-top:1px solid var(--ink)"><div class="sa-section__head"><div><span class="sa-mono sa-muted">NOS SERVICES</span><h2>Acheter ou louer</h2></div></div><div class="sa-doors">' +
+    '<a class="sa-door" href="#"><img src="' + P.look7 + '" alt="Look du Shop : blazer beige et panier paille"><span class="sa-door__cap"><span><span class="sa-mono sa-muted">ACHETER</span><h3>Le Shop</h3><span class="sa-muted" style="font-size:14px">Pièces uniques. Envoi dans toute la France, Outre-mer compris.</span></span><span class="sa-label">Entrer →</span></span></a>' +
+    '<a class="sa-door" href="#"><img src="' + P.look4 + '" alt="Look de location : gilet peau lainée, mini-jupe sequins"><span class="sa-door__cap"><span><span class="sa-mono sa-muted">LOUER</span><h3>Location & RP</h3><span class="sa-muted" style="font-size:14px">Looks et pièces à la journée, à Paris. Retrait ou coursier.</span></span><span class="sa-label">Réserver →</span></span></a>' +
+  '</div></section>' +
+
+  /* Nos éditos : flux Instagram filtré sur les photos de shoot (en production : app de flux Instagram, filtre par hashtag #simeedito). Chaque photo renvoie vers son post. */
+  '<section class="sa-section sa-wrap" style="border-top:1px solid var(--photocopy)"><div class="sa-section__head"><div><span class="sa-mono sa-muted">INSTAGRAM · @SIME.ARCHIVES</span><h2>Nos éditos</h2></div><a class="sa-btn sa-btn--link" href="https://www.instagram.com/sime.archives/" target="_blank" rel="noopener">Suivre @sime.archives</a></div><div class="sa-strip">' +
+    strip.map(function (u, i) { return '<a class="sa-ig" href="https://www.instagram.com/sime.archives/" target="_blank" rel="noopener" aria-label="Voir l’édito ' + (i + 1) + ' sur Instagram (nouvel onglet)"><img src="' + u + '" alt="" loading="lazy"><span class="sa-ig__cta sa-label">Voir le post</span></a>'; }).join("") +
+  '</div></section>' +
+  S.footer() + S.cartDrawer();
+S.init(document);
+</script>
+<script src="proto.js"></script>

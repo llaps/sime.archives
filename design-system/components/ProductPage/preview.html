@@ -1,0 +1,40 @@
+<!-- @dsCard group="Site" height=900 width=1280 page subtitle="Version A, écartée : la version retenue est ProductPageB" -->
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Fiche produit</title>
+<style>html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}</style></head>
+<body class="sa">
+<div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives;
+
+var p = S.find("SA-001");
+document.getElementById("r").innerHTML =
+  S.announcementBar() + S.header({active:"shop"}) +
+  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Shop</a><span>Hauts</span><span>'+p.id+'</span></nav></div>' +
+  '<div class="sa-pdp"><div class="sa-pdp__gallery">' +
+    [[p.photos[0],"La pièce"],[S.lookOf(p),"Le look"],[p.photos[1],"Portée"],[S.photos.look3,"Lookbook"]].map(function(v,i){return '<figure><img src="'+v[0]+'" alt="'+p.name+', '+v[1].toLowerCase()+'"><figcaption>'+String(i+1).padStart(2,"0")+' · '+v[1]+'</figcaption></figure>'}).join("") +
+  '</div><div class="sa-pdp__panel">' +
+    S.inventoryLabel(p, {compact:true}) +
+    '<span class="sa-label">'+p.brand+'</span><h1 class="sa-pdp__title">'+p.name+'</h1>' +
+    '<div class="sa-pdp__price"><span class="sa-price" style="font-size:16px">'+S.euro(p.price)+'</span><span class="sa-mono sa-muted">TVA sur marge</span></div>' +
+    '<p style="margin:0">Un nylon gris qui froisse comme une enveloppe. Col montant zippé, cordon à la taille, emmanchures nettes. <a href="#" style="text-decoration:underline;text-underline-offset:3px">Lire la fiche d’archive</a></p>' +
+    '<div class="sa-pdp__size"><span class="sa-card__size">'+p.size+'</span><span class="sa-mono sa-muted">Aisselles 46 cm · Longueur 58 cm</span></div>' +
+    S.modelLine(p) +
+    '<span class="sa-pdp__unique">Pièce unique · il n’y en aura pas d’autre</span>' +
+    '<div class="sa-pdp__actions">' + S.button("Ajouter au panier",{block:true,action:"add",id:p.id}) + S.button("Louer ce look · dès 30 €",{variant:"secondary",block:true,action:"rent"}) + '</div>' +
+    '<div>' + S.accordion([
+      {title:"La pièce",open:true,html:"Gilet sans manches, col montant. Nylon, zip court, cordon de serrage à la taille."},
+      {title:"Mesures à plat",html:'<span class="sa-mono">Aisselles 46 cm · Taille 44 cm · Longueur 58 cm</span>'},
+      {title:"État",html:"Très bon. Légère trace sur le zip, visible en photo 02."},
+      {title:"Comment le porter",html:'<div class="sa-pdp__look"><img src="'+S.img(S.products[1],"a")+'" alt="SA-002"><img src="'+S.img(S.products[2],"a")+'" alt="SA-003"><img src="'+S.img(S.products[3],"a")+'" alt="SA-004"></div><p class="sa-muted" style="margin:8px 0 0;font-size:13px">Le look de Lou-Ann : jupe voile SA-002, sac filet SA-003, chaussures SA-004.</p>'},
+      {title:"Livraison et retours",html:"Toute la France, Outre-mer compris. Tampon au monogramme. Rétractation sous 14 jours."}
+    ]) + '</div>' +
+  '</div></div>' +
+  '<section class="sa-section sa-wrap" style="border-top:1px solid var(--photocopy);display:grid;grid-template-columns:1fr;justify-items:center">' + S.archiveSheet(p) + '</section>' +
+  '<section class="sa-section sa-wrap" style="border-top:1px solid var(--photocopy)">' + S.related(p) + '</section>' +
+  S.footer() + S.cartDrawer();
+S.init(document);
+</script>
+</body>
+</html>

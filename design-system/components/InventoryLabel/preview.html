@@ -1,0 +1,14 @@
+<!-- @dsCard group="Éditorial" height=300 subtitle="Ligne d'inventaire (site) et étiquette complète (imprimés)" -->
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>InventoryLabel</title>
+<style>html,body{margin:0;background:var(--paper)} </style></head>
+<body class="sa">
+<div style="padding:24px;display:grid;gap:20px"><div><p class="sa-label" style="margin:0 0 8px">Site · ligne d'inventaire</p><div id="c"></div></div><div><p class="sa-label" style="margin:0 0 8px">Imprimés · étiquette complète</p><div id="r" style="display:flex;gap:24px;flex-wrap:wrap"></div></div></div>
+<script>
+var S = window.SimeArchives;
+document.getElementById("c").innerHTML = S.inventoryLabel(S.products[0], {compact:true});
+document.getElementById("r").innerHTML = S.inventoryLabel(S.products[0]) + S.inventoryLabel(S.products[6], {fund:"Archives"});
+</script>
+</body>
+</html>

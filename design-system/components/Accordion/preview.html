@@ -1,0 +1,13 @@
+<!-- @dsCard group="Shop" height=320 width=520 subtitle="Détails produit repliables" -->
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Accordion</title>
+<style>html,body{margin:0;background:var(--paper)} </style></head>
+<body class="sa">
+<div id="r" style="padding:24px"></div>
+<script>
+var S = window.SimeArchives;
+document.getElementById("r").innerHTML = S.accordion([{title:"La pièce",open:true,html:"Gilet sans manches, col montant zippé, nylon gris, cordon à la taille."},{title:"Mesures à plat",html:"<span class='sa-mono'>Aisselles 46 cm · Longueur 58 cm</span>"},{title:"Livraison et retours",html:"Toute la France, Outre-mer compris. Retour sous 14 jours."}]); S.init(document);
+</script>
+</body>
+</html>

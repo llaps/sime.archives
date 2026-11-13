@@ -1,0 +1,13 @@
+<!-- @dsCard group="Navigation" height=420 width=1200 subtitle="Survolez Shop : méga-menu. Faites défiler : la barre se masque, puis revient en remontant" -->
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Header</title>
+<style>html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;position:relative}</style></head>
+<body class="sa">
+<div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives;
+document.getElementById("r").innerHTML = S.announcementBar() + S.header({active:"shop"}) + '<div class="sa-wrap" style="padding-top:24px;padding-bottom:64px"><div class="sa-grid" data-cols="4">' + S.products.slice(0, 8).map(S.productCard).join("") + '</div></div>' + S.cartDrawer(); S.init(document);
+</script>
+</body>
+</html>

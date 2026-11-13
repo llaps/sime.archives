@@ -1,0 +1,24 @@
+<!-- @dsCard group="Site" height=900 width=1280 page subtitle="Liste : filtres, tri, colonnes, survol image, ajout rapide" -->
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Shop</title>
+<style>html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}</style></head>
+<body class="sa">
+<div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives;
+
+var list = S.shopProducts.slice(); /* les pièces d'archive se louent, elles ne sont pas en vente */
+var cards = list.map(S.productCard);
+document.getElementById("r").innerHTML =
+  S.announcementBar() + S.header({active:"shop"}) +
+  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span>Shop</span><span>Récolte 04</span></nav>' +
+  '<div class="sa-plp-head"><div><span class="sa-mono sa-muted">RÉCOLTE 04 · 12.11.26</span><h1>Technique et légère</h1></div><p class="sa-muted">Chaque pièce est unique : nettoyée, mesurée à plat, photographiée défauts compris. Ce qui part ne revient pas.</p></div>' +
+  '' + S.noteLine("Note d’archiviste", "« Technique en haut, voile en bas. L’hybridation, sans costume. »", "Lou-Ann") + '</div>' +
+  S.listingToolbar(list.length) +
+  '<div class="sa-wrap" style="padding-top:24px;padding-bottom:64px"><div class="sa-grid" data-cols="4">' + cards.join("") + '</div></div>' +
+  S.footer() + S.filterDrawer() + S.cartDrawer();
+S.init(document);
+</script>
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!-- @dsCard group="Workflow" height=860 width=1280 page subtitle="Userflows du site, éditables : glisser, renommer, relier, ajouter des étapes" -->
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Userflows</title>
+<style>
+  html, body { margin: 0; height: 100%; background: var(--paper); }
+  .uf { display: grid; grid-template-rows: auto auto 1fr; height: 100vh; }
+  .uf-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding: 20px 24px 12px; border-bottom: 1px solid var(--photocopy); }
+  .uf-head h1 { margin: 4px 0 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 32px; line-height: 1; }
+  .uf-legend { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .uf-legend span { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); }
+  .uf-legend i { display: inline-block; width: 18px; height: 12px; border: 1.5px solid var(--ink); }
+  .uf-legend .l-start { border-radius: 999px; }
+  .uf-legend .l-action { border-style: dashed; border-color: var(--rule-strong); }
+  .uf-legend .l-dec { width: 12px; height: 12px; transform: rotate(45deg); background: var(--accent); }
+  .uf-legend .l-end { border-radius: 999px; background: var(--ink); }
+  .uf-tabs { display: flex; gap: 2px; padding: 0 24px; border-bottom: 1px solid var(--photocopy); overflow-x: auto; }
+  .uf-tabs button { padding: 12px 14px 10px; border-bottom: 2px solid transparent; color: var(--ink-muted); white-space: nowrap; display: inline-flex; gap: 8px; align-items: baseline; }
+  .uf-tabs button b { font-family: var(--font-mono); font-weight: 400; font-size: 10px; }
+  .uf-tabs button[aria-selected="true"] { color: var(--ink); border-color: var(--ink); }
+  .uf-tabs button.is-edited::after { content: "•"; color: var(--kraft-deep); }
+  .uf-body { display: grid; grid-template-columns: 1fr 300px; min-height: 0; }
+  .uf-canvas-wrap { position: relative; overflow: auto; background-image: radial-gradient(var(--photocopy) 1px, transparent 1px); background-size: 20px 20px; }
+  .uf-tools { position: sticky; top: 12px; left: 12px; z-index: 3; display: inline-flex; gap: 4px; padding: 4px; margin: 12px; background: var(--paper); border: 1px solid var(--rule-strong); }
+  .uf-tools button { padding: 6px 10px; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+  .uf-tools button:hover, .uf-tools button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
+  .uf-tools .sep { width: 1px; background: var(--photocopy); margin: 2px 4px; }
+  svg.uf-svg { display: block; position: absolute; top: 0; left: 0; }
+  .uf-node { cursor: grab; }
+  .uf-node:active { cursor: grabbing; }
+  .uf-node .shape { fill: var(--paper); stroke: var(--ink); stroke-width: 1.5; }
+  .uf-node.t-action .shape { stroke: var(--rule-strong); stroke-dasharray: 5 4; }
+  .uf-node.t-decision .shape { fill: var(--accent); }
+  .uf-node.t-end .shape { fill: var(--ink); }
+  .uf-node.is-sel .shape { stroke: var(--focus); stroke-width: 3; stroke-dasharray: none; }
+  .uf-node.is-src .shape { stroke: var(--focus); stroke-width: 3; }
+  .uf-label { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 6px 10px; box-sizing: border-box; font-family: var(--font-sans); font-size: 12.5px; line-height: 16px; color: var(--ink); pointer-events: none; }
+  .uf-label small { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 2px; }
+  .t-end .uf-label, .t-end .uf-label small { color: var(--paper); }
+  .t-start .uf-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+  .uf-edge path { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+  .uf-edge .hit { stroke: transparent; stroke-width: 14; cursor: pointer; }
+  .uf-edge.is-sel path.line { stroke: var(--focus); stroke-width: 2.5; }
+  .uf-edge text { font-family: var(--font-mono); font-size: 10.5px; fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; }
+  .uf-side { border-left: 1px solid var(--photocopy); padding: 18px; overflow-y: auto; display: grid; align-content: start; gap: 14px; background: var(--paper); }
+  .uf-side h2 { margin: 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 22px; line-height: 1.15; }
+  .uf-side p { margin: 0; font-size: 13px; line-height: 20px; }
+  .uf-side label { display: grid; gap: 4px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .uf-side input, .uf-side textarea, .uf-side select { font: 14px/20px var(--font-sans); letter-spacing: 0; text-transform: none; color: var(--ink); background: var(--paper); border: 1px solid var(--rule-strong); padding: 8px; border-radius: 0; }
+  .uf-side textarea { min-height: 70px; resize: vertical; }
+  .uf-side .row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .uf-side .btn { padding: 8px 12px; border: 1px solid var(--ink); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .uf-side .btn--ink { background: var(--ink); color: var(--on-ink); }
+  .uf-side .hint { font-family: var(--font-mono); font-size: 11px; line-height: 16px; color: var(--ink-muted); }
+  .uf-side hr { border: 0; border-top: 1px solid var(--photocopy); margin: 4px 0; width: 100%; }
+  .uf-io textarea { min-height: 160px; font-family: var(--font-mono); font-size: 11px; line-height: 15px; }
+  .uf-mock { position: relative; overflow: hidden; background: var(--paper); border: 1px solid var(--rule-strong); }
+  .uf-mock__in { transform-origin: 0 0; pointer-events: none; background: var(--paper); }
+  .uf-mock__in .sa-header { position: relative; }
+  .uf-tip { position: absolute; z-index: 5; background: var(--paper); border: 1px solid var(--ink); padding: 10px; box-shadow: var(--shadow-drawer); display: grid; gap: 8px; pointer-events: none; opacity: 0; transition: opacity .15s; }
+  .uf-tip.is-on { opacity: 1; }
+  .uf-tip__cap { display: flex; justify-content: space-between; gap: 12px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); }
+  .uf-tip__cap b { color: var(--ink); font-weight: 500; }
+  .uf-node .has-mock { fill: var(--ink); }
+</style>
+</head>
+<body class="sa">
+<div class="uf">
+  <header class="uf-head">
+    <div><span class="sa-mono sa-muted">WORKFLOW · USERFLOWS · V1</span><h1>Les parcours du site</h1></div>
+    <div class="uf-legend" aria-label="Légende">
+      <span><i class="l-start"></i>Entrée</span><span><i></i>Écran</span><span><i class="l-action"></i>Action</span><span><i class="l-dec"></i>Décision</span><span><i class="l-end"></i>Fin</span>
+    </div>
+  </header>
+  <nav class="uf-tabs" role="tablist" id="tabs"></nav>
+  <div class="uf-body">
+    <div class="uf-canvas-wrap" id="wrap"><div class="uf-tip" id="tip" aria-hidden="true"></div>
+      <div class="uf-tools" role="toolbar" aria-label="Outils">
+        <button data-add="screen">+ Écran</button><button data-add="action">+ Action</button><button data-add="decision">+ Décision</button><button data-add="end">+ Fin</button>
+        <span class="sep"></span><button data-tool="link" aria-pressed="false">Relier</button><button data-tool="del">Supprimer</button>
+      </div>
+      <svg class="uf-svg" id="svg" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="var(--ink)"/></marker></defs>
+        <g id="edges"></g><g id="nodes"></g>
+      </svg>
+    </div>
+    <aside class="uf-side" id="side"></aside>
+  </div>
+</div>
+
+<script>
+(function () {
+  /* ── Données : chaque parcours = des étapes (type, libellé, réf. Workflow, colonne, ligne) et des liens ── */
+  var C = 200, R = 112, X0 = 30, Y0 = 70;
+  function flow(id, title, desc, nodes, edges) {
+    return { id: id, title: title, desc: desc,
+      nodes: nodes.map(function (n) { return { id: n[0], t: n[1], label: n[2], ref: n[3] || "", x: X0 + n[4] * C, y: Y0 + n[5] * R, note: n[6] || "" }; }),
+      edges: edges.map(function (e) { var m = e.split(":"), ab = m[0].split(">"); return { from: ab[0], to: ab[1], label: m[1] || "" }; }) };
+  }
+  var DEFAULTS = [
+    flow("drop", "Achat pendant une récolte", "D'Instagram à la confirmation de commande, le parcours principal du Shop.", [
+      ["a", "start", "Instagram : teasing, carrousel, story", "W-01", 0, 1],
+      ["b", "screen", "Accueil ou page de la récolte", "W-02", 1, 1],
+      ["c", "decision", "Récolte ouverte ?", "W-04", 2, 1],
+      ["d", "action", "S'inscrire à l'accès anticipé", "W-03", 2, 2.4],
+      ["e", "action", "E-mail de rappel H-1 avec lien personnel", "W-03", 3, 2.4],
+      ["f", "screen", "Shop · Récolte en cours", "W-05", 3, 1],
+      ["g", "screen", "Fiche produit", "W-07", 4, 1],
+      ["h", "decision", "Pièce encore disponible ?", "W-04", 5, 1],
+      ["i", "screen", "Mini-panier · réservé 15 min", "W-08", 6, 1],
+      ["j", "screen", "Pièces similaires · alerte prochaine récolte", "W-07", 5, 2.4],
+      ["k", "screen", "Paiement Shopify (express ou invité)", "W-09", 7, 1],
+      ["l", "end", "Confirmation · e-mail avec n° d'archive", "W-10", 8, 1]
+    ], ["a>b", "b>c", "c>f:Oui", "c>d:Non", "d>e", "e>f:18 h", "f>g", "g>h:Ajouter", "h>i:Oui", "h>j:Non", "j>f", "i>k:Commander", "k>l"]),
+
+    flow("filtres", "Chercher et filtrer", "Trouver la bonne pièce dans le Shop, avec les filtres alimentés par les fiches.", [
+      ["a", "start", "Menu Shop ou porte de l'accueil", "W-05", 0, 1],
+      ["b", "screen", "Liste des pièces · 4 colonnes", "W-05", 1, 1],
+      ["c", "action", "Ouvrir Filtrer", "W-05", 2, 0],
+      ["d", "action", "Cocher type, marque, époque, matière", "W-05", 3, 0],
+      ["e", "decision", "Résultats ?", "W-05", 4, 0],
+      ["f", "screen", "Aucun résultat · tout effacer, suggestions", "W-05", 4, 1.4],
+      ["g", "screen", "Grille filtrée · pastilles actives", "W-05", 5, 0],
+      ["h", "action", "Trier ou changer de colonnes", "W-05", 2, 2],
+      ["i", "action", "Survol : gros plan puis look complet", "W-06", 5, 1.4],
+      ["j", "end", "Fiche produit", "W-07", 6, 1]
+    ], ["a>b", "b>c", "c>d", "d>e", "e>g:Oui", "e>f:Non", "f>c", "b>h", "h>b", "g>i", "b>i", "i>j"]),
+
+    flow("fiche", "Fiche produit", "Se projeter, vérifier, décider : acheter, louer ou garder en favori.", [
+      ["a", "start", "Vignette, recherche ou lien Instagram", "W-06", 0, 1],
+      ["b", "screen", "Galerie : gros plan, look, détails", "W-07", 1, 1],
+      ["c", "action", "Zoom, miniatures, flèches", "W-07", 1, 2.4],
+      ["d", "screen", "Taille, mesures, ligne mannequin", "W-07", 2, 1],
+      ["e", "decision", "La taille convient ?", "W-07", 3, 1],
+      ["f", "action", "Guide des mesures", "W-07", 3, 2.4],
+      ["g", "decision", "Acheter ou louer ?", "W-07", 4, 1],
+      ["h", "end", "Ajout au panier", "W-08", 5, 0.2],
+      ["i", "end", "Location : choisir les dates", "L-03", 5, 1.2],
+      ["j", "action", "Ajouter aux favoris", "W-07", 4, 2.4],
+      ["k", "screen", "Fiche d'archive · L'archive", "W-07", 2, 2.4]
+    ], ["a>b", "b>c", "c>b", "b>d", "d>e", "e>g:Oui", "e>f:Non", "f>d", "g>h:Acheter", "g>i:Louer", "g>j:Plus tard", "d>k:Lire"]),
+
+    flow("panier", "Panier et paiement", "Du mini-panier au paiement, sans perdre la pièce réservée.", [
+      ["a", "start", "Ajout au panier", "W-08", 0, 1],
+      ["b", "screen", "Mini-panier · réservation 15 min", "W-08", 1, 1],
+      ["c", "decision", "Code promo ?", "W-08", 2, 1],
+      ["d", "action", "Saisir et appliquer le code", "W-08", 2, 2.4],
+      ["e", "decision", "Code valide ?", "W-08", 3, 2.4],
+      ["f", "decision", "Réservation expirée ?", "W-08", 3, 1],
+      ["g", "screen", "Pièce libérée · revenir au Shop", "W-08", 3, 0],
+      ["h", "screen", "Checkout : express ou invité", "W-09", 4, 1],
+      ["i", "action", "Livraison : domicile ou point relais", "W-09", 5, 1],
+      ["j", "decision", "Paiement accepté ?", "W-09", 6, 1],
+      ["k", "action", "Réessayer ou autre moyen", "W-09", 6, 2.4],
+      ["l", "end", "Commande confirmée", "W-10", 7, 1]
+    ], ["a>b", "b>c", "c>f:Non", "c>d:Oui", "d>e", "e>f:Oui", "e>d:Non", "f>g:Oui", "f>h:Non", "h>i", "i>j", "j>l:Oui", "j>k:Non", "k>j"]),
+
+    flow("location", "Location & RP", "Louer un look pour une soirée, un shoot ou un projet pro.", [
+      ["a", "start", "Menu Location & RP ou « Louer ce look »", "L-01", 0, 1],
+      ["b", "screen", "Looks à louer + disponibilités", "L-02", 1, 1],
+      ["c", "screen", "Look : pièces, prix, calendrier", "L-02", 2, 1],
+      ["d", "decision", "Particulier ou pro ?", "L-01", 3, 1],
+      ["e", "action", "Choisir les dates et la formule", "L-03", 4, 0],
+      ["f", "decision", "Dates disponibles ?", "L-03", 5, 0],
+      ["g", "action", "Options stylisme et photo", "L-04", 6, 0],
+      ["h", "screen", "Récap · caution par empreinte · CGL", "L-06", 7, 0],
+      ["i", "end", "Réservation confirmée", "L-06", 8, 0],
+      ["j", "screen", "Formulaire de devis pro", "L-05", 4, 2],
+      ["k", "end", "Réponse sous 48 h", "L-05", 5, 2],
+      ["l", "action", "Proposer d'autres dates ou looks", "L-03", 5, 1]
+    ], ["a>b", "b>c", "c>d", "d>e:Particulier", "d>j:Pro", "e>f", "f>g:Oui", "f>l:Non", "l>e", "g>h", "h>i", "j>k"]),
+
+    flow("retour", "Retour de location", "Après l'événement : rendre le look, récupérer la caution.", [
+      ["a", "start", "Rappel J-1 avant le retour", "L-07", 0, 1],
+      ["b", "action", "Retour en main propre ou envoi", "L-07", 1, 1],
+      ["c", "action", "Contrôle et nettoyage", "L-07", 2, 1],
+      ["d", "decision", "Pièce en bon état ?", "L-07", 3, 1],
+      ["e", "end", "Caution libérée sous 48 h", "L-07", 4, 0.4],
+      ["f", "action", "Devis de réparation, retenue partielle", "L-07", 4, 1.8],
+      ["g", "end", "Look de nouveau disponible", "L-02", 5, 1]
+    ], ["a>b", "b>c", "c>d", "d>e:Oui", "d>f:Non", "e>g", "f>g"]),
+
+    flow("journal", "Journaling", "Lire une fiche d'archive, puis aller vers la pièce ou le look.", [
+      ["a", "start", "Location & RP › Journaling ou accueil", "L-01", 0, 1],
+      ["b", "screen", "Journaling : lookbooks, fiches, archives caribéennes", "L-01", 1, 1],
+      ["c", "screen", "Fiche d'archive · La pièce / L'archive", "W-07", 2, 1],
+      ["d", "decision", "Pièce encore en vente ?", "W-07", 3, 1],
+      ["e", "end", "Fiche produit", "W-07", 4, 0.4],
+      ["f", "end", "Louer le look ou alerte récolte", "L-02", 4, 1.8]
+    ], ["a>b", "b>c", "c>d", "d>e:Oui", "d>f:Non"]),
+
+    flow("coulisses", "Coulisses de l'équipe", "De l'achat d'une pièce à son archivage, pour publier une récolte en 2 à 3 h.", [
+      ["a", "start", "Sourcing (Vanina)", "B-01", 0, 1],
+      ["b", "decision", "Fonds Shop ou Archives ?", "B-01", 1, 1],
+      ["c", "end", "Location uniquement", "B-01", 1, 2.4],
+      ["d", "action", "Saisie de la fiche", "B-02", 2, 1],
+      ["e", "decision", "Marque identifiée ?", "B-02", 3, 1],
+      ["f", "action", "Photo d'étiquette · « À identifier »", "B-02", 3, 2.4],
+      ["g", "action", "Shoot : gros plan, look, packshot", "B-03", 4, 1],
+      ["h", "action", "Rédaction de la fiche d'archive", "B-04", 5, 1],
+      ["i", "decision", "Liste de contrôle OK ?", "B-05", 6, 1],
+      ["j", "action", "Programmer la récolte", "B-06", 7, 1],
+      ["k", "action", "Vente · expédition sous 48 h", "B-07", 8, 1],
+      ["l", "end", "Récoltes passées", "B-08", 9, 1]
+    ], ["a>b", "b>d:Shop", "b>c:Archives", "d>e", "e>g:Oui", "e>f:Non", "f>e", "g>h", "h>i", "i>j:Oui", "i>d:Non", "j>k", "k>l"])
+  ];
+
+  /* ── Maquettes : chaque étape montre l'écran du design system qui lui correspond ── */
+  var S = window.SimeArchives;
+  var MOCKS = {
+    instagram: { name: "Story Instagram", page: "Instagram", w: 390, h: 700 },
+    home: { name: "Accueil · prochaine récolte", page: "HomePage", w: 1280, h: 860 },
+    early: { name: "Accès anticipé", page: "HomePage", w: 1280, h: 620 },
+    shop: { name: "Shop · liste des pièces", page: "ShopPage", w: 1280, h: 860 },
+    filters: { name: "Filtres ouverts", page: "ShopPage + FilterDrawer", w: 1280, h: 860 },
+    card: { name: "Vignettes, survol", page: "ProductCard", w: 1280, h: 560 },
+    pdp: { name: "Fiche produit", page: "ProductPageB (retenue)", w: 1280, h: 860 },
+    cart: { name: "Mini-panier", page: "CartDrawer", w: 1280, h: 860 },
+    checkout: { name: "Paiement Shopify", page: "Checkout (Shopify)", w: 1280, h: 860 },
+    email: { name: "E-mail de confirmation", page: "E-mail", w: 640, h: 860 },
+    location: { name: "Location & RP · packs", page: "LocationPage", w: 1280, h: 860 },
+    pro: { name: "Demande de devis pro", page: "LocationPage · Pros", w: 1280, h: 520 },
+    retour: { name: "Rappel de retour", page: "E-mail", w: 640, h: 760 },
+    journal: { name: "Fiche d'archive", page: "ArchiveSheet", w: 1280, h: 1000 },
+    team: { name: "Fiche d'inventaire (équipe)", page: "InventoryLabel", w: 900, h: 560 }
+  };
+  var REFMAP = { "W-01": "instagram", "W-02": "home", "W-03": "early", "W-04": "shop", "W-05": "shop", "W-06": "card", "W-07": "pdp", "W-08": "cart", "W-09": "checkout", "W-10": "email",
+    "L-01": "location", "L-02": "location", "L-03": "location", "L-04": "location", "L-05": "pro", "L-06": "location", "L-07": "retour" };
+  function mockKey(n) {
+    if (n.mock) return n.mock;
+    if (REFMAP[n.ref]) return REFMAP[n.ref];
+    if (/^B-/.test(n.ref)) return "team";
+    if (/journal|archive/i.test(n.label)) return "journal";
+    return null;
+  }
+  var cache = {};
+  function mockHtml(k) {
+    if (cache[k]) return cache[k];
+    var P = S.photos, pr = S.products, p = pr[0], h = "";
+    var grid = function (n, cols) { return '<div class="sa-grid" data-cols="' + (cols || 4) + '">' + pr.slice(0, n).map(S.productCard).join("") + '</div>'; };
+    var lines = function (items) { return items.map(function (q) { return "<div class='sa-line'><img src='" + S.img(q, "a") + "' alt=''><div class='sa-line__info'><span class='sa-label'>" + q.brand + "</span><span>" + q.name + "</span><span class='sa-mono sa-muted'>" + q.id + " · Taille " + q.size + "</span><span class='sa-price'>" + S.euro(q.price) + "</span></div></div>"; }).join(""); };
+    if (k === "instagram") h = '<div style="position:relative;width:390px;height:700px;background:#000;overflow:hidden"><img src="' + P.look3 + '" style="width:100%;height:100%;object-fit:cover;opacity:.92"><div style="position:absolute;top:14px;left:12px;right:12px;height:2px;background:rgba(255,255,255,.5)"><div style="width:60%;height:100%;background:#fff"></div></div><div style="position:absolute;top:28px;left:14px;color:#fff;font:600 13px var(--font-sans)">sime.archives</div><div style="position:absolute;left:24px;right:24px;bottom:150px;background:var(--paper);padding:16px"><span class="sa-mono sa-muted">RÉCOLTE 04 · JEUDI 19 H</span><div class="sa-serif" style="font-size:30px;line-height:1">Technique et légère</div></div><div style="position:absolute;left:50%;bottom:70px;transform:translateX(-50%);background:#fff;padding:10px 16px;font:600 12px var(--font-sans);letter-spacing:.1em">↗ ACCÈS ANTICIPÉ</div></div>';
+    else if (k === "home") h = S.announcementBar() + S.header() + S.dropCountdown();
+    else if (k === "early") h = S.header() + S.dropCountdown();
+    else if (k === "shop") h = S.announcementBar() + S.header({ active: "shop" }) + '<div class="sa-wrap"><div class="sa-plp-head"><div><span class="sa-mono sa-muted">RÉCOLTE 04</span><h1>Technique et légère</h1></div></div></div>' + S.listingToolbar(12).replace("sa-toolbar", "sa-toolbar\" style=\"position:static") + '<div class="sa-wrap" style="padding-top:24px">' + grid(8) + '</div>';
+    else if (k === "filters") h = '<div style="display:grid;grid-template-columns:440px 1fr;height:860px"><div style="height:860px">' + S.filterDrawer({ static: true }) + '</div><div style="padding:24px;opacity:.5">' + grid(6, 3) + '</div></div>';
+    else if (k === "card") h = '<div class="sa-wrap" style="padding-top:24px">' + grid(4) + '</div>';
+    else if (k === "pdp") h = S.header({ active: "shop" }) + '<div class="sa-pdp" style="padding-top:24px;grid-template-columns:1.25fr 1fr"><div style="padding:0 40px;display:grid;gap:12px"><div style="height:560px;background:#fff"><img src="' + p.photos[0] + '" style="width:100%;height:100%;object-fit:cover"></div><div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">' + [p.photos[0], S.lookOf(p), p.photos[1], P.look3, P.look5, P.look2].map(function (u, i) { return '<img src="' + u + '" style="width:100%;aspect-ratio:3/4;object-fit:cover;opacity:' + (i ? .6 : 1) + '">'; }).join("") + '</div></div><div class="sa-pdp__panel" style="position:static">' + S.inventoryLabel(p, { compact: true }) + '<span class="sa-label">' + p.brand + '</span><h1 class="sa-pdp__title">' + p.name + '</h1><span class="sa-price" style="font-size:16px">' + S.euro(p.price) + '</span><div class="sa-pdp__size"><span class="sa-card__size">' + p.size + '</span><span class="sa-mono sa-muted">Aisselles 46 cm · Longueur 58 cm</span></div>' + S.modelLine(p) + '<div class="sa-pdp__actions">' + S.button("Ajouter au panier", { block: true }) + S.button("Louer ce look", { variant: "secondary", block: true }) + '</div></div></div>';
+    else if (k === "cart") h = '<div style="display:grid;grid-template-columns:1fr 440px;height:860px"><div style="opacity:.35">' + S.header() + '<div class="sa-wrap" style="padding-top:24px">' + grid(4) + '</div></div><aside class="sa-drawer sa-drawer--static is-open"><div class="sa-drawer__head"><span class="sa-label">Panier (2)</span></div><div class="sa-drawer__body">' + lines([pr[0], pr[2]]) + '</div><div class="sa-drawer__foot"><div class="sa-hold">' + S.icon("clock") + '<span>Votre panier est réservé <b class="sa-mono">14:32</b></span></div><details class="sa-promo"><summary class="sa-label">Code promo</summary></details><div class="sa-total"><span class="sa-label">Sous-total</span><span class="sa-price">' + S.euro(pr[0].price + pr[2].price) + '</span></div>' + S.button("Commander", { block: true }) + '</div></aside></div>';
+    else if (k === "checkout") h = '<div style="display:grid;grid-template-columns:1.2fr 1fr;min-height:860px"><div style="padding:48px 64px;display:grid;gap:18px;align-content:start"><div class="sa-label" style="letter-spacing:.4em">SIMÉ ARCHIVES</div><span class="sa-mono sa-muted">PAIEMENT EXPRESS</span><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">' + ["Shop Pay", "Apple Pay", "PayPal"].map(function (t) { return '<div style="border:1px solid var(--ink);padding:14px;text-align:center;font-weight:600">' + t + '</div>'; }).join("") + '</div><span class="sa-mono sa-muted" style="text-align:center">OU</span>' + ["E-mail", "Adresse", "Livraison : domicile ou point relais", "Carte bancaire · paiement en 3 fois dès 150 €"].map(function (t) { return '<div style="border-bottom:1px solid var(--ink);padding:12px 0;color:var(--ink-muted)">' + t + '</div>'; }).join("") + S.button("Payer", { block: true }) + '</div><div style="background:var(--paper-deep);padding:48px">' + lines([pr[0], pr[2]]) + '<div class="sa-total" style="margin-top:16px"><span class="sa-label">Total</span><span class="sa-price">' + S.euro(pr[0].price + pr[2].price) + '</span></div><p class="sa-mono sa-muted">TVA sur marge</p></div></div>';
+    else if (k === "email" || k === "retour") h = '<div style="width:640px;background:#fff;min-height:' + (k === "email" ? 860 : 760) + 'px;padding:40px;box-sizing:border-box;display:grid;gap:18px;align-content:start"><div class="sa-label" style="letter-spacing:.4em;text-align:center">SIMÉ ARCHIVES</div><div class="sa-serif" style="font-size:36px;line-height:1.05">' + (k === "email" ? "Merci, votre pièce est réservée pour vous." : "Votre look revient demain.") + '</div><img src="' + (k === "email" ? p.photos[0] : P.look4) + '" style="width:100%;aspect-ratio:4/3;object-fit:cover">' + (k === "email" ? S.inventoryLabel(p, { compact: true }) + '<p style="margin:0">Expédition sous 48 h, avec sa carte et son QR code vers la fiche d\'archive.</p>' + S.button("Suivre mon colis", { block: true }) : '<p style="margin:0">Retour à l\'atelier ou dépôt du colis avec l\'étiquette fournie. Votre caution est libérée sous 48 h après le contrôle.</p>' + S.button("Voir mon étiquette retour", { block: true })) + '</div>';
+    else if (k === "location") h = S.header({ active: "location" }) + '<div style="display:grid;grid-template-columns:1.1fr 1fr"><div style="padding:56px 40px"><span class="sa-mono sa-muted">LOCATION & RP</span><div class="sa-serif" style="font-size:60px;line-height:.95;margin-top:12px">Porter un look Simé, le temps d\'une soirée</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:40px">' + [["Le look", "30 €"], ["Look + stylisme", "280 €"], ["Soirée complète", "530 €"], ["Shoot pro", "30 €"]].map(function (x, i) { return '<div style="border:' + (i === 2 ? 2 : 1) + 'px solid ' + (i === 2 ? "var(--ink)" : "var(--rule-strong)") + ';padding:16px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between"><span class="sa-serif" style="font-size:20px;line-height:1.1">' + x[0] + '</span><span class="sa-mono">dès ' + x[1] + '</span></div>'; }).join("") + '</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px"><img src="' + P.look4 + '" style="width:100%;height:660px;object-fit:cover"><img src="' + P.look7 + '" style="width:100%;height:660px;object-fit:cover"></div></div>';
+    else if (k === "pro") h = '<div style="background:var(--paper-deep);padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:40px;height:520px;box-sizing:border-box"><div><span class="sa-mono sa-muted">PROS · STYLISTES, ARTISTES, MARQUES</span><div class="sa-serif" style="font-size:34px;line-height:1.05;margin-top:8px">Un shoot, un clip, une campagne ?</div><p>Réponse sous 48 h. Crédit « RP : @sime.archives » obligatoire.</p></div><div style="display:grid;gap:14px;align-content:start">' + ["Nom", "E-mail", "Projet", "Dates", "Looks souhaités"].map(function (t) { return '<div style="border-bottom:1px solid var(--ink);padding:10px 0;color:var(--ink-muted)">' + t + '</div>'; }).join("") + S.button("Envoyer la demande", { variant: "secondary" }) + '</div></div>';
+    else if (k === "journal") h = '<div class="sa-wrap" style="padding:40px;display:grid;justify-items:center">' + S.archiveChapters(p) + '</div>';
+    else if (k === "team") h = '<div style="padding:40px;display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:start"><div>' + S.inventoryLabel(pr[0]) + '</div><div style="display:grid;gap:10px"><span class="sa-label">Liste de contrôle avant publication</span>' + ["Marque choisie dans la liste", "Époque, matière, mesures à plat", "Gros plan en première photo, look complet ensuite", "Mannequin : prénom et taille", "Fiche d'archive relue, sources vérifiées", "Texte alternatif sur chaque photo"].map(function (t, i) { return '<label class="sa-check" style="justify-content:flex-start"><span><input type="checkbox"' + (i < 4 ? " checked" : "") + '>' + t + '</span></label>'; }).join("") + '</div></div>';
+    cache[k] = h; return h;
+  }
+  function mockFrame(k, width) {
+    var m = MOCKS[k]; if (!m) return "";
+    var s = width / m.w, hh = Math.round(Math.min(m.h, m.w * 1.25) * s);
+    return '<div class="uf-mock" style="width:' + width + 'px;height:' + hh + 'px"><div class="uf-mock__in" style="width:' + m.w + 'px;transform:scale(' + s + ')">' + mockHtml(k) + '</div></div>';
+  }
+
+  /* ── État, sauvegarde locale ───────────────────────────────── */
+  var KEY = "sime-userflows-v1";
+  var store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { store = {}; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function getFlow(id) { if (!store[id]) store[id] = clone(DEFAULTS.filter(function (f) { return f.id === id; })[0]); return store[id]; }
+  function isEdited(id) { var d = DEFAULTS.filter(function (f) { return f.id === id; })[0]; return store[id] && JSON.stringify(store[id]) !== JSON.stringify(d); }
+
+  var cur = DEFAULTS[0].id, sel = null, linkMode = false, linkSrc = null;
+  var W = 168, H = 64;
+  var svg = document.getElementById("svg"), gN = document.getElementById("nodes"), gE = document.getElementById("edges"), side = document.getElementById("side");
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+
+  function renderTabs() {
+    document.getElementById("tabs").innerHTML = DEFAULTS.map(function (f, i) {
+      return '<button role="tab" data-flow="' + f.id + '" aria-selected="' + (f.id === cur) + '" class="sa-label' + (isEdited(f.id) ? ' is-edited' : '') + '"><b>0' + (i + 1) + '</b>' + esc(f.title) + '</button>';
+    }).join("");
+  }
+
+  function anchor(n, toward) {
+    var cx = n.x + W / 2, cy = n.y + H / 2, dx = toward.x - cx, dy = toward.y - cy;
+    if (Math.abs(dx) * H > Math.abs(dy) * W) return { x: cx + (dx > 0 ? W / 2 : -W / 2), y: cy, h: true };
+    return { x: cx, y: cy + (dy > 0 ? H / 2 : -H / 2), h: false };
+  }
+
+  function render() {
+    var f = getFlow(cur), byId = {};
+    f.nodes.forEach(function (n) { byId[n.id] = n; });
+    var maxX = 0, maxY = 0;
+    f.nodes.forEach(function (n) { maxX = Math.max(maxX, n.x + W); maxY = Math.max(maxY, n.y + H); });
+    var wrap = document.getElementById("wrap");
+    svg.setAttribute("width", Math.max(maxX + 80, wrap.clientWidth)); svg.setAttribute("height", Math.max(maxY + 80, wrap.clientHeight));
+
+    renderEdges(f, byId);
+    renderNodes(f);
+    renderSide();
+  }
+
+  function renderEdges(f, byId) {
+    if (!byId) { byId = {}; f.nodes.forEach(function (n) { byId[n.id] = n; }); }
+    gE.innerHTML = f.edges.map(function (e, i) {
+      var a = byId[e.from], b = byId[e.to]; if (!a || !b) return "";
+      var ca = { x: a.x + W / 2, y: a.y + H / 2 }, cb = { x: b.x + W / 2, y: b.y + H / 2 };
+      var p1 = anchor(a, cb), p2 = anchor(b, ca), k = 0.5;
+      var c1 = p1.h ? { x: p1.x + (p2.x - p1.x) * k, y: p1.y } : { x: p1.x, y: p1.y + (p2.y - p1.y) * k };
+      var c2 = p2.h ? { x: p2.x - (p2.x - p1.x) * k, y: p2.y } : { x: p2.x, y: p2.y - (p2.y - p1.y) * k };
+      var d = "M" + p1.x + " " + p1.y + " C" + c1.x + " " + c1.y + " " + c2.x + " " + c2.y + " " + p2.x + " " + p2.y;
+      var mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) / 2;
+      var isSel = sel && sel.kind === "edge" && sel.i === i;
+      return '<g class="uf-edge' + (isSel ? ' is-sel' : '') + '" data-edge="' + i + '"><path class="hit" d="' + d + '"/><path class="line" d="' + d + '" marker-end="url(#arr)"/>' +
+        (e.label ? '<text x="' + mx + '" y="' + (my - 6) + '" text-anchor="middle">' + esc(e.label) + '</text>' : '') + '</g>';
+    }).join("");
+  }
+
+  function renderNodes(f) {
+    gN.innerHTML = f.nodes.map(function (n) {
+      var shape;
+      if (n.t === "decision") shape = '<polygon class="shape" points="' + (W / 2) + ',0 ' + W + ',' + (H / 2) + ' ' + (W / 2) + ',' + H + ' 0,' + (H / 2) + '"/>';
+      else if (n.t === "start" || n.t === "end") shape = '<rect class="shape" width="' + W + '" height="' + H + '" rx="' + (H / 2) + '"/>';
+      else shape = '<rect class="shape" width="' + W + '" height="' + H + '"/>';
+      var isSel = sel && sel.kind === "node" && sel.id === n.id;
+      var pad = n.t === "decision" ? 26 : 0;
+      return '<g class="uf-node t-' + n.t + (isSel ? ' is-sel' : '') + (linkSrc === n.id ? ' is-src' : '') + '" data-node="' + n.id + '" transform="translate(' + n.x + ' ' + n.y + ')" tabindex="0" role="button" aria-label="' + esc(n.label) + '">' + shape +
+        '<foreignObject x="' + pad + '" y="0" width="' + (W - pad * 2) + '" height="' + H + '"><div xmlns="http://www.w3.org/1999/xhtml" class="uf-label">' + (n.ref ? '<small>' + esc(n.ref) + '</small>' : '') + esc(n.label) + '</div></foreignObject></g>';
+    }).join("");
+  }
+
+  function renderSide() {
+    var f = getFlow(cur);
+    var head = '<div><span class="sa-mono sa-muted">PARCOURS ' + String(DEFAULTS.map(function (d) { return d.id; }).indexOf(cur) + 1).padStart(2, "0") + '</span><h2>' + esc(f.title) + '</h2></div><p>' + esc(f.desc) + '</p>';
+    var body = "";
+    if (sel && sel.kind === "node") {
+      var n = f.nodes.filter(function (x) { return x.id === sel.id; })[0];
+      var mk = n ? mockKey(n) : null;
+      if (n) body = '<hr><span class="sa-label">Étape sélectionnée</span>' +
+        '<div style="display:grid;gap:6px"><span class="sa-mono sa-muted">MAQUETTE · ' + (mk ? esc(MOCKS[mk].page) : "aucune") + '</span>' + (mk ? mockFrame(mk, 262) : '<p class="hint">Pas d\'écran associé à cette étape.</p>') +
+        '<label>Écran associé<select data-f="mock"><option value="">Automatique (selon la réf.)</option>' + Object.keys(MOCKS).map(function (k) { return '<option value="' + k + '"' + (n.mock === k ? ' selected' : '') + '>' + MOCKS[k].name + '</option>'; }).join("") + '</select></label></div>' +
+        '<label>Libellé<textarea data-f="label">' + esc(n.label) + '</textarea></label>' +
+        '<label>Type<select data-f="t">' + [["start", "Entrée"], ["screen", "Écran"], ["action", "Action"], ["decision", "Décision"], ["end", "Fin"]].map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === n.t ? ' selected' : '') + '>' + o[1] + '</option>'; }).join("") + '</select></label>' +
+        '<label>Réf. Workflow<input data-f="ref" value="' + esc(n.ref) + '" placeholder="W-07"></label>' +
+        '<label>Note<textarea data-f="note" placeholder="Question, décision, idée à tester">' + esc(n.note || "") + '</textarea></label>' +
+        '<div class="row"><button class="btn" data-act="dup">Dupliquer</button><button class="btn" data-act="delnode">Supprimer</button></div>';
+    } else if (sel && sel.kind === "edge") {
+      var e = f.edges[sel.i];
+      if (e) body = '<hr><span class="sa-label">Lien sélectionné</span><label>Libellé du lien<input data-e="label" value="' + esc(e.label) + '" placeholder="Oui, Non, 18 h…"></label><div class="row"><button class="btn" data-act="flip">Inverser</button><button class="btn" data-act="deledge">Supprimer</button></div>';
+    } else {
+      body = '<hr><p class="hint">Glisser une étape pour la déplacer. Cliquer pour la modifier à droite. « Relier » : cliquer une étape de départ puis une étape d\'arrivée. Suppr efface la sélection, Échap annule.</p>';
+    }
+    var notes = f.nodes.filter(function (n) { return n.note; });
+    var notesHtml = notes.length ? '<hr><span class="sa-label">Notes du parcours</span>' + notes.map(function (n) { return '<p class="hint"><b>' + esc(n.ref || n.id) + '</b> · ' + esc(n.note) + '</p>'; }).join("") : "";
+    var io = '<hr><span class="sa-label">Partager une version</span><p class="hint">Les modifications sont gardées dans ce navigateur. Pour les partager, exporte le parcours et envoie le texte à Claude ou à l\'équipe.</p>' +
+      '<div class="row"><button class="btn" data-act="export">Exporter</button><button class="btn" data-act="import">Importer</button><button class="btn" data-act="reset">Réinitialiser</button></div><div class="uf-io" id="io"></div>';
+    side.innerHTML = head + body + notesHtml + io;
+  }
+
+  /* ── Interactions ──────────────────────────────────────────── */
+  var drag = null;
+  svg.addEventListener("pointerdown", function (e) {
+    var g = e.target.closest("[data-node]"), ge = e.target.closest("[data-edge]");
+    var f = getFlow(cur);
+    if (g) {
+      var id = g.dataset.node;
+      if (linkMode) {
+        if (!linkSrc) { linkSrc = id; render(); return; }
+        if (linkSrc !== id) { f.edges.push({ from: linkSrc, to: id, label: "" }); sel = { kind: "edge", i: f.edges.length - 1 }; }
+        linkSrc = null; save(); renderTabs(); render(); return;
+      }
+      var n = f.nodes.filter(function (x) { return x.id === id; })[0];
+      var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; var p = pt.matrixTransform(svg.getScreenCTM().inverse());
+      drag = { n: n, dx: p.x - n.x, dy: p.y - n.y, moved: false };
+      sel = { kind: "node", id: id }; renderNodes(f); renderSide();
+      return;
+    }
+    if (ge) { sel = { kind: "edge", i: +ge.dataset.edge }; render(); return; }
+    sel = null; linkSrc = null; render();
+  });
+  var tip = document.getElementById("tip"), tipT = null, tipFor = null;
+  function hideTip() { clearTimeout(tipT); tipFor = null; tip.classList.remove("is-on"); }
+  svg.addEventListener("mouseover", function (e) {
+    var g = e.target.closest("[data-node]"); if (!g || drag) return;
+    if (tipFor === g.dataset.node) return;
+    var f = getFlow(cur), n = f.nodes.filter(function (x) { return x.id === g.dataset.node; })[0], k = n && mockKey(n);
+    clearTimeout(tipT); tipFor = g.dataset.node;
+    if (!k) { tip.classList.remove("is-on"); return; }
+    tipT = setTimeout(function () {
+      var w = MOCKS[k].w < 700 ? 240 : 400;
+      tip.innerHTML = '<div class="uf-tip__cap"><b>' + esc(MOCKS[k].name) + '</b><span>' + esc(n.ref || "") + '</span></div>' + mockFrame(k, w);
+      var wrap = document.getElementById("wrap"), x = n.x + W + 16, y = n.y - 20;
+      if (x + w + 30 > wrap.scrollLeft + wrap.clientWidth) x = n.x - w - 36;
+      tip.style.left = Math.max(8, x) + "px"; tip.style.top = Math.max(8, y) + "px";
+      tip.classList.add("is-on");
+    }, 220);
+  });
+  svg.addEventListener("mouseout", function (e) { var g = e.target.closest("[data-node]"); if (g && !(e.relatedTarget && g.contains(e.relatedTarget))) hideTip(); });
+  svg.addEventListener("pointerdown", hideTip, true);
+  svg.addEventListener("pointermove", function (e) {
+    if (!drag) return;
+    var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; var p = pt.matrixTransform(svg.getScreenCTM().inverse());
+    drag.n.x = Math.max(0, Math.round((p.x - drag.dx) / 10) * 10); drag.n.y = Math.max(50, Math.round((p.y - drag.dy) / 10) * 10); drag.moved = true;
+    var g = gN.querySelector('[data-node="' + drag.n.id + '"]'); if (g) g.setAttribute("transform", "translate(" + drag.n.x + " " + drag.n.y + ")");
+    renderEdges(getFlow(cur));
+  });
+  svg.addEventListener("pointerup", function () { if (drag && drag.moved) { save(); renderTabs(); render(); } drag = null; });
+  svg.addEventListener("pointerleave", function () { if (drag) { if (drag.moved) { save(); renderTabs(); render(); } drag = null; } });
+
+  document.querySelector(".uf-tools").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var f = getFlow(cur);
+    if (b.dataset.add) {
+      var wrap = document.getElementById("wrap"), id = "n" + Date.now().toString(36);
+      var labels = { screen: "Nouvel écran", action: "Nouvelle action", decision: "Question ?", end: "Fin" };
+      f.nodes.push({ id: id, t: b.dataset.add, label: labels[b.dataset.add], ref: "", x: Math.round((wrap.scrollLeft + 80) / 10) * 10, y: Math.round((wrap.scrollTop + 90) / 10) * 10, note: "" });
+      sel = { kind: "node", id: id }; save(); renderTabs(); render();
+    }
+    if (b.dataset.tool === "link") { linkMode = !linkMode; linkSrc = null; b.setAttribute("aria-pressed", linkMode); render(); }
+    if (b.dataset.tool === "del") removeSel();
+  });
+
+  function removeSel() {
+    var f = getFlow(cur); if (!sel) return;
+    if (sel.kind === "node") { f.nodes = f.nodes.filter(function (n) { return n.id !== sel.id; }); var id = sel.id; f.edges = f.edges.filter(function (e) { return e.from !== id && e.to !== id; }); }
+    else f.edges.splice(sel.i, 1);
+    sel = null; save(); renderTabs(); render();
+  }
+
+  side.addEventListener("input", function (e) {
+    var f = getFlow(cur);
+    if (e.target.dataset.f && sel && sel.kind === "node") {
+      var n = f.nodes.filter(function (x) { return x.id === sel.id; })[0]; n[e.target.dataset.f] = e.target.value;
+      save(); renderTabs();
+      var keepFocus = e.target.dataset.f, pos = e.target.selectionStart;
+      if (keepFocus === "t" || keepFocus === "mock") { render(); return; }
+      renderEdges(f); renderNodes(f); renderSide(); var el = side.querySelector('[data-f="' + keepFocus + '"]'); if (el) { el.focus(); try { el.setSelectionRange(pos, pos); } catch (x) {} }
+    }
+    if (e.target.dataset.e && sel && sel.kind === "edge") {
+      f.edges[sel.i].label = e.target.value; save(); renderTabs(); render();
+      var el2 = side.querySelector('[data-e="label"]'); if (el2) { el2.focus(); var l = el2.value.length; el2.setSelectionRange(l, l); }
+    }
+  });
+  side.addEventListener("change", function (e) { if (e.target.dataset.f === "t" || e.target.dataset.f === "mock") { var f = getFlow(cur), n = f.nodes.filter(function (x) { return sel && x.id === sel.id; })[0]; if (n) { n[e.target.dataset.f] = e.target.value; save(); renderTabs(); } render(); } });
+  side.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-act]"); if (!b) return;
+    var f = getFlow(cur), a = b.dataset.act, io;
+    if (a === "delnode" || a === "deledge") removeSel();
+    if (a === "dup" && sel) { var n = f.nodes.filter(function (x) { return x.id === sel.id; })[0], c = clone(n); c.id = "n" + Date.now().toString(36); c.x += 30; c.y += 30; f.nodes.push(c); sel = { kind: "node", id: c.id }; save(); renderTabs(); render(); }
+    if (a === "flip" && sel) { var ed = f.edges[sel.i], t = ed.from; ed.from = ed.to; ed.to = t; save(); render(); }
+    if (a === "reset") { delete store[cur]; sel = null; save(); renderTabs(); render(); }
+    if (a === "export") { io = document.getElementById("io"); io.innerHTML = '<textarea readonly aria-label="Export du parcours">' + esc(JSON.stringify(getFlow(cur), null, 1)) + '</textarea><button class="btn btn--ink" data-act="copy">Copier</button>'; io.querySelector("textarea").select(); }
+    if (a === "copy") { var ta = document.querySelector("#io textarea"); ta.select(); try { navigator.clipboard.writeText(ta.value); b.textContent = "Copié"; } catch (x) { document.execCommand("copy"); b.textContent = "Copié"; } }
+    if (a === "import") { io = document.getElementById("io"); io.innerHTML = '<textarea aria-label="Coller un parcours exporté" placeholder="Coller ici le texte exporté"></textarea><button class="btn btn--ink" data-act="doimport">Charger</button>'; }
+    if (a === "doimport") { try { var obj = JSON.parse(document.querySelector("#io textarea").value); if (obj.nodes && obj.edges) { obj.id = cur; store[cur] = obj; sel = null; save(); renderTabs(); render(); } } catch (x) { b.textContent = "Texte illisible"; } }
+  });
+
+  document.getElementById("tabs").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-flow]"); if (!b) return;
+    cur = b.dataset.flow; sel = null; linkSrc = null; document.getElementById("wrap").scrollTo(0, 0); renderTabs(); render();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.target.closest("input, textarea, select")) return;
+    if ((e.key === "Delete" || e.key === "Backspace") && sel) { e.preventDefault(); removeSel(); }
+    if (e.key === "Escape") { sel = null; linkSrc = null; linkMode = false; document.querySelector('[data-tool="link"]').setAttribute("aria-pressed", "false"); render(); }
+    if (e.key === "Enter" && e.target.closest && e.target.closest("[data-node]")) { sel = { kind: "node", id: e.target.closest("[data-node]").dataset.node }; render(); }
+  });
+  window.addEventListener("resize", render);
+
+  renderTabs(); render();
+})();
+</script>
+</body>
+</html>

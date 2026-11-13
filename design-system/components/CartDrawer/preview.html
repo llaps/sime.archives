@@ -1,0 +1,13 @@
+<!-- @dsCard group="Shop" height=620 width=480 subtitle="Mini-panier, réservation 15 min" -->
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CartDrawer</title>
+<style>html,body{margin:0;background:var(--paper)} </style></head>
+<body class="sa">
+<div style="padding:10px;display:grid;gap:10px"><div id="b"></div><div id="r" style="height:540px"></div></div>
+<script>
+var S = window.SimeArchives;
+document.getElementById("b").innerHTML = S.button("Ajouter SA-004 (démo)", {variant:"secondary", action:"add", id:"SA-004"}); document.getElementById("r").innerHTML = S.cartDrawer({static:true}); S.init(document);
+</script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!-- @dsCard group="Identité" height=3400 width=1200 page subtitle="V3 : C, D, E, F affinées, G, H, I, J nouvelles" -->
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logo · pistes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<style>
+  html, body { margin: 0; background: var(--paper); }
+  .lp { padding: 56px 40px 80px; }
+  .lp h1 { font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 64px; line-height: .95; letter-spacing: -.02em; margin: 12px 0 0; }
+  .lp-intro { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: end; padding-bottom: 40px; border-bottom: 1px solid var(--ink); }
+  .lp-crit { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .lp-crit li { display: flex; gap: 12px; font-size: 14px; }
+  .lp-crit li span:first-child { font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); width: 28px; }
+  .lp-part { display: flex; justify-content: space-between; align-items: baseline; margin: 56px 0 20px; }
+  .lp-part h2 { margin: 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 32px; }
+  .lp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+  .lp-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lp-card { background: var(--paper); border: 1px solid var(--photocopy); display: flex; flex-direction: column; }
+  .lp-stage { height: 300px; background: var(--paper-deep); display: grid; place-items: center; position: relative; overflow: hidden; }
+  .lp-stage svg { overflow: visible; max-width: 88%; height: auto; } .lp-test svg { max-width: 84%; height: auto; }
+  .lp-stage .lp-no { position: absolute; top: 12px; left: 12px; }
+  .lp-tests { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--photocopy); }
+  .lp-test { height: 92px; display: grid; place-items: center; position: relative; }
+  .lp-test + .lp-test { border-left: 1px solid var(--photocopy); }
+  .lp-test small { position: absolute; left: 8px; bottom: 6px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; }
+  .lp-test--kraft { background: var(--kraft); }
+  .lp-test--kraft small { color: var(--ink); }
+  .lp-test--ink { background: var(--ink); color: var(--paper); }
+  .lp-test--ink small { color: var(--paper); }
+  .lp-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--paper); display: grid; place-items: center; overflow: hidden; box-shadow: 0 0 0 1px var(--photocopy); }
+  .lp-body { padding: 20px; display: grid; gap: 10px; font-size: 14px; line-height: 21px; }
+  .lp-body h3 { margin: 0; font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 26px; line-height: 1.1; }
+  .lp-body p { margin: 0; }
+  .lp-meta { display: grid; grid-template-columns: 84px 1fr; gap: 4px 12px; margin: 4px 0 0; padding-top: 10px; border-top: 1px solid var(--photocopy); }
+  .lp-meta dt { font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); padding-top: 2px; }
+  .lp-meta dd { margin: 0; font-size: 13px; line-height: 19px; }
+  .lp-states { display: flex; gap: 22px; align-items: center; }
+  .lp-states figure { margin: 0; display: grid; justify-items: center; gap: 6px; }
+  .lp-next { margin-top: 56px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 24px; border-top: 1px solid var(--ink); }
+  .lp-next div { display: grid; gap: 6px; font-size: 14px; line-height: 21px; }
+  .griffe { font-family: "Mrs Saint Delafield", cursive; }
+  .lp-pair { display: grid; justify-items: center; gap: 26px; width: 100%; }
+  .lp-pair .lp-mono-row { display: flex; gap: 28px; align-items: center; justify-content: center; }
+  .lp-tag { position: absolute; top: 12px; right: 12px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 2px 6px; border: 1px solid var(--rule-strong); background: var(--paper); }
+  .lp-tag--new { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .lp-stage { height: 340px; }
+</style>
+</head>
+<body class="sa">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="copy" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="0.55"/>
+    </filter>
+    <filter id="stamp" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="9" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.3 1.35" result="holes"/>
+      <feComposite in="SourceGraphic" in2="holes" operator="in" result="c"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="2" result="n2"/>
+      <feDisplacementMap in="c" in2="n2" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<main class="lp">
+  <section class="lp-intro">
+    <div>
+      <span class="sa-mono sa-muted">IDENTITÉ · PISTES DE LOGO · V3 · 12.11.26</span>
+      <h1>Quatre pistes gardées, quatre nouvelles</h1>
+      <p style="max-width:560px;margin:20px 0 0">C, D, E et F sont affinées et deviennent chacune un petit système : un logotype pour le site et le packaging, un monogramme pour l'avatar et l'étiquette. Quatre nouvelles pistes prolongent le board : le semis en tournesol, l'étiquette tissée, la perforation d'archive et la graine sur le é. Une seule famille, Archivo, de l'étroit au très large, plus la mono pour l'inventaire.</p>
+    </div>
+    <ul class="lp-crit">
+      <li><span>01</span><span>Reconnaissable en une seconde à 32 px (avatar Instagram)</span></li>
+      <li><span>02</span><span>Brodable sur une étiquette de 2 cm</span></li>
+      <li><span>03</span><span>Lisible en noir sur kraft</span></li>
+      <li><span>04</span><span>Rendu imprimé possible : photocopie, tampon, encre</span></li>
+    </ul>
+  </section>
+
+  <div class="lp-part"><h2>Pistes retenues, affinées</h2><span class="sa-mono sa-muted">C · D · E · F</span></div>
+  <div class="lp-grid lp-grid--2" id="kept"></div>
+
+  <div class="lp-part"><h2>Nouvelles pistes</h2><span class="sa-mono sa-muted">G · H · I · J</span></div>
+  <div class="lp-grid lp-grid--2" id="news"></div>
+
+  <section class="lp-next">
+    <div><span class="sa-label">1 · Réduire</span><span>Garder deux ou trois pistes en séance à trois, en regardant surtout les tests 32 px et kraft.</span></div>
+    <div><span class="sa-label">2 · Imprimer</span><span>Passer les finalistes à la photocopieuse et au tampon, scanner : le grain réel remplace le filtre.</span></div>
+    <div><span class="sa-label">3 · Dessiner</span><span>Redessiner les lettres à la main sur la base d'Archivo (coupes, lame, graines) pour qu'elles soient propres à Simé, puis vectoriser.</span></div>
+    <div><span class="sa-label">4 · Protéger</span><span>Recherche d'antériorité puis dépôt à l'INPI en classes 25 (vêtements) et 35 (vente).</span></div>
+  </section>
+</main>
+
+<script>
+(function () {
+  function A(o) { return "font-family:Archivo, var(--font-sans);font-weight:" + o.w + ";font-stretch:" + (o.s || 100) + "%"; }
+  var MONO = "font-family:var(--font-mono)";
+  var INK = "var(--ink)", PAPER = "var(--paper)", DEEP = "var(--paper-deep)", KRAFT = "var(--kraft)";
+  var uid = 0; function id(p) { return p + (uid++); }
+  function f(o) { return o.f ? ' filter="url(#' + o.f + ')"' : ''; }
+  function svg(vb, o, label, body) { return '<svg viewBox="' + vb + '" width="' + (o.w || 300) + '"' + f(o) + ' role="img" aria-label="' + label + '"' + (o.cls ? ' class="' + o.cls + '"' : '') + '>' + body + '</svg>'; }
+
+  /* ── C · Semis ─────────────────────────────────────────────── */
+  function semis(c, bg, o) {
+    o = o || {};
+    var L = "SIMÉ ARCHIVES".split(""), out = "", x = 30, n = L.length;
+    L.forEach(function (ch, i) {
+      if (ch === " ") { out += '<circle cx="' + (x + 2) + '" cy="' + (62 - 26 * Math.sin(Math.PI * (i / (n - 1)))).toFixed(1) + '" r="3.5" fill="' + c + '"/>'; x += 26; return; }
+      var y = 62 - 26 * Math.sin(Math.PI * (i / (n - 1)));
+      out += '<circle cx="' + x + '" cy="' + y.toFixed(1) + '" r="17" fill="' + c + '"/>' +
+        '<text x="' + x + '" y="' + (y + 6).toFixed(1) + '" text-anchor="middle" style="' + A({ w: 700 }) + '" font-size="17" fill="' + bg + '">' + ch + '</text>';
+      x += 38;
+    });
+    [[x - 6, 66, 4], [x + 10, 76, 3], [x + 22, 70, 2.2], [x + 32, 82, 1.6]].forEach(function (s) { out += '<circle cx="' + s[0] + '" cy="' + s[1] + '" r="' + s[2] + '" fill="' + c + '"/>'; });
+    return svg("0 0 " + (x + 44) + " 100", o, "Simé Archives, lettres semées", out);
+  }
+  function monoC(c, bg, o) {
+    return svg("0 0 120 120", o || {}, "Monogramme Semis",
+      '<circle cx="48" cy="54" r="36" fill="' + c + '"/><circle cx="88" cy="84" r="22" fill="' + c + '"/><circle cx="100" cy="46" r="5" fill="' + c + '"/><circle cx="108" cy="62" r="3" fill="' + c + '"/>' +
+      '<text x="48" y="71" text-anchor="middle" style="' + A({ w: 800 }) + '" font-size="50" fill="' + bg + '">S</text>' +
+      '<text x="88" y="96" text-anchor="middle" style="' + A({ w: 800 }) + '" font-size="30" fill="' + bg + '">é</text>');
+  }
+
+  /* ── D · Pochoir étendu ────────────────────────────────────── */
+  function pochoir(c, o) {
+    o = o || {}; var m = id("m");
+    return svg("0 0 520 140", o, "Simé Archives, pochoir étendu",
+      '<defs><mask id="' + m + '"><rect width="520" height="140" fill="#fff"/><rect x="0" y="45" width="520" height="2.4" fill="#000"/></mask></defs>' +
+      '<g mask="url(#' + m + ')" fill="' + c + '">' +
+      '<text x="10" y="68" textLength="500" lengthAdjust="spacingAndGlyphs" style="' + A({ w: 900, s: 125 }) + '" font-size="70">SIMÉ</text>' +
+      '<text x="12" y="128" textLength="496" lengthAdjust="spacing" style="' + A({ w: 700, s: 125 }) + '" font-size="40">ARCHIVES</text></g>');
+  }
+  function monoD(c, bg, o) {
+    var m = id("m");
+    return svg("0 0 120 120", o || {}, "Monogramme SA pochoir",
+      '<rect width="120" height="120" fill="' + c + '"/><defs><mask id="' + m + '"><rect width="120" height="120" fill="#fff"/><rect x="0" y="57" width="120" height="3" fill="#000"/></mask></defs>' +
+      '<text x="60" y="80" text-anchor="middle" mask="url(#' + m + ')" style="' + A({ w: 900, s: 125 }) + '" font-size="54" fill="' + bg + '">SA</text>');
+  }
+
+  /* ── E · Index ─────────────────────────────────────────────── */
+  function index(c, o, word) {
+    o = o || {};
+    return svg("0 0 520 90", Object.assign({ cls: "js-idx" }, o), "|simé|" + (word || "archives") + "|",
+      '<text class="js-t" x="260" y="60" text-anchor="middle" style="' + A({ w: 300, s: 112 }) + '" font-size="46" fill="' + c + '">simé ' + (word || "archives") + '</text><g class="js-bars" fill="' + c + '"></g>');
+  }
+  function monoE(c, bg, o) {
+    return svg("0 0 120 120", o || {}, "Monogramme |s|",
+      '<rect x="1.5" y="1.5" width="117" height="117" fill="' + bg + '" stroke="' + c + '" stroke-width="3"/>' +
+      '<rect x="30" y="26" width="4" height="70" fill="' + c + '"/><rect x="86" y="26" width="4" height="70" fill="' + c + '"/>' +
+      '<text x="60" y="80" text-anchor="middle" style="' + A({ w: 300, s: 112 }) + '" font-size="60" fill="' + c + '">s</text>');
+  }
+
+  /* ── F · Lame : l'accent du é devient le A ─────────────────── */
+  function lame(c, o) {
+    o = o || {};
+    return svg("0 0 520 100", Object.assign({ cls: "js-lame" }, o), "simé Archives, l'accent devient une lame",
+      '<text class="js-t1" x="40" y="70" style="' + A({ w: 400, s: 75 }) + '" font-size="64" fill="' + c + '">sime</text>' +
+      '<path class="js-blade" d="" fill="' + c + '"/>' +
+      '<text class="js-t2" x="0" y="70" style="' + A({ w: 400, s: 75 }) + '" font-size="64" fill="' + c + '">rchives</text>');
+  }
+  function monoF(c, bg, o) {
+    return svg("0 0 120 120", o || {}, "Monogramme lame",
+      '<rect width="120" height="120" fill="' + bg + '"/>' +
+      '<path d="M14 58 C42 50 70 40 82 18 L92 18 L108 100 L96 100 L88 52 C70 58 44 62 14 58 Z M84 22 L66 100 L73 100 L88 40 Z M72 74 L101 74 L100 79 L71 79 Z" fill="' + c + '"/>' +
+      '<text x="34" y="102" text-anchor="middle" style="' + A({ w: 400, s: 75 }) + '" font-size="42" fill="' + c + '">s</text>');
+  }
+
+  /* ── G · Tournesol : un capitule de graines, le S en réserve ── */
+  function tournesol(c, bg, o, n) {
+    o = o || {}; n = n || 260; var m = id("t"), dots = "";
+    for (var i = 1; i <= n; i++) {
+      var a = i * 2.39996, r = 54 * Math.sqrt(i / n), x = 60 + r * Math.cos(a), y = 60 + r * Math.sin(a);
+      dots += '<circle cx="' + x.toFixed(2) + '" cy="' + y.toFixed(2) + '" r="' + ((n < 120 ? 2.6 : 1.5) + i / n * (n < 120 ? 1.2 : 0.9)).toFixed(2) + '"/>';
+    }
+    return svg("0 0 120 120", o, "Monogramme Tournesol",
+      '<defs><mask id="' + m + '"><rect width="120" height="120" fill="#fff"/><text x="60" y="84" text-anchor="middle" style="' + A({ w: 900 }) + '" font-size="84" fill="#000">S</text></mask></defs>' +
+      '<g mask="url(#' + m + ')" fill="' + c + '">' + dots + '</g>');
+  }
+  function tournesolLogo(c, bg, o) {
+    o = o || {};
+    return '<div style="display:flex;align-items:center;gap:18px">' + tournesol(c, bg, { w: o.mw || 74, f: o.f }) +
+      svg("0 0 300 70", { w: o.w || 260, f: o.f }, "Simé Archives",
+        '<text x="0" y="34" style="' + A({ w: 700, s: 112 }) + ';letter-spacing:6px" font-size="26" fill="' + c + '">SIMÉ</text>' +
+        '<text x="0" y="62" style="' + A({ w: 400, s: 112 }) + ';letter-spacing:6px" font-size="17" fill="' + c + '">ARCHIVES</text>') + '</div>';
+  }
+
+  /* ── H · Étiquette tissée ──────────────────────────────────── */
+  function etiquette(c, bg, o) {
+    o = o || {};
+    return svg("0 0 360 110", o, "Simé Archives, étiquette tissée",
+      '<path d="M16 8 H344 L332 55 L344 102 H16 L28 55 Z" fill="' + c + '"/>' +
+      '<path d="M40 22 H320 M40 88 H320" stroke="' + bg + '" stroke-width=".8" stroke-dasharray="2 3" opacity=".55"/>' +
+      '<text x="180" y="62" text-anchor="middle" style="' + A({ w: 900, s: 125 }) + ';letter-spacing:4px" font-size="30" fill="' + bg + '">SIMÉ</text>' +
+      '<text x="180" y="80" text-anchor="middle" style="' + MONO + ';letter-spacing:3px" font-size="9.5" fill="' + bg + '">ARCHIVES · PARIS · N° 001</text>');
+  }
+  function monoH(c, bg, o) {
+    return svg("0 0 120 120", o || {}, "Monogramme étiquette",
+      '<path d="M8 30 H112 L102 60 L112 90 H8 L18 60 Z" fill="' + c + '"/>' +
+      '<text x="60" y="72" text-anchor="middle" style="' + A({ w: 900, s: 125 }) + '" font-size="34" fill="' + bg + '">SA</text>');
+  }
+
+  /* ── I · Perforé : lettres en points, comme un ticket d'archive poinçonné ── */
+  var G = { S: ["01111","10000","10000","01110","00001","00001","11110"], I: ["111","010","010","010","010","010","111"], M: ["10001","11011","10101","10101","10001","10001","10001"],
+    E: ["11111","10000","10000","11110","10000","10000","11111"], A: ["01110","10001","10001","11111","10001","10001","10001"], R: ["11110","10001","10001","11110","10100","10010","10001"],
+    C: ["01111","10000","10000","10000","10000","10000","01111"], H: ["10001","10001","10001","11111","10001","10001","10001"], V: ["10001","10001","10001","10001","10001","01010","00100"] };
+  function dotWord(word, x0, y0, p, r, c, accent) {
+    var out = "", x = x0;
+    word.split("").forEach(function (ch) {
+      if (ch === " ") { x += p * 3; return; }
+      var g = G[ch === "É" ? "E" : ch];
+      g.forEach(function (row, j) { row.split("").forEach(function (b, k) { if (b === "1") out += '<circle cx="' + (x + k * p) + '" cy="' + (y0 + j * p) + '" r="' + r + '" fill="' + c + '"/>'; }); });
+      if (ch === "É") { out += '<circle cx="' + (x + 3 * p) + '" cy="' + (y0 - 2 * p) + '" r="' + r + '" fill="' + c + '"/><circle cx="' + (x + 2 * p) + '" cy="' + (y0 - 1.2 * p) + '" r="' + (r * .8) + '" fill="' + c + '"/>'; }
+      x += (g[0].length + 1) * p;
+    });
+    return { svg: out, w: x - x0 };
+  }
+  function perfore(c, o) {
+    o = o || {};
+    var a = dotWord("SIMÉ", 10, 26, 9, 3.4, c), b = dotWord("ARCHIVES", 10, 104, 4.6, 1.75, c);
+    return svg("0 0 " + Math.max(a.w, b.w + 4) + " 140", o, "Simé Archives, lettres perforées", a.svg + b.svg);
+  }
+  function monoI(c, bg, o) {
+    var s = dotWord("S", 34, 26, 11, 4.2, c), ring = "";
+    for (var i = 0; i < 40; i++) { var t = i / 40 * Math.PI * 2; ring += '<circle cx="' + (60 + 54 * Math.cos(t)).toFixed(1) + '" cy="' + (60 + 54 * Math.sin(t)).toFixed(1) + '" r="1.8" fill="' + c + '"/>'; }
+    return svg("0 0 120 120", o || {}, "Monogramme perforé", ring + s.svg);
+  }
+
+  /* ── J · Graine : l'accent du é devient une graine ─────────── */
+  function graine(c, o) {
+    o = o || {};
+    return svg("0 0 460 120", Object.assign({ cls: "js-graine" }, o), "simé, l'accent est une graine",
+      '<text class="js-t" x="20" y="96" style="' + A({ w: 800, s: 88 }) + ';letter-spacing:-3px" font-size="104" fill="' + c + '">sime</text><ellipse class="js-seed" rx="9" ry="14" fill="' + c + '"/>' +
+      '<text class="js-sub" x="0" y="96" style="' + MONO + ';letter-spacing:2px" font-size="13" fill="' + c + '">ARCHIVES</text>');
+  }
+  function monoJ(c, bg, o) {
+    return svg("0 0 120 120", o || {}, "Monogramme graine",
+      '<rect width="120" height="120" fill="' + c + '"/>' +
+      '<text x="58" y="98" text-anchor="middle" style="' + A({ w: 800, s: 88 }) + '" font-size="96" fill="' + bg + '">e</text>' +
+      '<ellipse cx="74" cy="22" rx="7" ry="11" transform="rotate(30 74 22)" fill="' + bg + '"/>');
+  }
+
+  /* ── Cartes ─────────────────────────────────────────────────── */
+  var av = function (h) { return '<span class="lp-avatar">' + h + '</span>'; };
+  function card(o) {
+    return '<article class="lp-card"><div class="lp-stage"><span class="lp-no sa-mono sa-muted">' + o.no + '</span><span class="lp-tag' + (o.isNew ? ' lp-tag--new' : '') + '">' + (o.isNew ? 'Nouveau' : 'Affiné') + '</span>' + o.stage + '</div>' +
+      '<div class="lp-tests">' + o.tests.map(function (t) { return '<div class="lp-test ' + (t.cls || '') + '">' + t.html + '<small>' + t.label + '</small></div>'; }).join('') + '</div>' +
+      '<div class="lp-body"><span class="sa-label">' + o.kicker + '</span><h3>' + o.title + '</h3><p>' + o.text + '</p>' +
+      '<dl class="lp-meta">' + (o.changed ? '<dt>Affinage</dt><dd>' + o.changed + '</dd>' : '') + '<dt>Inspiré de</dt><dd>' + o.from + '</dd><dt>Usages</dt><dd>' + o.use + '</dd><dt>Point fort</dt><dd>' + o.plus + '</dd><dt>Vigilance</dt><dd>' + o.minus + '</dd></dl></div></article>';
+  }
+  function pair(logo, monos) { return '<div class="lp-pair">' + logo + '<div class="lp-mono-row">' + monos + '</div></div>'; }
+
+  document.getElementById("kept").innerHTML = [
+    card({ no: "C", kicker: "Semis", title: "Les lettres semées", stage: pair(semis(INK, DEEP, { w: 470, f: "copy" }), monoC(INK, DEEP, { w: 84 })),
+      tests: [{ label: "32 px", html: av(monoC(INK, PAPER, { w: 28 })) }, { label: "Kraft", cls: "lp-test--kraft", html: semis(INK, KRAFT, { w: 160, f: "stamp" }) }, { label: "Inversé", cls: "lp-test--ink", html: semis(PAPER, INK, { w: 160 }) }],
+      changed: "Graines de même taille, lettres plus grandes et plus grasses, une seule courbe douce, quatre graines qui s'échappent à la fin comme jetées à la main.",
+      text: "Chaque lettre dans une graine noire, posées en arc. Le monogramme garde deux graines, S et é, et deux petites qui tombent.",
+      from: "Les lettres dans des points noirs du board.", use: "Couvertures de récolte, papier de soie, stickers, avatar.",
+      plus: "Le nom devient l'image, sans explication.", minus: "Trop chargé en en-tête de site : réserver aux récoltes et au packaging." }),
+    card({ no: "D", kicker: "Pochoir étendu", title: "SIMÉ très large, ARCHIVES dessous", stage: pair(pochoir(INK, { w: 440, f: "copy" }), monoD(INK, DEEP, { w: 84 })),
+      tests: [{ label: "32 px", html: av(monoD(INK, PAPER, { w: 32 })) }, { label: "Kraft", cls: "lp-test--kraft", html: pochoir(INK, { w: 150, f: "stamp" }) }, { label: "Inversé", cls: "lp-test--ink", html: pochoir(PAPER, { w: 150 }) }],
+      changed: "Bloc sur deux lignes justifiées à la même largeur. SIMÉ porte le poids, ARCHIVES devient une ligne d'inventaire. Une seule coupe de pochoir, plus fine. Monogramme SA en carré plein.",
+      text: "SIMÉ en Archivo noir, le plus large possible, coupé par une ligne de pochoir. ARCHIVES en dessous, espacé pour tomber pile à la même largeur.",
+      from: "« ARCHIVES » au pochoir, « ARCHIVES » espacé.", use: "En-tête du site, étiquette de col, cartons, tampon.",
+      plus: "Un bloc compact, très lisible, qui se tamponne bien.", minus: "En en-tête de site, prévoir aussi une version sur une ligne." }),
+    card({ no: "E", kicker: "Index", title: "|simé|archives|", stage: pair('<div style="display:grid;gap:6px;justify-items:center">' + index(INK, { w: 420 }) + index(INK, { w: 260 }, "journaling") + index(INK, { w: 260 }, "location") + '</div>', ''),
+      tests: [{ label: "32 px", html: av(monoE(INK, PAPER, { w: 32 })) }, { label: "Kraft", cls: "lp-test--kraft", html: index(INK, { w: 160 }) }, { label: "Inversé", cls: "lp-test--ink", html: index(PAPER, { w: 160 }) }],
+      changed: "Barres calées sur les ascendantes, composition centrée, et un vrai système de rubriques : |simé|journaling|, |simé|location|. Monogramme |s| en cadre.",
+      text: "Des minuscules larges et légères rangées entre des barres d'intercalaire. Le second mot change selon la rubrique.",
+      from: "« |archive|s| », les fichiers d'inventaire.", use: "Site, rubriques, signature d'e-mail, fiches du Journal.",
+      plus: "Le plus calme et le plus SSENSE, et le plus facile à décliner.", minus: "Peu de caractère seul : à associer à C ou G sur les réseaux." }),
+    card({ no: "F", kicker: "Lame", title: "L'accent devient le A", stage: pair(lame(INK, { w: 440, f: "copy" }), monoF(INK, DEEP, { w: 84 })),
+      tests: [{ label: "32 px", html: av(monoF(INK, PAPER, { w: 32 })) }, { label: "Kraft", cls: "lp-test--kraft", html: lame(INK, { w: 160, f: "stamp" }) }, { label: "Inversé", cls: "lp-test--ink", html: lame(PAPER, { w: 160 }) }],
+      changed: "La lame ne traverse plus le mot : elle part exactement de l'accent du é et retombe en jambe de A. Un seul geste qui relie Simé à Archives.",
+      text: "Minuscules étroites. L'accent du é s'étire en lame effilée et forme le A d'Archives. Le côté sport et Y2K de la fin des années 90.",
+      from: "« prive Archive », Prada Sport 1999.", use: "Récoltes sportswear, stories, merch, couverture de lookbook.",
+      plus: "Une idée qui n'appartient qu'à Simé : l'accent fait le lien.", minus: "La lame doit être redessinée à la main pour être parfaitement tendue." })
+  ].join('');
+
+  document.getElementById("news").innerHTML = [
+    card({ no: "G", isNew: true, kicker: "Tournesol", title: "Un capitule de graines", stage: pair(tournesolLogo(INK, DEEP, { w: 270, mw: 110, f: "copy" }), ''),
+      tests: [{ label: "32 px", html: av(tournesol(INK, PAPER, { w: 30 }, 70)) }, { label: "Kraft", cls: "lp-test--kraft", html: tournesol(INK, KRAFT, { w: 70, f: "stamp" }) }, { label: "Inversé", cls: "lp-test--ink", html: tournesol(PAPER, INK, { w: 70 }) }],
+      text: "Des graines posées en spirale, comme dans un cœur de tournesol, avec un S laissé en réserve au milieu. Semé, littéralement. Le texte reste sobre à côté.",
+      from: "L'herbier, les sceaux circulaires, les lettres en points.", use: "Avatar, tampon, sticker, broderie en points.",
+      plus: "Une texture forte et reconnaissable même floue.", minus: "Sous 24 px les graines se fondent : version à 70 graines plus grosses pour l'avatar." }),
+    card({ no: "H", isNew: true, kicker: "Étiquette tissée", title: "Le logo est l'étiquette", stage: pair(etiquette(INK, PAPER, { w: 380 }), monoH(INK, DEEP, { w: 84 })),
+      tests: [{ label: "32 px", html: av(monoH(INK, PAPER, { w: 32 })) }, { label: "Kraft", cls: "lp-test--kraft", html: etiquette(INK, KRAFT, { w: 160, f: "stamp" }) }, { label: "Inversé", cls: "lp-test--ink", html: etiquette(PAPER, INK, { w: 160 }) }],
+      text: "Une étiquette de col pliée aux deux bouts : SIMÉ très large, puis la ligne d'inventaire en mono. Le logo est exactement l'objet cousu dans chaque pièce.",
+      from: "L'étiquette Michelotti, KAN, les étiquettes d'inventaire.", use: "Étiquette cousue, en-tête, cartes, packaging.",
+      plus: "Du logo à l'objet sans adaptation : on brode le fichier.", minus: "Format allongé : le site doit lui laisser de la place." }),
+    card({ no: "I", isNew: true, kicker: "Perforé", title: "Le ticket d'archive", stage: pair(perfore(INK, { w: 290 }), monoI(INK, DEEP, { w: 76 })),
+      tests: [{ label: "32 px", html: av(monoI(INK, PAPER, { w: 30 })) }, { label: "Kraft", cls: "lp-test--kraft", html: perfore(INK, { w: 120, f: "stamp" }) }, { label: "Inversé", cls: "lp-test--ink", html: perfore(PAPER, { w: 120 }) }],
+      text: "Les lettres construites en points, comme un ticket d'archive poinçonné ou un gaufrage. L'accent du É est deux points. Se perce, se gaufre, se brode.",
+      from: "Institute of Synesthesia, les lettres en points.", use: "Gaufrage sur kraft, cartes de remerciement, perforation des étiquettes.",
+      plus: "Le plus techno, très cohérent avec la mono d'inventaire.", minus: "Lisibilité moyenne en mouvement : à garder pour les supports imprimés." }),
+    card({ no: "J", isNew: true, kicker: "Graine", title: "L'accent est une graine", stage: pair(graine(INK, { w: 400, f: "copy" }), monoJ(INK, DEEP, { w: 84 })),
+      tests: [{ label: "32 px", html: av(monoJ(INK, PAPER, { w: 32 })) }, { label: "Kraft", cls: "lp-test--kraft", html: graine(INK, { w: 150, f: "stamp" }) }, { label: "Inversé", cls: "lp-test--ink", html: graine(PAPER, { w: 150 }) }],
+      text: "simé en minuscules grasses et serrées, l'accent remplacé par une graine pleine. ARCHIVES en mono minuscule, posé comme une légende.",
+      from: "Le « Se » massif, la graine du livre Simé.", use: "Site, avatar, sticker, tote.",
+      plus: "Le plus simple et le plus mémorisable. Raconte l'origine du nom.", minus: "Très minimal : la DA doit venir des photos et de la mise en page." })
+  ].join('');
+
+  function place() {
+    document.querySelectorAll(".js-idx").forEach(function (s) {
+      var t = s.querySelector(".js-t"), n = t.getNumberOfChars(); if (!n) return;
+      var sp = t.textContent.indexOf(" "), e0 = t.getExtentOfChar(0), es = t.getExtentOfChar(sp), eN = t.getExtentOfChar(n - 1), eh = t.getExtentOfChar(1);
+      var top = eh.y + 2, h = (e0.y + e0.height) - top - 6, xs = [e0.x - 14, es.x + es.width / 2, eN.x + eN.width + 14];
+      s.querySelector(".js-bars").innerHTML = xs.map(function (x) { return '<rect x="' + (x - 1.4).toFixed(1) + '" y="' + top.toFixed(1) + '" width="2.8" height="' + h.toFixed(1) + '"/>'; }).join("");
+    });
+    document.querySelectorAll(".js-lame").forEach(function (s) {
+      var t1 = s.querySelector(".js-t1"); if (!t1.getNumberOfChars()) return;
+      var e = t1.getExtentOfChar(3), base = 70, ec = e.x + e.width * 0.55, ax = e.x + e.width + 14;
+      var d = "M" + (ec - 8) + " " + (base - 48) + " C" + (ec + 20) + " " + (base - 52) + " " + (ax - 6) + " " + (base - 54) + " " + (ax + 12) + " " + (base - 62) +
+        " L" + (ax + 20) + " " + (base - 62) + " L" + (ax + 36) + " " + base + " L" + (ax + 26) + " " + base + " L" + (ax + 14) + " " + (base - 46) +
+        " C" + (ax - 6) + " " + (base - 46) + " " + (ec + 18) + " " + (base - 46) + " " + (ec - 8) + " " + (base - 48) + " Z" +
+        " M" + (ax + 13) + " " + (base - 60) + " L" + (ax - 4) + " " + base + " L" + (ax + 2) + " " + base + " L" + (ax + 16) + " " + (base - 50) + " Z" +
+        " M" + (ax + 6) + " " + (base - 20) + " L" + (ax + 30) + " " + (base - 20) + " L" + (ax + 29.4) + " " + (base - 17) + " L" + (ax + 5) + " " + (base - 17) + " Z";
+      s.querySelector(".js-blade").setAttribute("d", d);
+      s.querySelector(".js-t2").setAttribute("x", ax + 38);
+    });
+    document.querySelectorAll(".js-graine").forEach(function (s) {
+      var t = s.querySelector(".js-t"); if (!t.getNumberOfChars()) return;
+      var e = t.getExtentOfChar(3), sd = s.querySelector(".js-seed"), cx = e.x + e.width * 0.58, cy = 22;
+      sd.setAttribute("cx", cx); sd.setAttribute("cy", cy); sd.setAttribute("transform", "rotate(32 " + cx + " " + cy + ")");
+      s.querySelector(".js-sub").setAttribute("x", e.x + e.width + 10);
+    });
+  }
+  place();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+})();
+</script>
+</body>
+</html>

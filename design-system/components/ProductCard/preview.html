@@ -1,0 +1,13 @@
+<!-- @dsCard group="Shop" height=560 width=1100 subtitle="Survol : image portée → détail étiquette, ajout rapide" -->
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ProductCard</title>
+<style>html,body{margin:0;background:var(--paper)} </style></head>
+<body class="sa">
+<div class="sa-wrap" style="padding-top:24px;padding-bottom:24px"><div class="sa-grid" data-cols="4" id="r"></div></div>
+<script>
+var S = window.SimeArchives;
+document.getElementById("r").innerHTML = [S.shopProducts[0], S.shopProducts[2], S.shopProducts[5], Object.assign({}, S.shopProducts[6], { sold: "29.10.26" }) /* état « vendue », démonstration */].map(S.productCard).join(""); S.init(document);
+</script>
+</body>
+</html>

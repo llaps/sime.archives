@@ -1,0 +1,13 @@
+<!-- @dsCard group="Actions" height=140 subtitle="Primaire, secondaire, lien, désactivé" -->
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Button</title>
+<style>html,body{margin:0;background:var(--paper)} </style></head>
+<body class="sa">
+<div id="r" style="padding:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center"></div>
+<script>
+var S = window.SimeArchives;
+document.getElementById("r").innerHTML = S.button("Ajouter au panier") + S.button("Louer ce look", {variant:"secondary"}) + S.button("Lire la fiche", {variant:"link"}) + S.button("Vendue", {disabled:true});
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Journaling · Simé Archives</title><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="bundle.js"></script>
+<style>html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}
+.jr-sheet{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4px;padding-top:8px;height:clamp(320px,52vh,480px)}
+.jr-sheet figure{margin:0;position:relative;background:var(--packshot,#fff);overflow:hidden}
+.jr-sheet img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.jr-sheet .is-main{grid-row:span 1}
+.jr-sheet figcaption{position:absolute;left:8px;bottom:8px;background:var(--paper);padding:2px 6px;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:900px){.jr-sheet{grid-template-columns:1fr 1fr;height:auto}.jr-sheet img{aspect-ratio:3/4;height:auto}.jr-sheet .is-main{grid-column:1 / -1}}
+</style></head>
+<body class="sa"><div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives, p = S.find("SA-001");
+document.getElementById("r").innerHTML = S.announcementBar() + S.header({ active: "location" }) +
+  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span><a href="#">Location & RP</a></span><span>Journaling</span></nav></div>' +
+  /* Les visuels de la pièce, en planche contact, avant le texte */
+  '<section class="sa-wrap jr-sheet" aria-label="Photos de la pièce">' + [[p.photos[0], "La pièce, gros plan"], [p.photos[1], "Portée"], [S.lookOf(p), "Le look complet"], [S.photos.look3, "Lookbook"]].map(function (v, i) { return '<figure' + (i === 0 ? ' class="is-main"' : '') + '><img src="' + v[0] + '" alt="' + p.name + ', ' + v[1].toLowerCase() + '"><figcaption class="sa-mono">' + String(i + 1).padStart(2, "0") + ' · ' + v[1] + '</figcaption></figure>'; }).join("") + '</section>' +
+  '<section class="sa-section sa-wrap" style="display:grid;justify-items:center;padding-top:40px">' + S.archiveChapters(p) + '</section>' +
+  '<section class="sa-section sa-wrap">' + S.editoQuote() + '</section>' +
+  '<section class="sa-section sa-wrap" style="border-top:1px solid var(--photocopy)">' + S.related(p) + '</section>' +
+  S.footer() + S.cartDrawer();
+S.init(document);
+</script><script src="proto.js"></script></body></html>
