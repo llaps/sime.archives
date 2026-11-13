@@ -40,7 +40,7 @@ def page(src, out, title, patches=(), main=False):
         s = t + '\n<meta name="description" content="Prototype navigable du site Simé Archives">\n' + s.replace(t, '', 1)
     open(os.path.join(OUT, out), 'w').write(s)
 
-page('HomePage', 'index.html', 'Simé Archives', main=True)
+page('HomePage', 'index.html', 'Simé Archives')  # page complète, servie telle quelle par GitHub Pages
 page('DropPage', 'drop.html', 'Récolte 04 · Simé Archives')
 page('ShopPage', 'shop.html', 'Shop · Simé Archives')
 page('LocationPageB2', 'location.html', 'Location & RP · Simé Archives')

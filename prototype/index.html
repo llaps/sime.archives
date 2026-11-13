@@ -1,3 +1,6 @@
+<!doctype html>
+<html lang="fr">
+<head>
 <title>Simé Archives</title>
 <meta name="description" content="Prototype navigable du site Simé Archives">
 <link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="bundle.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -83,7 +86,9 @@ html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:aut
   .hm-rec .hm-next{grid-template-columns:1fr;gap:var(--space-4)}.hm-rec .hm-next .sa-btn{width:100%}
 }
 </style>
-<script>document.body.classList.add("sa")</script>
+</head>
+
+<body class="sa">
 <div class="sa-page" id="r"></div>
 <script>
 var S = window.SimeArchives, P = S.photos;
@@ -128,3 +133,5 @@ document.getElementById("r").innerHTML =
 S.init(document);
 </script>
 <script src="proto.js"></script>
+</body>
+</html>
