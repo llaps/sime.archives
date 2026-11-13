@@ -52,6 +52,7 @@
 .sa-logo__word { font-family: var(--font-sans); font-weight: 500; font-size: 15px; letter-spacing: .42em; padding-left: .42em; white-space: nowrap; }
 .sa-logo__word i { font-style: normal; position: relative; }
 .sa-logo__word i::after { content: ""; position: absolute; left: 7px; top: -7px; width: 9px; height: 6px; border-top: 1.6px solid currentColor; border-radius: 0 100% 0 0; transform: rotate(-28deg); }
+.sa-logo__short { display: none; }
 .sa-logo__sub { margin-top: 6px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .08em; color: var(--ink-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .sa-tools { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-4); }
 .sa-tools__lang { font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); }
@@ -82,7 +83,9 @@
   .sa-burger { display: block; }
   .sa-tools__lang, .sa-tools [data-tool="account"], .sa-tools [data-tool="wish"] { display: none; }
   .sa-logo__word { font-size: 12px; letter-spacing: .32em; }
-  .sa-logo__sub { display: none; }
+  .sa-logo__sub { margin-top: 4px; font-size: 8px; letter-spacing: .04em; }
+  .sa-logo__long { display: none; }
+  .sa-logo__short { display: inline; }
 }
 
 /* ── Product card (vignette) ────────────── */

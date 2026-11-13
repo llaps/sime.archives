@@ -139,7 +139,7 @@
   }
 
   function logo() {
-    return "<a class='sa-logo' href='#' aria-label='Simé Archives, accueil'><span class='sa-logo__word' aria-hidden='true'>SIM<i>E</i> ARCHIVES</span><span class='sa-logo__sub' data-sa='clocks' aria-label='Heure à Paris, en Guadeloupe et en Martinique'>PARIS <span data-tz='Europe/Paris'>--:--:--</span> · GUADELOUPE / MARTINIQUE <span data-tz='America/Guadeloupe'>--:--:--</span></span></a>";
+    return "<a class='sa-logo' href='#' aria-label='Simé Archives, accueil'><span class='sa-logo__word' aria-hidden='true'>SIM<i>E</i> ARCHIVES</span><span class='sa-logo__sub' data-sa='clocks' aria-label='Heure à Paris, en Guadeloupe et en Martinique'>PARIS <span data-tz='Europe/Paris'>--:--:--</span> · <span class='sa-logo__long'>GUADELOUPE / MARTINIQUE</span><span class='sa-logo__short'>GPE / MQ</span> <span data-tz='America/Guadeloupe'>--:--:--</span></span></a>";
   }
 
   /* Listes du méga-menu, alimentées par les fiches produit comme les filtres */
