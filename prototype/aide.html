@@ -1,31 +1,89 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Aide · Simé Archives</title><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="bundle.js"></script>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Questions fréquentes · Simé Archives</title><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="bundle.js"></script>
 <style>html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}
 .ai{display:grid;grid-template-columns:1fr 2fr;gap:var(--space-6);padding-top:72px;padding-bottom:96px}
 .ai h1{margin:var(--space-2) 0 0;font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-weight:500;font-size:44px;line-height:1}
+.ai__side{align-self:start;position:sticky;top:96px}
 .ai nav{display:grid;gap:8px;margin-top:var(--space-5);font-size:14px}.ai nav a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
-.ai section{scroll-margin-top:90px}.ai .sa-acc__inner p{margin:0 0 10px;max-width:62ch}
-@media (max-width:900px){.ai{grid-template-columns:1fr;padding-top:40px}}
+.ai section{scroll-margin-top:90px}
+.ai section + section{margin-top:var(--space-6)}
+.ai h2{margin:0 0 var(--space-3);padding-bottom:var(--space-3);border-bottom:1px solid var(--ink);font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-weight:500;font-size:24px;line-height:1.1}
+.ai .sa-acc__btn{text-transform:none;letter-spacing:0;font-size:15px;line-height:21px;font-weight:500;text-align:left;gap:var(--space-4)}
+.ai .sa-acc__inner p{margin:0 0 10px;max-width:62ch}
+.ai__more{margin-top:var(--space-6);padding-top:var(--space-5);border-top:1px solid var(--ink)}
+.ai__more p{margin:var(--space-2) 0 0;max-width:52ch}
+@media (max-width:900px){.ai{grid-template-columns:1fr;gap:var(--space-5);padding-top:40px}.ai__side{position:static}.ai nav{grid-template-columns:1fr 1fr;gap:8px 16px}.ai h1{font-size:36px}}
 </style></head>
 <body class="sa"><div class="sa-page" id="r"></div>
 <script>
 var S = window.SimeArchives;
-var SECS = [
-  ["livraison", "Livraison et retours", "<p>Les pièces achetées partent dans toute la France, Outre-mer compris. La location se fait à Paris uniquement pour l’instant, en retrait à l’atelier ou par coursier. Chaque pièce part sous 48 h, dans du papier de soie, avec un tampon au monogramme et une carte qui renvoie à sa fiche d’archive.</p><p>Vous avez 14 jours pour changer d’avis. La pièce revient dans l’état où elle est partie, étiquette Simé comprise.</p>"],
-  ["mesures", "Guide des mesures", "<p>Une pièce vintage ne suit pas les tailles d’aujourd’hui : chaque fiche donne les mesures à plat, en centimètres (aisselles, taille, longueur).</p><p>Pour comparer, posez à plat un vêtement à vous qui tombe bien, et mesurez-le de la même façon. La ligne mannequin vous dit aussi qui porte la pièce et dans quelle taille.</p>"],
-  ["location", "Conditions de location", "<p>Simé loue des looks complets, stylés par Lou-Ann, et les pièces du fonds Archives à l’unité. Une pièce du Shop se loue seulement dans son look, tant qu’elle n’est pas vendue. Pour un shoot, un clip ou une campagne, la formule Shoot pro est sur devis.</p><p>Le prix se calcule en pourcentage de la valeur des pièces. Un look : 15 % pour 3 jours, 25 % pour une semaine, 35 % pour deux semaines, jamais moins de 30 €. Une pièce seule : 20 % pour 3 jours, 30 % pour une semaine, 40 % pour deux semaines, jamais moins de 45 €. Shoot pro : 20 % par jour.</p><p>La caution est une empreinte bancaire du montant de la valeur, sans débit, libérée sous 48 h après le retour. Le nettoyage est inclus. Un rappel part la veille du retour.</p>"],
-  ["codes", "Codes promo", "<p>Les codes se saisissent dans le panier, rubrique Code promo, et s’appliquent avant le paiement. Ils arrivent avec la lettre des récoltes et la liste « Amis proches » sur Instagram.</p><p>Un code par commande, non cumulable.</p>"],
-  ["contact", "Contact", "<p>Une question sur une pièce, une mesure ou une location : écrivez à Simé en message privé sur Instagram, @sime.archives. Réponse sous 48 h.</p><p>Pour un shoot, un clip ou une campagne, passez par la demande pro de la page Location & RP.</p>"]
+/* FAQ : questions classées par thème. Les ancres des thèmes (#livraison, #mesures, #location, #codes, #contact) restent celles de l'ancienne page Aide.
+   Une question s'ouvre aussi par son ancre : aide.html#q-taille. */
+var FAQ = [
+  ["recoltes", "Les récoltes", [
+    ["q-recolte", "Quand a lieu la prochaine récolte ?", "<p>Une récolte par mois, le premier jeudi à 19 h, heure de Paris. La prochaine : <span data-sa='recolte-jour'>jeudi</span>. Les pièces se dévoilent d’abord sur Instagram, @sime.archives.</p>"],
+    ["q-acces", "Comment avoir l’accès anticipé ?", "<p>Inscrivez votre e-mail sur la page récolte ou en bas de chaque page. Le lien d’accès arrive le jour de la récolte à 18 h, une heure avant tout le monde.</p>"],
+    ["q-panier", "Une pièce dans mon panier est-elle réservée ?", "<p>Non. Chaque pièce est unique : elle est à vous quand le paiement est validé. Pendant une récolte, passez commande sans attendre.</p>"],
+    ["q-reste", "Que deviennent les pièces après la récolte ?", "<p>Celles qui restent passent dans le Shop jusqu’à leur vente. Une pièce vendue ne revient pas.</p>"]
+  ]],
+  ["acheter", "Acheter", [
+    ["q-unique", "Les pièces existent-elles en plusieurs tailles ?", "<p>Non. Chaque pièce est unique : une taille, une seule fois. Le numéro d’archive SA-### qui l’accompagne n’est jamais réutilisé.</p>"],
+    ["q-paiement", "Quels moyens de paiement acceptez-vous ?", "<p>Carte bancaire, Apple Pay, Google Pay et PayPal. Le paiement en plusieurs fois est possible à partir de 150 €.</p>"],
+    ["q-compte", "Faut-il créer un compte ?", "<p>Non. Vous pouvez commander sans compte. Un compte garde vos favoris et l’historique de vos commandes et locations.</p>"],
+    ["q-mettre-de-cote", "Pouvez-vous mettre une pièce de côté ?", "<p>Non, pour que chaque pièce reste accessible à tout le monde au même moment.</p>"]
+  ]],
+  ["mesures", "Tailles et mesures", [
+    ["q-taille", "Comment choisir ma taille ?", "<p>Une pièce vintage ne suit pas les tailles d’aujourd’hui, et l’étiquette d’origine peut tromper. Chaque fiche donne les mesures à plat, en centimètres : aisselles, taille, longueur.</p><p>Posez à plat un vêtement à vous qui tombe bien, mesurez-le de la même façon et comparez.</p>"],
+    ["q-mannequin", "Qui porte les pièces sur les photos ?", "<p>La ligne sous la taille indique le prénom et la taille du mannequin, et la taille qu’elle porte.</p>"],
+    ["q-question", "Une mesure vous fait hésiter ?", "<p>Écrivez à Simé sur Instagram avec le numéro de la pièce. Simé reprend la mesure et vous répond sous 48 h.</p>"]
+  ]],
+  ["etat", "État et authenticité", [
+    ["q-etat", "Dans quel état sont les pièces ?", "<p>Chaque pièce est nettoyée, mesurée et photographiée défauts compris. L’état est décrit précisément sur la fiche, et chaque défaut est montré en photo.</p>"],
+    ["q-authentique", "Les pièces de créateur sont-elles authentiques ?", "<p>Vanina vérifie chaque pièce avant sa mise en ligne : étiquettes, coutures, matières, provenance. Quand une marque n’est pas certaine, la pièce est présentée « Sans marque » ou « À identifier ».</p>"],
+    ["q-fiche", "Qu’est-ce que la fiche d’archive ?", "<p>L’histoire de la pièce : sa marque, son époque, la façon dont Simé la porte aujourd’hui. Elle se lit sur le site et par la carte glissée dans le colis.</p>"]
+  ]],
+  ["livraison", "Livraison", [
+    ["q-ou", "Où livrez-vous ?", "<p>Dans toute la France, Outre-mer compris : Guadeloupe, Martinique, Guyane, La Réunion, Mayotte. La location se fait à Paris uniquement.</p>"],
+    ["q-delai", "Quand ma commande part-elle ?", "<p>Sous 48 h, dans du papier de soie, avec un tampon au monogramme et une carte qui renvoie à la fiche d’archive. Un lien de suivi vous est envoyé par e-mail.</p>"],
+    ["q-frais", "Combien coûte la livraison ?", "<p>Les frais s’affichent dans le panier, avant le paiement. Pour l’Outre-mer, des taxes locales peuvent s’ajouter à la réception.</p>"]
+  ]],
+  ["retours", "Retours et remboursements", [
+    ["q-retour", "Puis-je retourner une pièce ?", "<p>Oui. Vous avez 14 jours après la réception pour changer d’avis. La pièce revient non portée, dans l’état où elle est partie, étiquette Simé comprise.</p>"],
+    ["q-rembourse", "Quand le remboursement arrive-t-il ?", "<p>Sous 14 jours après la réception de la pièce par Simé, sur le moyen de paiement utilisé.</p>"],
+    ["q-defaut", "La pièce ne correspond pas à la fiche. Que faire ?", "<p>Écrivez à Simé dans les 48 h avec des photos. Simé vous propose un retour pris en charge et un remboursement complet.</p>"]
+  ]],
+  ["location", "Location", [
+    ["q-louer", "Que peut-on louer ?", "<p>Des looks complets, stylés par Lou-Ann, et les pièces du fonds Archives à l’unité. Une pièce du Shop se loue seulement dans son look, tant qu’elle n’est pas vendue.</p>"],
+    ["q-ou-louer", "Où se fait la location ?", "<p>À Paris uniquement : retrait à l’atelier ou par coursier. L’envoi en France et aux Antilles pourra venir plus tard.</p>"],
+    ["q-prix", "Combien coûte une location ?", "<p>Un pourcentage de la valeur des pièces. Un look : 15 % pour 3 jours, 25 % pour une semaine, 35 % pour deux semaines, jamais moins de 30 €. Une pièce seule : 20 % pour 3 jours, 30 % pour une semaine, 40 % pour deux semaines, jamais moins de 45 €.</p>"],
+    ["q-caution", "Comment fonctionne la caution ?", "<p>Une empreinte bancaire du montant de la valeur, sans débit. Elle est libérée sous 48 h après le retour et le contrôle des pièces.</p>"],
+    ["q-essai", "Et si le look ne me va pas ?", "<p>Au retrait à l’atelier, vous essayez avant de partir. Avec la formule stylisme, Lou-Ann fait les retouches d’ajustement.</p>"],
+    ["q-retard", "Que se passe-t-il si je rends en retard ?", "<p>Un rappel part la veille du retour. Chaque jour de retard est facturé comme une journée en plus, 5 % de la valeur. Prévenez Simé dès que possible : si personne n’a réservé ensuite, la location peut être prolongée.</p>"],
+    ["q-accroc", "Et en cas d’accroc ou de tache ?", "<p>Le nettoyage est inclus, les petites traces d’usage aussi. En cas de dommage, Simé fait faire un devis de réparation et vous le montre avant toute retenue sur la caution.</p>"]
+  ]],
+  ["pros", "Pros", [
+    ["q-pro", "Comment louer pour un shoot, un clip ou une campagne ?", "<p>La formule Shoot pro : looks et pièces d’archive à la journée, plusieurs pièces à la fois, sur devis. Réponse sous 48 h.</p>"],
+    ["q-credit", "Comment créditer Simé ?", "<p>« RP : @sime.archives » sur vos publications, et en légende sur Instagram.</p>"]
+  ]],
+  ["codes", "Codes promo", [
+    ["q-code", "Où saisir un code promo ?", "<p>Dans le panier, rubrique Code promo, avant le paiement. Les codes arrivent avec la lettre des récoltes et la liste « Amis proches » sur Instagram.</p>"],
+    ["q-cumul", "Les codes se cumulent-ils ?", "<p>Non. Un code par commande.</p>"]
+  ]],
+  ["contact", "Contact", [
+    ["q-contact", "Comment joindre Simé ?", "<p>En message privé sur Instagram, @sime.archives. Réponse sous 48 h.</p>"]
+  ]]
 ];
 document.getElementById("r").innerHTML = S.announcementBar() + S.header() +
-  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span>Aide</span></nav></div>' +
-  '<div class="ai sa-wrap"><div><span class="sa-mono sa-muted">AIDE</span><h1>Avant, pendant, après</h1><nav aria-label="Sujets">' + SECS.map(function (s) { return '<a href="#' + s[0] + '" data-sec="' + s[0] + '">' + s[1] + '</a>'; }).join("") + '</nav><p class="sa-muted" style="font-size:13px;margin-top:24px">Textes de maquette, à relire par l’équipe.</p></div>' +
-  '<div>' + SECS.map(function (s, i) { return '<section id="' + s[0] + '">' + S.accordion([{ title: s[1], open: i === 0, html: s[2] }]) + '</section>'; }).join("") + '</div></div>' +
+  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span>Questions fréquentes</span></nav></div>' +
+  '<div class="ai sa-wrap"><div class="ai__side"><span class="sa-mono sa-muted">FAQ</span><h1>Questions fréquentes</h1><nav aria-label="Thèmes">' + FAQ.map(function (s) { return '<a href="#' + s[0] + '" data-sec="' + s[0] + '">' + s[1] + '</a>'; }).join("") + '</nav></div>' +
+  '<div>' + FAQ.map(function (s) { return '<section id="' + s[0] + '" aria-labelledby="h-' + s[0] + '"><h2 id="h-' + s[0] + '">' + s[1] + '</h2>' +
+      s[2].map(function (q) { return '<div id="' + q[0] + '" style="scroll-margin-top:90px">' + S.accordion([{ title: q[1], html: q[2] }]) + '</div>'; }).join("") + '</section>'; }).join("") +
+    '<div class="ai__more"><span class="sa-mono sa-muted">UNE AUTRE QUESTION</span><p>Écrivez à Simé en message privé sur Instagram, @sime.archives. Réponse sous 48 h.</p></div></div></div>' +
   S.footer() + S.cartDrawer();
 S.init(document);
+/* Sommaire : défile jusqu'au thème */
 document.querySelector(".ai nav").addEventListener("click", function (e) {
   var a = e.target.closest("[data-sec]"); if (!a) return; e.preventDefault();
-  var s = document.getElementById(a.dataset.sec); s.scrollIntoView({ behavior: "smooth", block: "start" });
-  var acc = s.querySelector(".sa-acc"); if (acc && !acc.classList.contains("is-open")) s.querySelector("button").click();
+  document.getElementById(a.dataset.sec).scrollIntoView({ behavior: "smooth", block: "start" });
 });
 </script><script src="proto.js"></script></body></html>

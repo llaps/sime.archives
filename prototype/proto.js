@@ -10,6 +10,11 @@
     ["location.html", ["Location & RP", "Louer", "Tarifs et options", "Location look", "Location pièces", "Options", "Réserver →", "Formules et options", "Disponibilités et réservation", "Formules et tarifs", "Option stylisme et photo", "Pros · demande de devis", "Stylistes", "Artistes & musiciens", "Marques · demande de devis"]],
     ["journal.html", ["Journaling", "Tout le Journaling", "Fiches d'archive", "Fiches d’archive", "Lookbooks par shoot", "Archives caribéennes", "Lire la fiche d’archive", "Le défilé", "Le lookbook", "Une interview"]],
     ["apropos.html", ["À propos", "Simé Archives", "L’histoire de Simé", "Jardin Créole"]],
+    ["aide.html#q-recolte", ["Quand a lieu la prochaine récolte ?"]],
+    ["aide.html#q-taille", ["Comment choisir ma taille ?"]],
+    ["aide.html#q-retour", ["Puis-je retourner une pièce ?"]],
+    ["aide.html#q-louer", ["Que peut-on louer ?"]],
+    ["aide.html", ["Toutes les questions", "FAQ", "Questions fréquentes"]],
     ["aide.html#livraison", ["Livraison et retours"]],
     ["aide.html#mesures", ["Guide des mesures"]],
     ["aide.html#location", ["Conditions de location"]],
@@ -66,10 +71,13 @@
   if (/drop\.html$/.test(location.pathname) && location.hash === "#acces") {
     setTimeout(function () { var f = document.getElementById("early-mail"); if (f) { f.scrollIntoView({ block: "center" }); f.focus({ preventScroll: true }); } }, 300);
   }
-  /* Page Aide : ouvrir la bonne section */
-  if (/aide\.html$/.test(location.pathname) && location.hash) {
-    setTimeout(function () { var s = document.getElementById(location.hash.slice(1)); if (s) { s.scrollIntoView({ block: "start" }); s.querySelector("button") && s.querySelector("button").click(); } }, 300);
+  /* FAQ : aller au thème (#location) ou ouvrir la question (#q-taille) */
+  function openFaq() {
+    var id = location.hash.slice(1), s = id && document.getElementById(id); if (!s) return;
+    s.scrollIntoView({ block: "start" });
+    var acc = /^q-/.test(id) && s.querySelector(".sa-acc"); if (acc && !acc.classList.contains("is-open")) acc.querySelector("button").click();
   }
+  if (/aide\.html$/.test(location.pathname)) { if (location.hash) setTimeout(openFaq, 300); window.addEventListener("hashchange", openFaq); }
   /* Fiche produit : changer de pièce sans recharger (lien depuis une recommandation) */
   window.addEventListener("hashchange", function () { if (/piece\.html$/.test(location.pathname)) location.reload(); });
 
@@ -86,7 +94,7 @@
     ["journal.html#SA-005", "Page d’archive", "L’histoire d’une pièce, et en bas de page : louer la pièce seule ou son look"],
     ["location.html", "Tarifs et options", "Le tunnel de réservation, de la formule au récapitulatif"],
     ["apropos.html", "À propos", "L’histoire de Simé"],
-    ["aide.html", "Aide", "Livraison, mesures, location, codes promo, contact"]
+    ["aide.html", "Questions fréquentes", "Récoltes, achat, tailles, état, livraison, retours, location, pros"]
   ];
   var css = document.createElement("style");
   css.textContent =

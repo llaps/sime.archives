@@ -107,9 +107,9 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 
 ### L-02 · Choisir un look
 - **Bonnes pratiques** : looks entiers photographiés portés, pièces du look listées, disponibilité visible dès la liste.
-- **Décidé (16 novembre, remplace la règle du 13)** : tout le monde loue les looks complets et les pièces du fonds Archives à l'unité. Seules les pièces classées Archive au back office (jamais en vente) se louent seules ; une pièce du Shop se loue seulement dans son look. Prix d'une pièce seule : 20 % de sa valeur pour 3 jours, 45 € minimum (semaine 30 %, deux semaines 40 %, à valider). Les pros gardent la formule Shoot pro, sur devis.
+- **Décidé (16 novembre, remplace la règle du 13)** : tout le monde loue les looks complets et les pièces du fonds Archives à l'unité. Seules les pièces classées Archive au back office (jamais en vente) se louent seules ; une pièce du Shop se loue seulement dans son look. Prix d'une pièce seule : 20 % de sa valeur pour 3 jours, 45 € minimum (semaine 30 %, deux semaines 40 %, à valider). Les pros gardent la formule Shoot pro, sur devis. Dit dans le tunnel (étape « Ce que vous portez »), dans la FAQ de la page location et dans la page Questions fréquentes.
 - **Vigilance** : disponibilités liées. Une pièce louée seule rend son look indisponible à ces dates, et inversement. L'application de location dans Shopify doit gérer ce lien.
-- **À valider** : une pièce seule peut coûter plus cher que le look qui la contient (Mary Jane SA-005 seule : 45 € ; look « Mary Jane kaki » : 30 €). Dit dans le tunnel (étape « Ce que vous portez »), dans la FAQ de la page location et dans l'Aide.
+- **À valider** : une pièce seule peut coûter plus cher que le look qui la contient (Mary Jane SA-005 seule : 45 € ; look « Mary Jane kaki » : 30 €).
 - **En place** : grille des looks du shoot, sélection, prix pour la durée choisie, tag de récolte ou « Pris à ces dates ». La bascule « Un look complet » / « Des pièces à l'unité » n'apparaît qu'avec la formule Shoot pro. Depuis une fiche produit, « Louer le look » ouvre le tunnel avec le look de la pièce sélectionné ; « Une demande pro ? Louer cette pièce seule » ouvre la formule Shoot pro avec la pièce.
 - **Décidé (16 novembre) · retrait automatique** : dès qu'une pièce d'un look est vendue, le look entier sort de la location (vitrine et tunnel) jusqu'à ce que Lou-Ann le recompose. Dans Shopify : stock de la pièce à zéro, looks masqués. Dans le prototype : `archives.html?vendu=SA-012` simule la vente.
 - **À valider** : retirer tout le look (en place) ou seulement la pièce, avec la mention « pièce remplacée au retrait ».
@@ -158,6 +158,11 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 **À valider** : la liste de contrôle B-05 bloque-t-elle la publication (aucune pièce sans marque, sans mesures ou sans gros plan) ?
 
 ## Règles transverses
+
+### FAQ (16 novembre)
+- **Décidé** : la colonne Aide du pied de page devient **FAQ**, avec les quatre questions les plus posées en liens directs. La page Aide devient « Questions fréquentes » (`aide.html`) : 10 thèmes (récoltes, acheter, tailles et mesures, état et authenticité, livraison, retours, location, pros, codes promo, contact), une question par ligne, chacune avec son ancre (`aide.html#q-retard`).
+- **Recherche** (marché du vintage et de la location) : les tailles sont la première cause de retour et de question ; viennent ensuite l'état réel des pièces, l'authenticité, la politique de retour et les frais d'envoi. En location : la caution non rendue, les frais de retard, les dommages et l'essayage sont les premiers motifs de plainte, souvent aggravés par un service client lent. Pour les sorties limitées : pièces vendues pendant le paiement, sentiment d'injustice.
+- **À valider** : moyens de paiement et paiement en plusieurs fois (bonne pratique, pas encore décidé), délai de 48 h pour signaler une pièce non conforme, essayage au retrait à l'atelier, frais de retard à 5 % par jour (repris de l'option « journée en plus »), taxes à la réception pour l'Outre-mer, rétractation sur la location (à vérifier avec un juriste).
 
 - **Accessibilité** : contrastes du système, navigation clavier, textes alternatifs. L'European Accessibility Act s'applique au e-commerce depuis juin 2025. Les micro-entreprises qui vendent des services en sont exemptées, mais on vise le même niveau.
 - **Performance** : images compressées, peu d'applis Shopify, chargement visé sous 2,5 s sur mobile.

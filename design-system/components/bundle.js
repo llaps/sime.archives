@@ -414,7 +414,7 @@
       "<div><h4 class='sa-label'>Shop</h4><ul><li><a href='#'>Récolte en cours</a></li><li><a href='#'>Toutes les pièces</a></li><li><a href='#'>Par marque</a></li><li><a href='#'>Récoltes passées</a></li></ul></div>" +
       "<div><h4 class='sa-label'>Location & RP</h4><ul><li><a href='#'>Archives à louer</a></li><li><a href='#'>Tarifs et options</a></li></ul></div>" +
       "<div><h4 class='sa-label'>À propos</h4><ul><li><a href='#'>Simé Archives</a></li><li><a href='#'>Jardin Créole</a></li><li><a href='#'>Instagram @sime.archives</a></li><li><a href='#'>Contact</a></li></ul></div>" +
-      "<div><h4 class='sa-label'>Aide</h4><ul><li><a href='#'>Livraison et retours</a></li><li><a href='#'>Conditions de location</a></li><li><a href='#'>Guide des mesures</a></li><li><a href='#'>Codes promo</a></li></ul></div>" +
+      "<div><h4 class='sa-label'>FAQ</h4><ul><li><a href='#'>Quand a lieu la prochaine récolte ?</a></li><li><a href='#'>Comment choisir ma taille ?</a></li><li><a href='#'>Puis-je retourner une pièce ?</a></li><li><a href='#'>Que peut-on louer ?</a></li><li><a href='#'>Toutes les questions</a></li></ul></div>" +
       "</div><div class='sa-footer__base sa-mono sa-muted'><span>© 2026 Simé Archives · Paris</span><span>CGV · Mentions légales · Confidentialité</span><span>FR / EN</span></div></footer>";
   }
 
