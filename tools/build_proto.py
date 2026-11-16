@@ -102,7 +102,7 @@ document.getElementById("r").innerHTML = S.announcementBar() + S.header({ active
   '<p>Simé est l’initiative de trois femmes originaires de la Caraïbe, passionnées de mode chacune à sa façon. Laury la regarde à travers l’objectif, Lou-Ann la compose en silhouettes, Vanina la déniche là où personne ne pense à chercher.</p>' +
   '<p>Simé veut dire « semé » en créole. C’est le titre du premier livre photo de Laury, sorti en 2023 avec l’exposition qui a lancé Jardin Créole. Le livre était la graine, Jardin Créole ce qui a poussé. Simé Archives, c’est la récolte : ce qui se garde, se transmet et se porte à nouveau.</p>' +
   '<p>Simé chine des pièces d’archive et les mêle à des pièces contemporaines, choisies parce qu’elles dialoguent avec l’archive. De cette hybridation naissent les looks : technique et fourrure, sport et élégance, tradition et futur. Une récolte par mois, des pièces uniques, et un vestiaire à louer pour les soirées, les shoots et les scènes.</p>' +
-  '<p class="sa-muted" style="font-size:14px">Texte de maquette, tiré du cahier des charges, à relire par l’équipe.</p></div></section>' +
+  '</div></section>' +
   '<section class="ap-team sa-wrap">' + [["DIRECTION ARTISTIQUE, PHOTO", "Laury", "kahlory_"], ["STYLISME", "Lou-Ann", "louannsaliou"], ["SOURCING", "Vanina", "giochinini"]].map(function (m) { return '<div><span class="sa-mono sa-muted">' + m[0] + '</span><b>' + m[1] + '</b><a class="ap-ig" href="https://www.instagram.com/' + m[2] + '/" target="_blank" rel="noopener" aria-label="Instagram de ' + m[1] + ', @' + m[2] + ' (nouvel onglet)">@' + m[2] + ' ↗</a></div>'; }).join("") + '</section>' +
   S.footer() + S.cartDrawer();
 S.init(document);
