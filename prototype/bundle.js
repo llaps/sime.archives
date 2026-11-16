@@ -17,6 +17,8 @@
     mjNoir: "photos/maryjane-noir-a.jpg",
     look6: "photos/look-6.jpg", look7: "photos/look-7.jpg", look8: "photos/look-8.jpg",
     chemise: "photos/chemise-a.jpg", bottes: "photos/bottes-a.jpg",
+    /* Shoot de novembre (looks 9 et 10) */
+    robe: "photos/robe-mohair-a.jpg", robeB: "photos/robe-mohair-b.jpg", foulard: "photos/foulard-vichy-a.jpg", ceinture: "photos/sac-ceinture-a.jpg", ceintureB: "photos/sac-ceinture-b.jpg", bottesM: "photos/bottes-marron-a.jpg", bottesMB: "photos/bottes-marron-b.jpg", lin: "photos/veste-lin-a.jpg", linB: "photos/veste-lin-b.jpg", denim: "photos/jupe-denim-a.jpg", feutre: "photos/sac-feutre-a.jpg", feutreB: "photos/sac-feutre-b.jpg", tabi: "photos/sandales-a.jpg", look9: "photos/look-9.jpg", look10: "photos/look-10.jpg",
     panier: "photos/panier-a.jpg", panierB: "photos/panier-b.jpg"
   };
 
@@ -35,7 +37,16 @@
     { id: "SA-010", brand: "NA-KD", name: "Veste plissée vert d'eau", era: "Contemporaine", eraLabel: "Contemporaine", type: "Veste", kind: "veste", material: "Polyester plissé", size: "M", price: 75, tone: "#a9c4b0", drop: "Récolte 03", city: "Paris", photos: [PH.chemise, PH.look6] },
     { id: "SA-011", brand: "Vivienne Westwood", name: "Bottes Pirate à boucles, bout Animal, cuir noir", era: "Contemporaine", eraLabel: "Contemporaine", type: "Chaussures", kind: "chaussure", material: "Cuir", size: "40", price: 350, tone: "#1c1a18", drop: "Récolte 03", tier: "Archive", city: "Paris", photos: [PH.bottes, PH.look6] },
     { id: "SA-012", brand: "Sans marque", name: "Panier paille, anses bois, artisan de Guadeloupe", era: "Années 90", eraLabel: "Années 90", type: "Accessoire", kind: "sac", material: "Paille et bois", size: "TU", price: 68, tone: "#b49a5e", drop: "Récolte 02", city: "Guadeloupe", photos: [PH.panier, PH.panierB, PH.look8] },
-    { id: "SA-013", with: ["SA-002"], brand: "Sans marque", name: "Jupe filet bleue", era: "Années 90", eraLabel: "Années 90", type: "Jupe", kind: "jupe", material: "Filet", size: "36", price: 45, tone: "#9fb4c8", drop: "Récolte 04", city: "Paris", photos: [PH.voileB, PH.voile, PH.look5] }
+    { id: "SA-013", with: ["SA-002"], brand: "Sans marque", name: "Jupe filet bleue", era: "Années 90", eraLabel: "Années 90", type: "Jupe", kind: "jupe", material: "Filet", size: "36", price: 45, tone: "#9fb4c8", drop: "Récolte 04", city: "Paris", photos: [PH.voileB, PH.voile, PH.look5] },
+    /* Shoot de novembre : deux looks. Marques, tailles, prix et époques à confirmer par Vanina ; mannequin à renseigner (model: false masque la ligne mannequin). */
+    { id: "SA-014", with: ["SA-016", "SA-017", "SA-015"], brand: "À identifier", name: "Robe courte sans manches, mohair écossais rouge", era: "Années 60", eraLabel: "Années 60", type: "Robe", kind: "jupe", material: "Mohair et laine", size: "36", price: 160, tone: "#c8302a", drop: "Récolte 04", tier: "Archive", city: "Paris", model: false, photos: [PH.robe, PH.robeB, PH.look9] },
+    { id: "SA-015", with: ["SA-014"], brand: "Sans marque", name: "Foulard carré vichy gris et blanc", era: "Contemporaine", eraLabel: "Contemporaine", type: "Accessoire", kind: "sac", material: "Coton", size: "TU", price: 25, tone: "#b9b8b2", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.foulard, PH.look9] },
+    { id: "SA-016", with: ["SA-014"], brand: "Sans marque", name: "Sac ceinture, cuir brun et feutre vert", era: "Contemporaine", eraLabel: "Contemporaine", type: "Accessoire", kind: "sac", material: "Cuir et feutre de laine", size: "TU", price: 90, tone: "#5b3a2c", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.ceinture, PH.ceintureB, PH.look9] },
+    { id: "SA-017", with: ["SA-014"], brand: "Sans marque", name: "Bottes hautes en cuir brun, semelle crantée", era: "Années 90", eraLabel: "Années 90", type: "Chaussures", kind: "chaussure", material: "Cuir, semelle caoutchouc", size: "39", price: 130, tone: "#5a3426", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.bottesM, PH.bottesMB, PH.look9] },
+    { id: "SA-018", with: ["SA-019", "SA-020", "SA-021"], brand: "À identifier", name: "Veste courte en lin à carreaux bleus, poches plaquées", era: "Années 90", eraLabel: "Années 90", type: "Veste", kind: "veste", material: "Lin", size: "M", price: 190, tone: "#3f6f9a", drop: "Récolte 04", tier: "Archive", city: "Paris", model: false, photos: [PH.lin, PH.linB, PH.look10] },
+    { id: "SA-019", with: ["SA-018"], brand: "Sans marque", name: "Jupe longue évasée, denim brut", era: "Y2K", eraLabel: "Y2K", type: "Jupe", kind: "jupe", material: "Denim de coton", size: "38", price: 75, tone: "#2c3140", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.denim, PH.look10] },
+    { id: "SA-020", with: ["SA-018"], brand: "Sans marque", name: "Cabas en laine feutrée, carreaux jaune et vert", era: "Contemporaine", eraLabel: "Contemporaine", type: "Accessoire", kind: "sac", material: "Laine feutrée", size: "TU", price: 95, tone: "#d9d24a", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.feutre, PH.feutreB, PH.look10] },
+    { id: "SA-021", with: ["SA-018"], brand: "Sans marque", name: "Sandales tabi à talon sculpté, crème", era: "Contemporaine", eraLabel: "Contemporaine", type: "Chaussures", kind: "chaussure", material: "Caoutchouc", size: "39", price: 65, tone: "#e6dfd0", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.tabi, PH.look10] }
   ];
 
   /* Les pièces d'archive (tier « Archive », fonds Archives) ne se vendent pas : elles se louent uniquement.
@@ -46,7 +57,9 @@
     { id: "L2", name: "Peau lainée et sequins", photo: PH.look4, pieces: ["SA-007", "SA-006"] },
     { id: "L3", name: "Mary Jane kaki", photo: PH.look2, pieces: ["SA-005", "SA-006"] },
     { id: "L4", name: "Plissé vert d'eau", photo: PH.look6, pieces: ["SA-010", "SA-011"] },
-    { id: "L5", name: "Panier paille", photo: PH.look8, pieces: ["SA-012"] }
+    { id: "L5", name: "Panier paille", photo: PH.look8, pieces: ["SA-012"] },
+    { id: "L6", name: "Mohair et vichy", photo: PH.look9, pieces: ["SA-014", "SA-015", "SA-016", "SA-017"] },
+    { id: "L7", name: "Lin et denim", photo: PH.look10, pieces: ["SA-018", "SA-019", "SA-020", "SA-021"] }
   ];
   /* Prototype : ?vendu=SA-012 simule la vente d'une pièce, pour voir le retrait automatique du look qui la contient */
   (function () { var m = typeof location !== "undefined" && (location.search || "").match(/vendu=(SA-\d{3})/); if (m) products.forEach(function (p) { if (p.id === m[1]) p.sold = true; }); })();
@@ -75,7 +88,7 @@
 
   /* Ligne mannequin : « Alima mesure 1,80 m et porte la taille S. » */
   function modelLine(p) {
-    var m = p.model || MODEL; if (!m || !p.photos) return "";
+    var m = p.model === false ? null : (p.model || MODEL); if (!m || !p.photos) return "";
     return "<p class='sa-pdp__model'>" + icon("user") + "<span>" + esc(m.name) + " mesure " + esc(m.height) + " et porte la taille " + esc(p.size) + ".</span></p>";
   }
 
@@ -351,7 +364,7 @@
   }
 
   /* ── Recommandations (à la SSENSE) : le look, la marque, le type de pièce ── */
-  var PLURAL = { "Haut": "hauts", "Jupe": "jupes", "Chaussures": "chaussures", "Veste": "vestes", "Accessoire": "accessoires", "Maille": "pièces en maille", "Pantalon": "pantalons" };
+  var PLURAL = { "Robe": "robes", "Haut": "hauts", "Jupe": "jupes", "Chaussures": "chaussures", "Veste": "vestes", "Accessoire": "accessoires", "Maille": "pièces en maille", "Pantalon": "pantalons" };
   function rail(kicker, title, items, link) {
     if (!items.length) return "";
     return "<section class='sa-rail-block'><div class='sa-section__head'><div><span class='sa-mono sa-muted'>" + esc(kicker) + "</span><h2>" + esc(title) + "</h2></div>" +
