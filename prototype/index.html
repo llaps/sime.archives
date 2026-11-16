@@ -112,7 +112,7 @@ document.getElementById("r").innerHTML =
   '<section class="sa-wrap hm-upwrap"><div class="hm-up">' +
     '<div class="hm-up__txt"><span class="hm-tag">À venir · Récolte 05</span><h2><a class="hm-up__link" href="#">La prochaine récolte <span aria-hidden="true">→</span></a></h2>' +
       '<p class="hm-up__ig">Les pièces sont présentées sur <a href="https://www.instagram.com/sime.archives/" target="_blank" rel="noopener">@sime.archives</a> avant l’ouverture.</p><p class="hm-up__early"><span class="sa-label">Accès anticipé · 18 h</span>Entrez une heure avant tout le monde.</p>' +
-      '<form class="sa-form hm-up__form" data-sa="early"><label class="sa-sr" for="home-mail">E-mail</label><div class="sa-field"><input id="home-mail" type="email" placeholder="Votre e-mail" required><button class="sa-label" type="submit">Recevoir mon accès</button></div><p class="sa-form-ok">Mèsi. Votre lien d’accès arrivera jeudi à 18 h.</p></form>' +
+      '<form class="sa-form hm-up__form" data-sa="early"><label class="sa-sr" for="home-mail">E-mail</label><div class="sa-field"><input id="home-mail" type="email" placeholder="Votre e-mail" required><button class="sa-label" type="submit">Recevoir mon accès</button></div><p class="sa-form-ok">Mèsi. Votre lien d’accès arrivera <span data-sa="recolte-jour">jeudi</span> à 18 h.</p></form>' +
     '</div>' +
     '<div class="hm-up__clock">' +
       '<div class="sa-count" data-sa="count" role="timer" aria-label="Temps avant l’ouverture de la prochaine récolte">' + ["Jours", "Heures", "Min", "Sec"].map(function (u, i) { return '<div class="sa-count__cell"><span class="sa-count__num" data-u="' + i + '">00</span><span class="sa-count__unit">' + u + '</span></div>'; }).join("") + '</div>' +

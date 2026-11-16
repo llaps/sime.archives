@@ -293,7 +293,7 @@
       "<h1 class='sa-drop__title'>Technique <em>et</em> légère</h1>" +
       "<p style='max-width:380px;margin:16px 0 0'>Des pièces uniques, réactivées en looks par Lou-Ann. Elles se dévoilent sur Instagram, puis ici jeudi à 19 h.</p></div>" +
       "<div class='sa-count' data-sa='count' role='timer' aria-label='Temps avant l&#39;ouverture de la récolte'>" + ["Jours", "Heures", "Min", "Sec"].map(function (u, i) { return "<div class='sa-count__cell'><span class='sa-count__num' data-u='" + i + "'>00</span><span class='sa-count__unit'>" + u + "</span></div>"; }).join("") + "</div>" +
-      "<form class='sa-form' data-sa='early'><span class='sa-label'>Accès anticipé · une heure avant</span><div class='sa-field'><label class='sa-sr' for='early-mail'>E-mail</label><input id='early-mail' type='email' placeholder='Votre e-mail' required>" + "<button class='sa-label' type='submit'>Recevoir mon accès</button></div><p class='sa-form-ok'>Mèsi. Votre lien d'accès arrivera jeudi à 18 h.</p></form>" +
+      "<form class='sa-form' data-sa='early'><span class='sa-label'>Accès anticipé · une heure avant</span><div class='sa-field'><label class='sa-sr' for='early-mail'>E-mail</label><input id='early-mail' type='email' placeholder='Votre e-mail' required>" + "<button class='sa-label' type='submit'>Recevoir mon accès</button></div><p class='sa-form-ok'>Mèsi. Votre lien d'accès arrivera <span data-sa='recolte-jour'>jeudi</span> à 18 h.</p></form>" +
       "</div></section>";
   }
 
@@ -369,7 +369,7 @@
 
   function footer() {
     return "<footer class='sa-footer sa-wrap'><div class='sa-footer__grid'>" +
-      "<div><p class='sa-footer__sign'>Ce qui a été semé revient autrement.</p><p class='sa-footer__gloss sa-mono sa-muted'>Simé : « semé », en créole.</p><form class='sa-form' data-sa='news'><span class='sa-label'>La lettre des récoltes</span><div class='sa-field'><label class='sa-sr' for='news-mail'>E-mail</label><input id='news-mail' type='email' placeholder='Votre e-mail' required><button class='sa-label' type='submit'>OK</button></div><p class='sa-form-ok'>Mèsi. À jeudi, 18 h.</p></form></div>" +
+      "<div><p class='sa-footer__sign'>Ce qui a été semé revient autrement.</p><p class='sa-footer__gloss sa-mono sa-muted'>Simé : « semé », en créole.</p><form class='sa-form' data-sa='news'><span class='sa-label'>La lettre des récoltes</span><div class='sa-field'><label class='sa-sr' for='news-mail'>E-mail</label><input id='news-mail' type='email' placeholder='Votre e-mail' required><button class='sa-label' type='submit'>OK</button></div><p class='sa-form-ok'>Mèsi. À <span data-sa='recolte-jour'>jeudi</span>, 18 h.</p></form></div>" +
       "<div><h4 class='sa-label'>Shop</h4><ul><li><a href='#'>Récolte en cours</a></li><li><a href='#'>Toutes les pièces</a></li><li><a href='#'>Par marque</a></li><li><a href='#'>Récoltes passées</a></li></ul></div>" +
       "<div><h4 class='sa-label'>Location & RP</h4><ul><li><a href='#'>Louer</a></li><li><a href='#'>Tarifs et options</a></li><li><a href='#'>Journaling</a></li></ul></div>" +
       "<div><h4 class='sa-label'>À propos</h4><ul><li><a href='#'>Simé Archives</a></li><li><a href='#'>Jardin Créole</a></li><li><a href='#'>Instagram @sime.archives</a></li><li><a href='#'>Contact</a></li></ul></div>" +
@@ -523,7 +523,8 @@
       tick(); setInterval(tick, 1000);
     });
 
-    /* Formulaires d'inscription */
+    /* Formulaires d'inscription : la confirmation donne la date de la prochaine récolte (« jeudi 3 ») */
+    root.querySelectorAll("[data-sa='recolte-jour']").forEach(function (el) { el.textContent = "jeudi " + nextThursday19().getDate(); });
     root.querySelectorAll(".sa-form").forEach(function (f) { f.addEventListener("submit", function (e) { e.preventDefault(); f.classList.add("is-done"); }); });
 
     /* Fiche d'archive B : sommaire qui suit la lecture */
