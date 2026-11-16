@@ -371,13 +371,15 @@
 
   /* ── Location : looks à louer et fonds Archives ─────────────── */
   /* Retrait automatique : dès qu'une pièce d'un look est vendue, le look sort de la location jusqu'à ce que Lou-Ann le recompose. */
-  function lookPrice(l) { var v = l.pieces.reduce(function (s, id) { var q = find(id); return s + (q ? q.price : 0); }, 0); return Math.max(30, Math.round(v * 15) / 100); }
+  /* Règle (16 novembre) : une location coûte toujours moins que la valeur des pièces. Le minimum s'applique, sans jamais dépasser la moitié de la valeur. */
+  function rentPrice(v, pct, floor) { return Math.min(Math.max(floor, Math.round(v * pct) / 100), Math.round(v * 50) / 100); }
+  function lookPrice(l) { var v = l.pieces.reduce(function (s, id) { var q = find(id); return s + (q ? q.price : 0); }, 0); return rentPrice(v, 15, 30); }
   function lookAvailable(l) { return !!l && l.pieces.every(function (id) { return !find(id).sold; }); }
   function rentLooks() { return looks.filter(lookAvailable); }
   /* Fonds Archives : pièces classées Archive au back office. Elles ne se vendent pas et se louent seules ou dans leur look. */
   function archivePieces() { return products.filter(function (p) { return p.tier === "Archive"; }); }
   /* Prix d'une pièce seule : 20 % de sa valeur pour 3 jours, jamais moins de 45 € */
-  function piecePrice(p) { return Math.max(45, Math.round(p.price * 20) / 100); }
+  function piecePrice(p) { return rentPrice(p.price, 20, 45); }
   function lookNo(l) { return "LOOK " + l.id.slice(1).padStart(2, "0"); }
 
   /* Carte de look : photo du look porté, pièces qui le composent (vers leur page d'archive), prix des 3 jours */
@@ -654,7 +656,7 @@
   window.SimeArchives = {
     products: products, shopProducts: shopProducts, looks: looks,
     lookFor: function (id) { return looks.filter(function (l) { return l.pieces.indexOf(id) > -1; })[0] || null; },
-    lookPrice: lookPrice, piecePrice: piecePrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, lookCard: lookCard, archiveCard: archiveCard, rentArchive: rentArchive, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
+    lookPrice: lookPrice, piecePrice: piecePrice, rentPrice: rentPrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, lookCard: lookCard, archiveCard: archiveCard, rentArchive: rentArchive, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
     button: button, announcementBar: announcementBar, header: header, logo: logo,
     productCard: productCard, listingToolbar: listingToolbar, filterDrawer: filterDrawer,
     cartDrawer: cartDrawer, dropCountdown: dropCountdown, editoQuote: editoQuote, noteLine: noteLine, inventoryLabel: inventoryLabel,

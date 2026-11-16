@@ -223,7 +223,7 @@ var DUR = [
   { id: "pro", label: "Shoot pro · 1 jour", pct: 20, note: "shoot, clip, campagne" }
 ];
 var FLOOR = 30, STYLE = 250, PHOTO = 250;
-/* Pièce seule (fonds Archives, décidé le 16 novembre) : 20 % de la valeur pour 3 jours, jamais moins de 45 €. Semaine et deux semaines : +5 points, comme pour 3 jours (à valider). */
+/* Pièce seule (fonds Archives, décidé le 16 novembre) : 20 % de la valeur pour 3 jours, jamais moins de 45 €. Semaine et deux semaines : +5 points, comme pour 3 jours. */
 var PIECE_PLUS = 5, PIECE_FLOOR = 45;
 function pctOf(id) { return durOf(id).pct + (st.mode === "piece" && id !== "pro" ? PIECE_PLUS : 0); }
 function floorOf() { return st.mode === "piece" ? PIECE_FLOOR : FLOOR; }
@@ -253,7 +253,9 @@ function value() {
   return st.sel.reduce(function (s, id) { return s + find(id).price; }, 0);
 }
 function durOf(id) { return DUR.filter(function (d) { return d.id === id; })[0]; }
-function rental() { var v = value(); if (!v) return 0; return Math.max(floorOf(), Math.round(v * pctOf(st.dur)) / 100); }
+/* Jamais plus de la moitié de la valeur : une location coûte toujours moins que la pièce (sauf Shoot pro, sur devis) */
+function rentCalc(v) { return st.dur === "pro" ? Math.max(floorOf(), Math.round(v * pctOf(st.dur)) / 100) : S.rentPrice(v, pctOf(st.dur), floorOf()); }
+function rental() { var v = value(); if (!v) return 0; return rentCalc(v); }
 function packOf(id) { return PACKS.filter(function (p) { return p.id === id; })[0]; }
 function busy(item) { return st.date && item.busy && item.busy.indexOf(st.date) > -1; }
 /* Disponibilités liées : une pièce est prise si un look qui la contient l'est (et dans l'application de location, l'inverse aussi) */
@@ -269,7 +271,7 @@ function packCard(p) {
 }
 
 function itemCard(it, isLook) {
-  var on = st.sel.indexOf(it.id) > -1, b = isLook ? busy(it) : pieceBusy(it), price = Math.max(floorOf(), Math.round((isLook ? it.value : it.price) * pctOf(st.dur)) / 100);
+  var on = st.sel.indexOf(it.id) > -1, b = isLook ? busy(it) : pieceBusy(it), price = rentCalc(isLook ? it.value : it.price);
   var img = isLook ? it.photo : S.img(it, "a"), name = isLook ? it.name : it.name, sub = isLook ? it.pieces.length + " pièces · " + it.pieces.join(", ") : it.id + " · " + it.size;
   return '<button class="lc-item" data-item="' + it.id + '" aria-pressed="' + on + '"' + (b ? ' aria-disabled="true"' : '') + '><span class="lc-item__img"><img src="' + img + '" alt="' + name + '"><span class="lc-item__check" aria-hidden="true">' + (on ? "✓" : "+") + '</span>' +
     '<span class="lc-item__avail' + (b ? ' is-busy' : '') + '">' + (b ? "Pris à ces dates" : (isLook ? find(it.pieces[0]).drop : "Fonds Archives")) + '</span></span>' +
@@ -293,7 +295,7 @@ function anyBusy() { return st.mode === "look" ? st.sel.some(function (id) { ret
 function toast(msg) { var t = document.querySelector(".sa-toast") || document.body.appendChild(Object.assign(document.createElement("div"), { className: "sa-toast", role: "status" })); t.textContent = msg; t.classList.add("is-on"); setTimeout(function () { t.classList.remove("is-on"); }, 2200); }
 var FAQ = S.accordion([
   { title: "Peut-on louer une seule pièce ?", html: "Oui. Les pièces du fonds Archives se louent seules ou dans leur look. Les pièces du Shop, qui sont à vendre, se louent seulement dans un look, tant qu’elles ne sont pas vendues." },
-  { title: "Comment est calculé le prix ?", html: "En pourcentage de la valeur estimée des pièces. Un look : 15 % pour 3 jours, 25 % pour une semaine, 35 % pour deux semaines, jamais moins de 30 €. Une pièce seule : 20 % pour 3 jours, 30 % pour une semaine, 40 % pour deux semaines, jamais moins de 45 €. Shoot pro : 20 % par jour." },
+  { title: "Comment est calculé le prix ?", html: "En pourcentage de la valeur estimée des pièces. Un look : 15 % pour 3 jours, 25 % pour une semaine, 35 % pour deux semaines, jamais moins de 30 €. Une pièce seule : 20 % pour 3 jours, 30 % pour une semaine, 40 % pour deux semaines, jamais moins de 45 €. Une location ne dépasse jamais la moitié de la valeur. Shoot pro : 20 % par jour." },
   { title: "La caution", html: "Une empreinte bancaire du montant de la valeur, sans débit. Elle est libérée sous 48 h après le contrôle de la pièce." },
   { title: "Nettoyage et petits accrocs", html: "Le nettoyage est inclus. En cas de dommage, un devis de réparation est fait avant toute retenue." },
   { title: "Les photos de la soirée", html: "8 photos retouchées livrées. Simé garde les droits et peut les publier." }
