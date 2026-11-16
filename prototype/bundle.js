@@ -398,7 +398,7 @@
       lines.innerHTML = cart.length ? cart.map(function (p) {
         total += p.price;
         return "<div class='sa-line'><img src='" + img(p, "a") + "' alt=''><div class='sa-line__info'><span class='sa-label'>" + esc(p.brand) + "</span><span>" + esc(p.name) + "</span><span class='sa-mono sa-muted'>" + p.id + " · Taille " + esc(p.size) + "</span><span class='sa-price'>" + euro(p.price) + "</span><button class='sa-line__remove' data-action='remove' data-id='" + p.id + "'>Retirer</button></div></div>";
-      }).join("") : "<p class='sa-empty'>Votre panier est vide.<br><span class='sa-mono'>Le prochaine récolte tombe jeudi à 19 h.</span></p>";
+      }).join("") : "<p class='sa-empty'>Votre panier est vide.<br><span class='sa-mono'>La prochaine récolte tombe jeudi à 19 h.</span></p>";
     }
     var set = function (sel, v) { root.querySelectorAll(sel).forEach(function (n) { n.textContent = v; if (n.dataset.n !== undefined) n.dataset.n = v; }); };
     var off = promo && cart.length ? Math.round(total * promo.pct) / 100 : 0;
