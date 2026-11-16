@@ -40,7 +40,7 @@
 
   /* Les pièces d'archive (tier « Archive », fonds Archives) ne se vendent pas : elles se louent uniquement.
      products = toutes les pièces (location, fiches) ; shopProducts = ce qui s'achète (Shop, récoltes, menus, filtres, recommandations). */
-  /* Looks de location (stylés par Lou-Ann). Le grand public loue des looks complets ; les pièces à l'unité sont réservées aux pros. */
+  /* Looks de location (stylés par Lou-Ann). Tout le monde loue des looks complets, et les pièces du fonds Archives à l'unité (décidé le 16 novembre). */
   var looks = [
     { id: "L1", name: "Nylon et voile", photo: PH.look1, pieces: ["SA-001", "SA-002", "SA-013", "SA-003", "SA-004"] },
     { id: "L2", name: "Peau lainée et sequins", photo: PH.look4, pieces: ["SA-007", "SA-006"] },
@@ -374,8 +374,10 @@
   function lookPrice(l) { var v = l.pieces.reduce(function (s, id) { var q = find(id); return s + (q ? q.price : 0); }, 0); return Math.max(30, Math.round(v * 15) / 100); }
   function lookAvailable(l) { return !!l && l.pieces.every(function (id) { return !find(id).sold; }); }
   function rentLooks() { return looks.filter(lookAvailable); }
-  /* Fonds Archives : pièces qui ne se vendent pas, louées dans les looks ou à l'unité par les pros */
+  /* Fonds Archives : pièces classées Archive au back office. Elles ne se vendent pas et se louent seules ou dans leur look. */
   function archivePieces() { return products.filter(function (p) { return p.tier === "Archive"; }); }
+  /* Prix d'une pièce seule : 20 % de sa valeur pour 3 jours, jamais moins de 45 € */
+  function piecePrice(p) { return Math.max(45, Math.round(p.price * 20) / 100); }
   function lookNo(l) { return "LOOK " + l.id.slice(1).padStart(2, "0"); }
 
   /* Carte de look : photo du look porté, pièces qui le composent (vers leur page d'archive), prix des 3 jours */
@@ -386,23 +388,24 @@
       "<ul class='sa-look__pieces'>" + l.pieces.map(function (id) { var q = find(id); return "<li><a href='#' data-archive='" + id + "'><span class='sa-mono sa-muted'>" + id + "</span><span>" + esc(q.name) + "</span></a></li>"; }).join("") + "</ul>" +
       "<div class='sa-look__foot'><span>" + euro(lookPrice(l)) + " <span class='sa-muted'>les 3 jours</span></span><button class='sa-btn sa-btn--link' data-action='rent' data-look='" + l.id + "'>Réserver ce look</button></div></div></article>";
   }
-  /* Carte d'archive : la pièce seule, vers sa page d'archive. Pas de prix ni de panier : elle ne se vend pas. */
+  /* Carte d'archive : la pièce seule, vers sa page d'archive, avec son prix de location. Pas de panier : elle ne se vend pas. */
   function archiveCard(p) {
     var lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1 && lookAvailable(l); })[0];
     return "<a class='sa-arch' href='#' data-archive='" + p.id + "'><span class='sa-arch__img'><img src='" + img(p, "a") + "' alt='" + esc(p.name) + "' loading='lazy'></span>" +
       "<span class='sa-mono sa-muted'>" + p.id + " · " + esc(p.eraLabel || p.era) + "</span><span class='sa-label'>" + esc(p.brand) + "</span><span>" + esc(p.name) + "</span>" +
-      "<span class='sa-mono sa-muted'>" + (lk ? "Dans le " + lookNo(lk).toLowerCase() : "À l'unité · pros") + "</span></a>";
+      "<span class='sa-arch__price'>" + euro(piecePrice(p)) + " <span class='sa-muted'>les 3 jours</span></span>" + (lk ? "<span class='sa-mono sa-muted'>Aussi dans le " + lookNo(lk).toLowerCase() + "</span>" : "") + "</a>";
   }
-  /* Bas de page d'archive : louer le look qui la porte (grand public) ou la pièce seule (pros, sur devis) */
+  /* Bas de page d'archive : louer la pièce seule (fonds Archives) ou le look qui la porte, au même niveau. Les pros : Shoot pro, sur devis. */
   function rentArchive(p) {
     var lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0];
-    var ok = lk && lookAvailable(lk);
-    return "<section class='sa-rentbox' aria-label='Louer cette archive'>" +
-      "<div class='sa-rentbox__look'>" + (ok ? "<img src='" + lk.photo + "' alt='" + esc(lk.name) + ", le look porté'>" : "") +
-      "<div><span class='sa-mono sa-muted'>LOUER · PARIS</span><h2>" + (ok ? "Porter le look " + esc(lk.name) : "Cette archive se loue") + "</h2>" +
-      (ok ? "<p>" + lk.pieces.length + " pièce" + (lk.pieces.length > 1 ? "s" : "") + ", stylées par Lou-Ann. " + euro(lookPrice(lk)) + " les 3 jours, nettoyage inclus. Retrait à l'atelier ou coursier dans Paris.</p><button class='sa-btn sa-btn--primary' data-action='rent' data-look='" + lk.id + "'>Réserver ce look</button>"
-          : "<p>" + (lk ? "Le look qui la porte est en cours de recomposition par Lou-Ann. Il revient bientôt." : "Elle n'est dans aucun look pour l'instant.") + "</p><a class='sa-btn sa-btn--link' href='#'>Archives à louer</a>") + "</div></div>" +
-      "<div class='sa-rentbox__pro'><span class='sa-mono sa-muted'>PROS · STYLISTES, MARQUES</span><p>Louer cette pièce seule pour un shoot, un clip ou une campagne. À la journée, sur devis.</p><button class='sa-btn sa-btn--secondary' data-action='rent-pro' data-id='" + p.id + "'>Demander un devis</button></div></section>";
+    var ok = lk && lookAvailable(lk), solo = p.tier === "Archive" && !p.sold;
+    var opt = function (img_, kicker, title, text, btn) { return "<div class='sa-rentbox__opt'>" + (img_ ? "<img src='" + img_ + "' alt=''>" : "") + "<div><span class='sa-mono sa-muted'>" + kicker + "</span><h3>" + title + "</h3><p>" + text + "</p>" + btn + "</div></div>"; };
+    return "<section class='sa-rentbox' aria-labelledby='rent-t'><div class='sa-rentbox__head'><span class='sa-mono sa-muted'>LOUER · PARIS</span><h2 id='rent-t'>Porter cette archive</h2><p class='sa-muted'>Retrait à l'atelier ou coursier dans Paris. Nettoyage inclus.</p></div>" +
+      "<div class='sa-rentbox__opts'>" +
+      (solo ? opt(img(p, "a"), "LA PIÈCE SEULE", esc(p.name), euro(piecePrice(p)) + " les 3 jours.", "<button class='sa-btn sa-btn--primary' data-action='rent-one' data-id='" + p.id + "'>Louer cette pièce</button>") : "") +
+      (ok ? opt(lk.photo, "LE LOOK COMPLET · " + lk.pieces.length + " PIÈCES", esc(lk.name), "Stylé par Lou-Ann. " + euro(lookPrice(lk)) + " les 3 jours.", "<button class='sa-btn sa-btn--" + (solo ? "secondary" : "primary") + "' data-action='rent' data-look='" + lk.id + "'>Louer le look</button>")
+          : lk ? opt("", "LE LOOK COMPLET", esc(lk.name), "En cours de recomposition par Lou-Ann. Il revient bientôt.", "") : "") +
+      "</div><p class='sa-rentbox__pro sa-mono sa-muted'>Pros · un shoot, un clip, une campagne : <a href='#' data-action='rent-pro' data-id='" + p.id + "'>formule Shoot pro, sur devis</a></p></section>";
   }
 
   function footer() {
@@ -651,7 +654,7 @@
   window.SimeArchives = {
     products: products, shopProducts: shopProducts, looks: looks,
     lookFor: function (id) { return looks.filter(function (l) { return l.pieces.indexOf(id) > -1; })[0] || null; },
-    lookPrice: lookPrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, lookCard: lookCard, archiveCard: archiveCard, rentArchive: rentArchive, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
+    lookPrice: lookPrice, piecePrice: piecePrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, lookCard: lookCard, archiveCard: archiveCard, rentArchive: rentArchive, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
     button: button, announcementBar: announcementBar, header: header, logo: logo,
     productCard: productCard, listingToolbar: listingToolbar, filterDrawer: filterDrawer,
     cartDrawer: cartDrawer, dropCountdown: dropCountdown, editoQuote: editoQuote, noteLine: noteLine, inventoryLabel: inventoryLabel,

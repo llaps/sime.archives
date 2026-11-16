@@ -56,9 +56,9 @@ document.getElementById("r").innerHTML =
     (p.tier === "Archive" ? '<span class="sa-pdp__unique">Pièce d’archive · elle ne se vend pas, elle se loue</span>' : '<span class="sa-pdp__unique">Pièce unique · une taille, une seule fois</span>') +
     '<div class="sa-pdp__actions">' + (function () {
       var lk = S.lookFor(p.id), rentLook = lk ? S.button("Louer le look · dès " + S.euro(S.lookPrice(lk)), { variant: p.tier === "Archive" ? "primary" : "secondary", block: true, action: "rent" }).replace("<button ", '<button data-look="' + lk.id + '" ') : "";
-      var pro = '<a class="sa-btn sa-btn--link" href="#" data-action="rent-pro" data-id="' + p.id + '">Une demande pro ? Louer cette pièce seule</a>';
-      if (p.tier === "Archive") return rentLook + pro;
-      return S.button("Ajouter au panier",{block:true,action:"add",id:p.id}) + (p.sold ? "" : rentLook + pro);
+      /* Fonds Archives : la pièce seule se loue (20 % pour 3 jours, 45 € minimum), au même niveau que son look. Pièce du Shop : elle se loue seulement dans son look. */
+      if (p.tier === "Archive") return S.button("Louer cette pièce · dès " + S.euro(S.piecePrice(p)), { block: true, action: "rent-one" }).replace("<button ", '<button data-id="' + p.id + '" ') + rentLook.replace("sa-btn--primary", "sa-btn--secondary");
+      return S.button("Ajouter au panier",{block:true,action:"add",id:p.id}) + (p.sold ? "" : rentLook);
     })() + '</div>' +
     '<div>' + S.accordion([
       {title:"La pièce",open:true,html:"Gilet sans manches, col montant. Nylon, zip court, cordon de serrage à la taille."},

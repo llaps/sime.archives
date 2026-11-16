@@ -22,20 +22,20 @@ var looks = S.rentLooks(), out = S.looks.length - looks.length, arch = S.archive
 document.getElementById("r").innerHTML = S.announcementBar() + S.header({ active: "location" }) +
   '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span><a href="#">Location & RP</a></span><span>Archives à louer</span></nav>' +
   '<div class="sa-plp-head"><div><span class="sa-mono sa-muted">FONDS ARCHIVES · LOCATION À PARIS</span><h1>Archives à louer</h1></div>' +
-  '<p class="sa-muted">Des looks complets, stylés par Lou-Ann, à porter le temps d’un événement. Retrait à l’atelier ou coursier dans Paris.</p></div></div>' +
+  '<p class="sa-muted">Des looks stylés par Lou-Ann et des pièces d’archive, seules, à porter le temps d’un événement. Retrait à l’atelier ou coursier dans Paris.</p></div></div>' +
   '<div class="sa-wrap" data-sa="rent-tabs" style="padding-bottom:64px">' +
     '<div class="sa-tabs ar-tabs" role="tablist"><button class="sa-label" role="tab" aria-selected="true" data-tab="looks">Looks · ' + looks.length + '</button><button class="sa-label" role="tab" aria-selected="false" data-tab="pieces">Pièces · ' + arch.length + '</button></div>' +
     '<div data-panel="looks">' +
       (out ? '<p class="sa-mono sa-muted ar-note">' + out + ' look' + (out > 1 ? 's' : '') + ' en cours de recomposition.</p>' : '') +
       '<div class="sa-looks">' + looks.map(S.lookCard).join("") + '</div></div>' +
-    '<div data-panel="pieces" hidden><p class="sa-muted ar-note">Les pièces du fonds Archives ne se vendent pas. Elles se portent dans les looks. Les pros peuvent aussi les louer à l’unité, sur devis.</p>' +
+    '<div data-panel="pieces" hidden><p class="sa-muted ar-note">Les pièces du fonds Archives ne se vendent pas. Elles se louent seules, ou dans le look stylé par Lou-Ann.</p>' +
       '<div class="sa-grid" data-cols="4">' + arch.map(S.archiveCard).join("") + '</div></div>' +
   '</div>' +
   '<section class="sa-section sa-wrap"><span class="sa-mono sa-muted">COMMENT ÇA MARCHE</span><div class="ar-how" style="margin-top:var(--space-3)">' +
-    [["01", "Réserver", "Choisissez un look et vos dates. Trois jours minimum, nettoyage inclus."], ["02", "Retirer", "À l’atelier, ou par coursier dans Paris."], ["03", "Rendre", "Le jour prévu, au même endroit. Simé s’occupe du reste."]].map(function (s) { return '<div><span class="sa-mono sa-muted">' + s[0] + '</span><h3>' + s[1] + '</h3><p>' + s[2] + '</p></div>'; }).join("") +
+    [["01", "Réserver", "Choisissez un look ou une pièce, et vos dates. Trois jours minimum, nettoyage inclus."], ["02", "Retirer", "À l’atelier, ou par coursier dans Paris."], ["03", "Rendre", "Le jour prévu, au même endroit. Simé s’occupe du reste."]].map(function (s) { return '<div><span class="sa-mono sa-muted">' + s[0] + '</span><h3>' + s[1] + '</h3><p>' + s[2] + '</p></div>'; }).join("") +
   '</div></section>' +
   '<section class="sa-section sa-wrap" style="padding-bottom:64px"><div class="ar-pro"><div><span class="sa-mono sa-muted">PROS · STYLISTES, MARQUES, ARTISTES</span><h2>Un shoot, un clip, une campagne ?</h2>' +
-    '<p>Les looks se réservent en ligne. Les pièces à l’unité se louent à la journée, sur devis. Réponse sous 48 h.</p></div>' +
+    '<p>Formule Shoot pro : looks et pièces d’archive à la journée, plusieurs pièces à la fois, sur devis. Réponse sous 48 h.</p></div>' +
     '<a class="sa-btn sa-btn--secondary" href="#">Pros · demande de devis</a></div></section>' +
   S.footer() + S.cartDrawer();
 S.init(document);

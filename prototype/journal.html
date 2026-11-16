@@ -21,7 +21,7 @@ document.getElementById("r").innerHTML = S.announcementBar() + S.header({ active
   '<section class="sa-wrap jr-sheet" aria-label="Photos de la pièce">' + [[p.photos[0], "La pièce, gros plan"], [p.photos[1], "Portée"], [S.lookOf(p), "Le look complet"], [S.photos.look3, "Lookbook"]].map(function (v, i) { return '<figure' + (i === 0 ? ' class="is-main"' : '') + '><img src="' + v[0] + '" alt="' + p.name + ', ' + v[1].toLowerCase() + '"><figcaption class="sa-mono">' + String(i + 1).padStart(2, "0") + ' · ' + v[1] + '</figcaption></figure>'; }).join("") + '</section>' +
   '<section class="sa-section sa-wrap" style="display:grid;justify-items:center;padding-top:40px">' + S.archiveChapters(p) + '</section>' +
   '<section class="sa-section sa-wrap">' + S.editoQuote() + '</section>' +
-  /* En bas de page : louer l'archive (le look pour tous, la pièce seule pour les pros) */
+  /* En bas de page : louer la pièce seule (fonds Archives) ou son look */
   '<div class="sa-wrap">' + S.rentArchive(p) + '</div>' +
   (others.length ? '<section class="sa-section sa-wrap" style="border-top:1px solid var(--photocopy);padding-bottom:64px"><div class="sa-section__head"><div><span class="sa-mono sa-muted">FONDS ARCHIVES</span><h2>D’autres archives à louer</h2></div><a class="sa-btn sa-btn--link" href="#">Archives à louer</a></div><div class="sa-grid" data-cols="4">' + others.map(S.archiveCard).join("") + '</div></section>' : '') +
   S.footer() + S.cartDrawer();

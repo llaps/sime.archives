@@ -35,6 +35,7 @@
     var el;
     if (e.target.closest(".pt-plan, .pt-pill")) return;
     if (e.target.closest(".sa-logo")) { e.preventDefault(); return go("index.html"); }
+    if ((el = e.target.closest("[data-action='rent-one']"))) { e.preventDefault(); return go("location.html#seule=" + el.dataset.id); }
     if ((el = e.target.closest("[data-action='rent-pro']"))) { e.preventDefault(); return go("location.html#pro=" + el.dataset.id); }
     if ((el = e.target.closest("[data-action='rent']"))) { e.preventDefault(); return go("location.html" + (el.dataset.look ? "#look=" + el.dataset.look : el.dataset.id ? "#piece=" + el.dataset.id : "")); }
     if (e.target.closest(".hm-drop__img")) { e.preventDefault(); return go("drop.html?statut=ouvert"); }
@@ -82,7 +83,7 @@
     ["shop.html", "Shop", "Filtres, tri, colonnes, ajout rapide au panier"],
     ["piece.html#SA-001", "Fiche produit", "Photos, mesures, panier, fiche d’archive, recommandations"],
     ["archives.html", "Archives à louer", "Les looks et les pièces du fonds Archives, à louer à Paris"],
-    ["journal.html#SA-005", "Page d’archive", "L’histoire d’une pièce, et en bas de page : louer le look ou la pièce (pros)"],
+    ["journal.html#SA-005", "Page d’archive", "L’histoire d’une pièce, et en bas de page : louer la pièce seule ou son look"],
     ["location.html", "Tarifs et options", "Le tunnel de réservation, de la formule au récapitulatif"],
     ["apropos.html", "À propos", "L’histoire de Simé"],
     ["aide.html", "Aide", "Livraison, mesures, location, codes promo, contact"]
