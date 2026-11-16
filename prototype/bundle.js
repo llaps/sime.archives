@@ -42,12 +42,14 @@
      products = toutes les pièces (location, fiches) ; shopProducts = ce qui s'achète (Shop, récoltes, menus, filtres, recommandations). */
   /* Looks de location (stylés par Lou-Ann). Le grand public loue des looks complets ; les pièces à l'unité sont réservées aux pros. */
   var looks = [
-    { id: "L1", name: "Nylon et voile", pieces: ["SA-001", "SA-002", "SA-013", "SA-003", "SA-004"] },
-    { id: "L2", name: "Peau lainée et sequins", pieces: ["SA-007", "SA-006"] },
-    { id: "L3", name: "Mary Jane kaki", pieces: ["SA-005", "SA-006"] },
-    { id: "L4", name: "Plissé vert d'eau", pieces: ["SA-010", "SA-011"] },
-    { id: "L5", name: "Panier paille", pieces: ["SA-012"] }
+    { id: "L1", name: "Nylon et voile", photo: PH.look1, pieces: ["SA-001", "SA-002", "SA-013", "SA-003", "SA-004"] },
+    { id: "L2", name: "Peau lainée et sequins", photo: PH.look4, pieces: ["SA-007", "SA-006"] },
+    { id: "L3", name: "Mary Jane kaki", photo: PH.look2, pieces: ["SA-005", "SA-006"] },
+    { id: "L4", name: "Plissé vert d'eau", photo: PH.look6, pieces: ["SA-010", "SA-011"] },
+    { id: "L5", name: "Panier paille", photo: PH.look8, pieces: ["SA-012"] }
   ];
+  /* Prototype : ?vendu=SA-012 simule la vente d'une pièce, pour voir le retrait automatique du look qui la contient */
+  (function () { var m = typeof location !== "undefined" && (location.search || "").match(/vendu=(SA-\d{3})/); if (m) products.forEach(function (p) { if (p.id === m[1]) p.sold = true; }); })();
   var shopProducts = products.filter(function (p) { return p.tier !== "Archive"; });
 
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
@@ -158,7 +160,7 @@
     }
     if (key === "location") {
       return "<div class='sa-mega sa-wrap' data-mega='location'>" +
-        "<div><h4 class='sa-label'>Location & RP</h4><ul><li><a href='#'>Louer</a></li><li><a href='#'>Tarifs et options</a></li><li><a href='#'>Journaling</a></li></ul></div>" +
+        "<div><h4 class='sa-label'>Location & RP</h4><ul><li><a href='#'>Archives à louer</a></li><li><a href='#'>Tarifs et options</a></li></ul></div>" +
         "<a class='sa-mega__edito' href='#'><img src='" + PH.giletB + "' alt='Gilet zippé en nylon gris, porté'><span><span class='sa-mono sa-muted'>JOURNAL · SA-001</span><br><span class='sa-serif' style='font-size:22px;line-height:1.15'>Le nylon qui voulait être une fourrure</span></span></a>" +
         "</div>";
     }
@@ -182,7 +184,7 @@
 
   /* Menu mobile : les mêmes trois entrées que l'en-tête et le pied de page */
   function mobileMenu() {
-    var groups = [["Shop", ["Récolte 04 en cours", "Toutes les pièces", "Par marque", "Récoltes passées"]], ["Location & RP", ["Louer", "Tarifs et options", "Journaling"]], ["À propos", ["Simé Archives", "Jardin Créole", "Contact"]]];
+    var groups = [["Shop", ["Récolte 04 en cours", "Toutes les pièces", "Par marque", "Récoltes passées"]], ["Location & RP", ["Archives à louer", "Tarifs et options"]], ["À propos", ["Simé Archives", "Jardin Créole", "Contact"]]];
     return "<aside class='sa-drawer sa-drawer--left sa-menu' data-sa='menu' aria-label='Menu'>" +
       "<div class='sa-drawer__head'><span class='sa-label'>Menu</span><button data-action='close' aria-label='Fermer'>" + icon("close") + "</button></div>" +
       "<div class='sa-drawer__body'>" + groups.map(function (g, i) { return "<details class='sa-menu__grp'" + (i === 0 ? " open" : "") + "><summary class='sa-label'>" + g[0] + "<span class='sa-acc__plus' aria-hidden='true'></span></summary><ul>" + g[1].map(function (l) { return "<li><a href='#'>" + l + "</a></li>"; }).join("") + "</ul></details>"; }).join("") + "</div>" +
@@ -367,11 +369,47 @@
       rail("MÊME MARQUE", "Plus de " + p.brand, byBrand, "Toutes les pièces " + p.brand);
   }
 
+  /* ── Location : looks à louer et fonds Archives ─────────────── */
+  /* Retrait automatique : dès qu'une pièce d'un look est vendue, le look sort de la location jusqu'à ce que Lou-Ann le recompose. */
+  function lookPrice(l) { var v = l.pieces.reduce(function (s, id) { var q = find(id); return s + (q ? q.price : 0); }, 0); return Math.max(30, Math.round(v * 15) / 100); }
+  function lookAvailable(l) { return !!l && l.pieces.every(function (id) { return !find(id).sold; }); }
+  function rentLooks() { return looks.filter(lookAvailable); }
+  /* Fonds Archives : pièces qui ne se vendent pas, louées dans les looks ou à l'unité par les pros */
+  function archivePieces() { return products.filter(function (p) { return p.tier === "Archive"; }); }
+  function lookNo(l) { return "LOOK " + l.id.slice(1).padStart(2, "0"); }
+
+  /* Carte de look : photo du look porté, pièces qui le composent (vers leur page d'archive), prix des 3 jours */
+  function lookCard(l) {
+    var n = l.pieces.length;
+    return "<article class='sa-look'><a class='sa-look__img' href='#' data-action='rent' data-look='" + l.id + "' aria-label='Réserver le look " + esc(l.name) + "'><img src='" + l.photo + "' alt='" + esc(l.name) + ", le look porté' loading='lazy'></a>" +
+      "<div class='sa-look__info'><span class='sa-mono sa-muted'>" + lookNo(l) + " · " + n + " PIÈCE" + (n > 1 ? "S" : "") + "</span><h3>" + esc(l.name) + "</h3>" +
+      "<ul class='sa-look__pieces'>" + l.pieces.map(function (id) { var q = find(id); return "<li><a href='#' data-archive='" + id + "'><span class='sa-mono sa-muted'>" + id + "</span><span>" + esc(q.name) + "</span></a></li>"; }).join("") + "</ul>" +
+      "<div class='sa-look__foot'><span>" + euro(lookPrice(l)) + " <span class='sa-muted'>les 3 jours</span></span><button class='sa-btn sa-btn--link' data-action='rent' data-look='" + l.id + "'>Réserver ce look</button></div></div></article>";
+  }
+  /* Carte d'archive : la pièce seule, vers sa page d'archive. Pas de prix ni de panier : elle ne se vend pas. */
+  function archiveCard(p) {
+    var lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1 && lookAvailable(l); })[0];
+    return "<a class='sa-arch' href='#' data-archive='" + p.id + "'><span class='sa-arch__img'><img src='" + img(p, "a") + "' alt='" + esc(p.name) + "' loading='lazy'></span>" +
+      "<span class='sa-mono sa-muted'>" + p.id + " · " + esc(p.eraLabel || p.era) + "</span><span class='sa-label'>" + esc(p.brand) + "</span><span>" + esc(p.name) + "</span>" +
+      "<span class='sa-mono sa-muted'>" + (lk ? "Dans le " + lookNo(lk).toLowerCase() : "À l'unité · pros") + "</span></a>";
+  }
+  /* Bas de page d'archive : louer le look qui la porte (grand public) ou la pièce seule (pros, sur devis) */
+  function rentArchive(p) {
+    var lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0];
+    var ok = lk && lookAvailable(lk);
+    return "<section class='sa-rentbox' aria-label='Louer cette archive'>" +
+      "<div class='sa-rentbox__look'>" + (ok ? "<img src='" + lk.photo + "' alt='" + esc(lk.name) + ", le look porté'>" : "") +
+      "<div><span class='sa-mono sa-muted'>LOUER · PARIS</span><h2>" + (ok ? "Porter le look " + esc(lk.name) : "Cette archive se loue") + "</h2>" +
+      (ok ? "<p>" + lk.pieces.length + " pièce" + (lk.pieces.length > 1 ? "s" : "") + ", stylées par Lou-Ann. " + euro(lookPrice(lk)) + " les 3 jours, nettoyage inclus. Retrait à l'atelier ou coursier dans Paris.</p><button class='sa-btn sa-btn--primary' data-action='rent' data-look='" + lk.id + "'>Réserver ce look</button>"
+          : "<p>" + (lk ? "Le look qui la porte est en cours de recomposition par Lou-Ann. Il revient bientôt." : "Elle n'est dans aucun look pour l'instant.") + "</p><a class='sa-btn sa-btn--link' href='#'>Archives à louer</a>") + "</div></div>" +
+      "<div class='sa-rentbox__pro'><span class='sa-mono sa-muted'>PROS · STYLISTES, MARQUES</span><p>Louer cette pièce seule pour un shoot, un clip ou une campagne. À la journée, sur devis.</p><button class='sa-btn sa-btn--secondary' data-action='rent-pro' data-id='" + p.id + "'>Demander un devis</button></div></section>";
+  }
+
   function footer() {
     return "<footer class='sa-footer sa-wrap'><div class='sa-footer__grid'>" +
       "<div><p class='sa-footer__sign'>Ce qui a été semé revient autrement.</p><p class='sa-footer__gloss sa-mono sa-muted'>Simé : « semé », en créole.</p><form class='sa-form' data-sa='news'><span class='sa-label'>La lettre des récoltes</span><div class='sa-field'><label class='sa-sr' for='news-mail'>E-mail</label><input id='news-mail' type='email' placeholder='Votre e-mail' required><button class='sa-label' type='submit'>OK</button></div><p class='sa-form-ok'>Mèsi. À <span data-sa='recolte-jour'>jeudi</span>, 18 h.</p></form></div>" +
       "<div><h4 class='sa-label'>Shop</h4><ul><li><a href='#'>Récolte en cours</a></li><li><a href='#'>Toutes les pièces</a></li><li><a href='#'>Par marque</a></li><li><a href='#'>Récoltes passées</a></li></ul></div>" +
-      "<div><h4 class='sa-label'>Location & RP</h4><ul><li><a href='#'>Louer</a></li><li><a href='#'>Tarifs et options</a></li><li><a href='#'>Journaling</a></li></ul></div>" +
+      "<div><h4 class='sa-label'>Location & RP</h4><ul><li><a href='#'>Archives à louer</a></li><li><a href='#'>Tarifs et options</a></li></ul></div>" +
       "<div><h4 class='sa-label'>À propos</h4><ul><li><a href='#'>Simé Archives</a></li><li><a href='#'>Jardin Créole</a></li><li><a href='#'>Instagram @sime.archives</a></li><li><a href='#'>Contact</a></li></ul></div>" +
       "<div><h4 class='sa-label'>Aide</h4><ul><li><a href='#'>Livraison et retours</a></li><li><a href='#'>Conditions de location</a></li><li><a href='#'>Guide des mesures</a></li><li><a href='#'>Codes promo</a></li></ul></div>" +
       "</div><div class='sa-footer__base sa-mono sa-muted'><span>© 2026 Simé Archives · Paris</span><span>CGV · Mentions légales · Confidentialité</span><span>FR / EN</span></div></footer>";
@@ -523,6 +561,13 @@
       tick(); setInterval(tick, 1000);
     });
 
+    /* Archives à louer : onglets Looks / Pièces */
+    root.querySelectorAll("[data-sa='rent-tabs']").forEach(function (box) {
+      var tabs = box.querySelectorAll("[role='tab']");
+      tabs.forEach(function (t) { t.addEventListener("click", function () {
+        tabs.forEach(function (u) { var on = u === t; u.setAttribute("aria-selected", on); var pnl = box.querySelector("[data-panel='" + u.dataset.tab + "']"); if (pnl) pnl.hidden = !on; });
+      }); });
+    });
     /* Formulaires d'inscription : la confirmation donne la date de la prochaine récolte (« jeudi 3 ») */
     root.querySelectorAll("[data-sa='recolte-jour']").forEach(function (el) { el.textContent = "jeudi " + nextThursday19().getDate(); });
     root.querySelectorAll(".sa-form").forEach(function (f) { f.addEventListener("submit", function (e) { e.preventDefault(); f.classList.add("is-done"); }); });
@@ -606,7 +651,7 @@
   window.SimeArchives = {
     products: products, shopProducts: shopProducts, looks: looks,
     lookFor: function (id) { return looks.filter(function (l) { return l.pieces.indexOf(id) > -1; })[0] || null; },
-    lookPrice: function (l) { var v = l.pieces.reduce(function (s, id) { var q = find(id); return s + (q ? q.price : 0); }, 0); return Math.max(30, Math.round(v * 15) / 100); }, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
+    lookPrice: lookPrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, lookCard: lookCard, archiveCard: archiveCard, rentArchive: rentArchive, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
     button: button, announcementBar: announcementBar, header: header, logo: logo,
     productCard: productCard, listingToolbar: listingToolbar, filterDrawer: filterDrawer,
     cartDrawer: cartDrawer, dropCountdown: dropCountdown, editoQuote: editoQuote, noteLine: noteLine, inventoryLabel: inventoryLabel,

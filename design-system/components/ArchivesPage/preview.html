@@ -1,0 +1,42 @@
+<!-- @dsCard group="Site" height=900 width=1280 page subtitle="Location : looks à louer et pièces du fonds Archives, retrait automatique des looks incomplets" -->
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Archives à louer</title>
+<style>html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}
+.ar-tabs{margin:0 0 var(--space-5)}
+.ar-note{margin:0 0 var(--space-5);max-width:560px}
+.ar-how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5);border-top:1px solid var(--ink);padding-top:var(--space-5)}
+.ar-how h3{margin:var(--space-2) 0;font-weight:500;font-size:18px}
+.ar-how p{margin:0;color:var(--ink-muted);font-size:14px}
+.ar-how > div + div{border-left:1px dashed var(--rule-strong);padding-left:var(--space-5)}
+.ar-pro{display:grid;grid-template-columns:1fr auto;gap:var(--space-5);align-items:end;border-top:1px solid var(--ink);padding-top:var(--space-5)}
+.ar-pro h2{margin:var(--space-2) 0 var(--space-3);font-family:var(--font-display,var(--font-sans));font-stretch:112%;font-weight:500;font-size:32px;line-height:1.05}
+.ar-pro p{margin:0;max-width:520px}
+@media (max-width:900px){.ar-how{grid-template-columns:1fr;gap:0}.ar-how > div{padding:var(--space-4) 0}.ar-how > div + div{border-left:0;padding-left:0;border-top:1px dashed var(--rule-strong)}.ar-pro{grid-template-columns:1fr}.ar-pro h2{font-size:26px}}
+</style></head>
+<body class="sa"><div class="sa-page" id="r"></div>
+<script>
+var S = window.SimeArchives;
+/* Retrait automatique : un look dont une pièce est vendue n'apparaît plus (essai : archives.html?vendu=SA-012) */
+var looks = S.rentLooks(), out = S.looks.length - looks.length, arch = S.archivePieces();
+document.getElementById("r").innerHTML = S.announcementBar() + S.header({ active: "location" }) +
+  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span><a href="#">Location & RP</a></span><span>Archives à louer</span></nav>' +
+  '<div class="sa-plp-head"><div><span class="sa-mono sa-muted">FONDS ARCHIVES · LOCATION À PARIS</span><h1>Archives à louer</h1></div>' +
+  '<p class="sa-muted">Des looks complets, stylés par Lou-Ann, à porter le temps d’un événement. Retrait à l’atelier ou coursier dans Paris.</p></div></div>' +
+  '<div class="sa-wrap" data-sa="rent-tabs" style="padding-bottom:64px">' +
+    '<div class="sa-tabs ar-tabs" role="tablist"><button class="sa-label" role="tab" aria-selected="true" data-tab="looks">Looks · ' + looks.length + '</button><button class="sa-label" role="tab" aria-selected="false" data-tab="pieces">Pièces · ' + arch.length + '</button></div>' +
+    '<div data-panel="looks">' +
+      (out ? '<p class="sa-mono sa-muted ar-note">' + out + ' look' + (out > 1 ? 's' : '') + ' en cours de recomposition.</p>' : '') +
+      '<div class="sa-looks">' + looks.map(S.lookCard).join("") + '</div></div>' +
+    '<div data-panel="pieces" hidden><p class="sa-muted ar-note">Les pièces du fonds Archives ne se vendent pas. Elles se portent dans les looks. Les pros peuvent aussi les louer à l’unité, sur devis.</p>' +
+      '<div class="sa-grid" data-cols="4">' + arch.map(S.archiveCard).join("") + '</div></div>' +
+  '</div>' +
+  '<section class="sa-section sa-wrap"><span class="sa-mono sa-muted">COMMENT ÇA MARCHE</span><div class="ar-how" style="margin-top:var(--space-3)">' +
+    [["01", "Réserver", "Choisissez un look et vos dates. Trois jours minimum, nettoyage inclus."], ["02", "Retirer", "À l’atelier, ou par coursier dans Paris."], ["03", "Rendre", "Le jour prévu, au même endroit. Simé s’occupe du reste."]].map(function (s) { return '<div><span class="sa-mono sa-muted">' + s[0] + '</span><h3>' + s[1] + '</h3><p>' + s[2] + '</p></div>'; }).join("") +
+  '</div></section>' +
+  '<section class="sa-section sa-wrap" style="padding-bottom:64px"><div class="ar-pro"><div><span class="sa-mono sa-muted">PROS · STYLISTES, MARQUES, ARTISTES</span><h2>Un shoot, un clip, une campagne ?</h2>' +
+    '<p>Les looks se réservent en ligne. Les pièces à l’unité se louent à la journée, sur devis. Réponse sous 48 h.</p></div>' +
+    '<a class="sa-btn sa-btn--secondary" href="#">Pros · demande de devis</a></div></section>' +
+  S.footer() + S.cartDrawer();
+S.init(document);
+</script></body></html>

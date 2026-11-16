@@ -16,7 +16,7 @@ Statuts : **En place** (prototypé dans le système), **À valider** (proposé, 
 | L · Location & RP | L-01 à L-07 | Transformer une envie de look en réservation confirmée |
 | B · Coulisses (équipe) | B-01 à B-08 | Publier une récolte en 2 à 3 h de travail par personne |
 
-Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Le Journaling (lookbooks, fiches d'archive, archives caribéennes) vit dans Location & RP.
+Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Location & RP a deux sous-entrées : **Archives à louer** (la vitrine de la location) et **Tarifs et options** (le tunnel). Décidé le 16 novembre : le Journaling n'a plus d'entrée propre, chaque archive a sa page, construite comme le Journaling.
 
 ## W · Parcours d'achat
 
@@ -98,16 +98,19 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Le Jour
 
 ### L-01 · Entrée Location & RP
 - **La cliente** arrive par le menu, la porte de l'accueil ou « Louer ce look » sur une fiche.
-- **En place** : méga-menu (Louer, Pros, Journaling).
+- **Décidé (16 novembre)** : mieux dissocier achat et location, et rendre la location aussi visible que le Shop. Méga-menu et menu mobile : Archives à louer, Tarifs et options.
+- **En place** : ArchivesPage (`archives.html`), la vitrine de la location. Onglets Looks (par défaut) et Pièces (fonds Archives, à l'unité pour les pros), « Comment ça marche » en 3 étapes, bloc Pros. La porte Location de l'accueil et « Louer un look » y mènent.
+- **En place** : page d'archive (`journal.html#SA-005`), même structure que le Journaling (planche contact, fiche d'archive en chapitres), avec en bas de page le bloc « Louer » : le look qui porte la pièce pour tout le monde, la pièce seule pour les pros, sur devis. Puis d'autres archives à louer.
 - **En place** : LocationPage, une seule page en 4 étapes (pack, looks ou pièces, dates, options) avec récapitulatif fixe à droite (barre en bas sur mobile).
 - **À valider** : trois versions de la page, avec une préférence de Laury pour LocationPageB (12 novembre). LocationPage (tout sur une page, archivée le 12 novembre dans le groupe Archives), LocationPageB (pas à pas, une étape à la fois, total et bouton Continuer fixés en bas), LocationPageC (le look d'abord : grille des looks, puis durée, date, stylisme ou photo et retrait dans un panneau latéral).
 - **Indicateur** : visites Location issues d'une fiche produit.
 
 ### L-02 · Choisir un look
 - **Bonnes pratiques** : looks entiers photographiés portés, pièces du look listées, disponibilité visible dès la liste.
-- **Décidé (13 novembre)** : le grand public loue des looks complets, stylés par Lou-Ann. Les pièces à l'unité sont réservées aux pros, avec la formule Shoot pro, sur devis. Dit dans le tunnel (étape « Ce que vous portez »), dans la FAQ de la page location et dans l'Aide.
+- **Décidé (13 novembre, précisé le 16)** : le grand public loue des looks complets, stylés par Lou-Ann. Les pros louent aussi bien des looks entiers (réservation en ligne, à confirmer) que des pièces à l'unité (formule Shoot pro, sur devis). Dit dans le tunnel (étape « Ce que vous portez »), dans la FAQ de la page location et dans l'Aide.
 - **En place** : grille des looks du shoot, sélection, prix pour la durée choisie, tag de récolte ou « Pris à ces dates ». La bascule « Un look complet » / « Des pièces à l'unité » n'apparaît qu'avec la formule Shoot pro. Depuis une fiche produit, « Louer le look » ouvre le tunnel avec le look de la pièce sélectionné ; « Une demande pro ? Louer cette pièce seule » ouvre la formule Shoot pro avec la pièce.
-- **Vigilance** : un look qui contient une pièce en vente perd cette pièce le jour de la vente. Composer les looks surtout avec le fonds Archives, ou les recomposer.
+- **Décidé (16 novembre) · retrait automatique** : dès qu'une pièce d'un look est vendue, le look entier sort de la location (vitrine et tunnel) jusqu'à ce que Lou-Ann le recompose. Dans Shopify : stock de la pièce à zéro, looks masqués. Dans le prototype : `archives.html?vendu=SA-012` simule la vente.
+- **À valider** : retirer tout le look (en place) ou seulement la pièce, avec la mention « pièce remplacée au retrait ».
 
 ### L-03 · Dates et formule
 - **Bonnes pratiques** : calendrier de disponibilité en direct (The Dress Rental App prévue), prix calculé tout de suite (15 %, 25 %, 35 %, 20 % shoot pro, plancher 30 €), caution et frais de nettoyage annoncés avant la validation.

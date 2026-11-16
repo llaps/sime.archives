@@ -236,6 +236,8 @@ var LOOKS = [
   { id: "L4", name: "Plissé vert d'eau", photo: P.look6, pieces: ["SA-010", "SA-011"], busy: [] },
   { id: "L5", name: "Panier paille", photo: P.look8, pieces: ["SA-012"], busy: [] }
 ];
+/* Retrait automatique : un look dont une pièce est vendue sort de la location (voir S.lookAvailable) */
+LOOKS = LOOKS.filter(function (l) { return S.lookAvailable(S.looks.filter(function (x) { return x.id === l.id; })[0]); });
 LOOKS.forEach(function (l) { l.value = l.pieces.reduce(function (s, id) { return s + find(id).price; }, 0); });
 var PIECES = S.products.filter(function (p) { return !p.sold; });
 

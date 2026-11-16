@@ -6,7 +6,8 @@
     ["drop.html", ["Voir la récolte à venir", "La prochaine récolte →"]],
     ["drop.html?statut=ouvert", ["Récolte 04 en cours", "Récolte en cours", "La récolte en cours", "Voir la récolte", "Voir la Récolte", "Toute la récolte →"]],
     ["shop.html", ["Shop", "Le Shop", "Toutes les pièces", "Tout le Shop", "Entrer →", "Récoltes passées", "Archives de créateurs", "Par marque"]],
-    ["location.html", ["Location & RP", "Louer", "Tarifs et options", "Location look", "Location pièces", "Options", "Louer un look", "Les looks à louer", "Réserver →", "Formules et options", "Disponibilités et réservation", "Formules et tarifs", "Option stylisme et photo", "Pros · demande de devis", "Stylistes", "Artistes & musiciens", "Marques · demande de devis"]],
+    ["archives.html", ["Archives à louer", "Les looks à louer", "Louer un look"]],
+    ["location.html", ["Location & RP", "Louer", "Tarifs et options", "Location look", "Location pièces", "Options", "Réserver →", "Formules et options", "Disponibilités et réservation", "Formules et tarifs", "Option stylisme et photo", "Pros · demande de devis", "Stylistes", "Artistes & musiciens", "Marques · demande de devis"]],
     ["journal.html", ["Journaling", "Tout le Journaling", "Fiches d'archive", "Fiches d’archive", "Lookbooks par shoot", "Archives caribéennes", "Lire la fiche d’archive", "Le défilé", "Le lookbook", "Une interview"]],
     ["apropos.html", ["À propos", "Simé Archives", "L’histoire de Simé", "Jardin Créole"]],
     ["aide.html#livraison", ["Livraison et retours"]],
@@ -27,7 +28,7 @@
   function go(url) { location.href = url; }
   window.__ptTarget = target;
   /* La fiche lit le numéro dans l'ancre : on recharge quand on passe d'une pièce à l'autre */
-  window.addEventListener("hashchange", function () { if (/piece\.html$/.test(location.pathname)) location.reload(); });
+  window.addEventListener("hashchange", function () { if (/(piece|journal)\.html$/.test(location.pathname)) location.reload(); });
 
   document.addEventListener("click", function (e) {
     if (e.defaultPrevented) return;
@@ -43,10 +44,12 @@
     if (e.target.closest("[data-mega='shop'] a")) { e.preventDefault(); return go("shop.html"); }
     /* Portes de l'accueil : la première vers le Shop, la seconde vers la location */
     var door = e.target.closest(".sa-door");
-    if (door) { e.preventDefault(); var ds = Array.prototype.indexOf.call(door.parentNode.children, door); return go(ds === 0 ? "shop.html" : "location.html"); }
+    if (door) { e.preventDefault(); var ds = Array.prototype.indexOf.call(door.parentNode.children, door); return go(ds === 0 ? "shop.html" : "archives.html"); }
     /* Rangées de recommandations : « Tous les hauts », « Toutes les pièces X » → Shop */
     if ((el = e.target.closest(".sa-rail-block a[href='#']"))) { e.preventDefault(); return go("shop.html"); }
 
+    /* Carte de look ou d'archive : la pièce → sa page d'archive */
+    if ((el = e.target.closest("[data-archive]"))) { e.preventDefault(); return go("journal.html#" + el.dataset.archive); }
     /* Vignette produit : clic hors boutons → fiche produit */
     if ((el = e.target.closest("[data-piece]"))) { e.preventDefault(); return go("piece.html#" + el.dataset.piece); }
     var card = e.target.closest(".sa-card");
@@ -78,8 +81,9 @@
     ["drop.html", "Page récolte", "Deux statuts : avant la récolte, récolte ouverte"],
     ["shop.html", "Shop", "Filtres, tri, colonnes, ajout rapide au panier"],
     ["piece.html#SA-001", "Fiche produit", "Photos, mesures, panier, fiche d’archive, recommandations"],
-    ["location.html", "Location & RP", "Le tunnel de réservation, de la formule au récapitulatif"],
-    ["journal.html", "Journaling", "Une fiche d’archive"],
+    ["archives.html", "Archives à louer", "Les looks et les pièces du fonds Archives, à louer à Paris"],
+    ["journal.html#SA-005", "Page d’archive", "L’histoire d’une pièce, et en bas de page : louer le look ou la pièce (pros)"],
+    ["location.html", "Tarifs et options", "Le tunnel de réservation, de la formule au récapitulatif"],
     ["apropos.html", "À propos", "L’histoire de Simé"],
     ["aide.html", "Aide", "Livraison, mesures, location, codes promo, contact"]
   ];

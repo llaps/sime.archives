@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Journaling · Simé Archives</title><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="bundle.js"></script>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Archive · Simé Archives</title><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="bundle.js"></script>
 <style>html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}
 .jr-sheet{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4px;padding-top:8px;height:clamp(320px,52vh,480px)}
 .jr-sheet figure{margin:0;position:relative;background:var(--packshot,#fff);overflow:hidden}
@@ -10,14 +10,20 @@
 </style></head>
 <body class="sa"><div class="sa-page" id="r"></div>
 <script>
-var S = window.SimeArchives, p = S.find("SA-001");
+var S = window.SimeArchives;
+/* Page d'archive : la pièce est choisie par l'ancre (journal.html#SA-005), SA-001 par défaut */
+var p = S.find(((location.hash || "").match(/SA-\d{3}/) || ["SA-001"])[0]);
+document.title = p.id + " · " + p.name + " · Simé Archives";
+var others = S.archivePieces().filter(function (q) { return q.id !== p.id; });
 document.getElementById("r").innerHTML = S.announcementBar() + S.header({ active: "location" }) +
-  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span><a href="#">Location & RP</a></span><span>Journaling</span></nav></div>' +
+  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span><a href="#">Location & RP</a></span><span><a href="#">Archives à louer</a></span><span>' + p.id + '</span></nav></div>' +
   /* Les visuels de la pièce, en planche contact, avant le texte */
   '<section class="sa-wrap jr-sheet" aria-label="Photos de la pièce">' + [[p.photos[0], "La pièce, gros plan"], [p.photos[1], "Portée"], [S.lookOf(p), "Le look complet"], [S.photos.look3, "Lookbook"]].map(function (v, i) { return '<figure' + (i === 0 ? ' class="is-main"' : '') + '><img src="' + v[0] + '" alt="' + p.name + ', ' + v[1].toLowerCase() + '"><figcaption class="sa-mono">' + String(i + 1).padStart(2, "0") + ' · ' + v[1] + '</figcaption></figure>'; }).join("") + '</section>' +
   '<section class="sa-section sa-wrap" style="display:grid;justify-items:center;padding-top:40px">' + S.archiveChapters(p) + '</section>' +
   '<section class="sa-section sa-wrap">' + S.editoQuote() + '</section>' +
-  '<section class="sa-section sa-wrap" style="border-top:1px solid var(--photocopy)">' + S.related(p) + '</section>' +
+  /* En bas de page : louer l'archive (le look pour tous, la pièce seule pour les pros) */
+  '<div class="sa-wrap">' + S.rentArchive(p) + '</div>' +
+  (others.length ? '<section class="sa-section sa-wrap" style="border-top:1px solid var(--photocopy);padding-bottom:64px"><div class="sa-section__head"><div><span class="sa-mono sa-muted">FONDS ARCHIVES</span><h2>D’autres archives à louer</h2></div><a class="sa-btn sa-btn--link" href="#">Archives à louer</a></div><div class="sa-grid" data-cols="4">' + others.map(S.archiveCard).join("") + '</div></section>' : '') +
   S.footer() + S.cartDrawer();
 S.init(document);
 </script><script src="proto.js"></script></body></html>
