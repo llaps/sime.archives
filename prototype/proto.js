@@ -80,7 +80,7 @@
   window.addEventListener("hashchange", function () { if (/piece\.html$/.test(location.pathname)) location.reload(); });
 
   /* Liens externes : le compte Instagram du pied de page devient un vrai lien */
-  document.querySelectorAll("a[href='#']").forEach(function (a) { if (/Instagram/.test(a.textContent)) { a.href = "https://www.instagram.com/sime.archives/"; a.target = "_blank"; a.rel = "noopener"; } });
+  document.querySelectorAll("a[href='#']").forEach(function (a) { if (/Instagram|@sime\.archives/.test(a.textContent)) { a.href = "https://www.instagram.com/sime.archives/"; a.target = "_blank"; a.rel = "noopener"; } });
 
   /* Plan du prototype */
   var PAGES = [
