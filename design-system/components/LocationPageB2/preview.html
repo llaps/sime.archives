@@ -181,11 +181,8 @@
   .lt-sec__body { margin-top: var(--space-5); margin-left: calc(56px + var(--space-3)); }
   .lt-sec.is-locked { padding-bottom: var(--space-5); border-top-color: var(--photocopy); }
   .lt-sec.is-locked h2 { color: var(--ink-muted); }
-  /* Boutons « Continuer » à droite, sur ordinateur comme sur mobile (17 novembre) */
-  .lt-next { margin-top: var(--space-5); display: flex; align-items: center; justify-content: flex-end; gap: var(--space-4); flex-wrap: wrap; }
-  .lt-next p { margin: 0; font-size: 14px; color: var(--ink-muted); flex: 1 1 260px; text-align: right; }
-  .lt-next .sa-btn { flex: none; }
-  @media (max-width: 600px) { .lt-next p { flex-basis: 100%; text-align: left; } }
+  .lt-next { margin-top: var(--space-5); display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+  .lt-next p { margin: 0; font-size: 14px; color: var(--ink-muted); }
   .lc-calc { margin-top: var(--space-4); border-top: 1px dashed var(--rule-strong); padding-top: var(--space-3); }
   .lc-calc summary { cursor: pointer; }
   .lc-calc p { margin: var(--space-2) 0 0; font-size: 13px; line-height: 19px; color: var(--ink-muted); }
@@ -354,7 +351,7 @@ function availMsg(busyNow) {
   }
   return "<b>" + what + "</b> du " + long(start) + " au " + long(end) + " (" + d.label + "). Vous " + pron + " récupérez le " + fmt(start, true) + " et " + pron + " rendez le " + fmt(end, true) + ".";
 }
-function nextBtn(i, label, hint) { return '<div class="lt-next">' + (hint ? '<p>' + hint + '</p>' : '') + S.button(label, { action: "next", id: String(i), disabled: !done(i) }) + '</div>'; }
+function nextBtn(i, label, hint) { return '<div class="lt-next">' + S.button(label, { action: "next", id: String(i), disabled: !done(i) }) + '<p>' + hint + '</p></div>'; }
 function body(i) {
   var pk = st.pack ? packOf(st.pack) : PACKS[0];
   if (i === 0) return '<div class="lc-packs" role="radiogroup" aria-label="Formules">' + PACKS.map(function (p) { return packCard(p).replace('</button>', '<span class="lc-pack__go">' + (st.pack === p.id ? "Formule sélectionnée" : "Sélectionner") + '</span></button>'); }).join("") + '</div>' +
