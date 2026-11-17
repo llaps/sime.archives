@@ -181,8 +181,14 @@
   .lt-sec__body { margin-top: var(--space-5); margin-left: calc(56px + var(--space-3)); }
   .lt-sec.is-locked { padding-bottom: var(--space-5); border-top-color: var(--photocopy); }
   .lt-sec.is-locked h2 { color: var(--ink-muted); }
-  .lt-next { margin-top: var(--space-5); display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
-  .lt-next p { margin: 0; font-size: 14px; color: var(--ink-muted); }
+  /* Boutons « Continuer » à droite, sur ordinateur comme sur mobile (17 novembre) */
+  .lt-next { margin-top: var(--space-5); display: flex; align-items: center; justify-content: flex-end; gap: var(--space-4); flex-wrap: wrap; }
+  .lt-next p { margin: 0; font-size: 14px; color: var(--ink-muted); flex: 1 1 260px; text-align: right; }
+  .lt-next .sa-btn { flex: none; }
+  @media (max-width: 600px) { .lt-next p { flex-basis: 100%; text-align: left; } }
+  .lc-calc { margin-top: var(--space-4); border-top: 1px dashed var(--rule-strong); padding-top: var(--space-3); }
+  .lc-calc summary { cursor: pointer; }
+  .lc-calc p { margin: var(--space-2) 0 0; font-size: 13px; line-height: 19px; color: var(--ink-muted); }
   .lt-next p b { color: var(--ink); font-weight: 500; }
   .lt-avail { margin: var(--space-4) 0 0; padding: var(--space-3) var(--space-4); border-left: 2px solid var(--ink); background: var(--paper-deep); font-size: 14px; }
   .lt-avail.is-busy { border-left-color: var(--ink-muted); color: var(--ink-muted); }
@@ -223,7 +229,7 @@ var DUR = [
   { id: "2s", label: "2 semaines", pct: 35, note: "vacances" },
   { id: "pro", label: "Shoot pro · 1 jour", pct: 20, note: "shoot, clip, campagne" }
 ];
-var FLOOR = 30, STYLE = 250, PHOTO = 250;
+var FLOOR = 45, STYLE = 250, PHOTO = 250; /* minimum d'un look : 45 € (16 novembre) */
 /* Pièce seule (fonds Archives, décidé le 16 novembre) : 20 % de la valeur pour 3 jours, jamais moins de 45 €. Semaine et deux semaines : +5 points, comme pour 3 jours. */
 var PIECE_PLUS = 5, PIECE_FLOOR = 45;
 function pctOf(id) { return durOf(id).pct + (st.mode === "piece" && id !== "pro" ? PIECE_PLUS : 0); }
@@ -241,7 +247,7 @@ var LOOKS = [
   { id: "L4", name: "Plissé vert d'eau", photo: P.look6, pieces: ["SA-010", "SA-011"], busy: [] },
   { id: "L5", name: "Paille et daim", photo: P.look11, pieces: ["SA-022", "SA-023", "SA-024", "SA-025", "SA-012", "SA-026"], busy: [] },
   { id: "L6", name: "Mohair et vichy", photo: P.look9, pieces: ["SA-014", "SA-015", "SA-016", "SA-017"], busy: [] },
-  { id: "L7", name: "Lin et denim", photo: P.look10, pieces: ["SA-018", "SA-019", "SA-020", "SA-021"], busy: [] }
+  { id: "L7", name: "Lin et denim", photo: P.look10, pieces: ["SA-018", "SA-019", "SA-027", "SA-020", "SA-021"], busy: [] }
 ];
 /* Retrait automatique : un look dont une pièce est vendue sort de la location (voir S.lookAvailable) */
 LOOKS = LOOKS.filter(function (l) { return S.lookAvailable(S.looks.filter(function (x) { return x.id === l.id; })[0]); });
@@ -257,8 +263,14 @@ function value() {
 }
 function durOf(id) { return DUR.filter(function (d) { return d.id === id; })[0]; }
 /* Jamais plus de la moitié de la valeur : une location coûte toujours moins que la pièce (sauf Shoot pro, sur devis) */
-function rentCalc(v) { return st.dur === "pro" ? Math.max(floorOf(), Math.round(v * pctOf(st.dur)) / 100) : S.rentPrice(v, pctOf(st.dur), floorOf()); }
-function rental() { var v = value(); if (!v) return 0; return rentCalc(v); }
+function calcFor(v, pct, floor) { return st.dur === "pro" ? Math.max(floor, Math.round(v * pct) / 100) : S.rentPrice(v, pct, floor); }
+function lookRent(l) { return calcFor(l.value, durOf(st.dur).pct, FLOOR); }
+/* Une pièce seule ne coûte jamais plus que son look, à durée égale */
+function pieceRent(p) { var r = calcFor(p.price, durOf(st.dur).pct + (st.dur !== "pro" ? PIECE_PLUS : 0), PIECE_FLOOR), lk = LOOKS.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0]; return lk ? Math.min(r, lookRent(lk)) : r; }
+/* Prix de la sélection pour une durée donnée, sans changer la durée choisie */
+function durPrice(id) { var keep = st.dur; st.dur = id; var r = rental(); st.dur = keep; return S.euro(r); }
+function rentCalc(v) { return calcFor(v, pctOf(st.dur), floorOf()); }
+function rental() { if (!st.sel.length) return 0; return st.sel.reduce(function (s, id) { var l = LOOKS.filter(function (x) { return x.id === id; })[0]; return s + (st.mode === "look" ? (l ? lookRent(l) : 0) : pieceRent(find(id))); }, 0); }
 function packOf(id) { return PACKS.filter(function (p) { return p.id === id; })[0]; }
 function busy(item) { return st.date && item.busy && item.busy.indexOf(st.date) > -1; }
 /* Disponibilités liées : une pièce est prise si un look qui la contient l'est (et dans l'application de location, l'inverse aussi) */
@@ -268,13 +280,14 @@ function packCard(p) {
   var minDur = durOf(p.durs[0]);
   var from = FLOOR + (p.style ? STYLE : 0) + (p.photo ? PHOTO : 0);
   return '<button class="lc-pack" role="radio" aria-checked="' + (st.pack === p.id) + '" data-pack="' + p.id + '">' + (p.tag ? '<span class="lc-pack__badge">' + p.tag + '</span>' : '') + '<span class="lc-pack__radio" aria-hidden="true"></span>' +
-    '<span class="sa-mono sa-muted">' + (p.id === "pro" ? "20 % DE LA VALEUR / JOUR" : "DÈS " + minDur.pct + " % DE LA VALEUR") + '</span><h3>' + p.name + '</h3><span style="font-size:13px;line-height:19px">' + p.desc + '</span>' +
-    '<ul>' + p.inc.map(function (t) { return '<li>' + t + '</li>'; }).join("") + p.off.map(function (t) { return '<li class="off">' + t + ' en option</li>'; }).join("") + '</ul>' +
-    '<span class="lc-pack__price"><span class="sa-mono sa-muted">À PARTIR DE</span><b>' + S.euro(from) + '</b></span></button>';
+    /* Pas de pourcentage ici (17 novembre) : un prix en euros, le calcul détaillé n'apparaît qu'au récapitulatif */
+    '<span class="sa-mono sa-muted">' + (p.id === "pro" ? "À LA JOURNÉE" : "DÈS 3 JOURS") + '</span><h3>' + p.name + '</h3><span style="font-size:13px;line-height:19px">' + p.desc + '</span>' +
+    '<ul>' + p.inc.map(function (t) { return '<li>' + t + '</li>'; }).join("") + '</ul>' +
+    '<span class="lc-pack__price">' + (p.id === "pro" ? '<span class="sa-mono sa-muted">TARIF</span><b>Sur devis</b>' : '<span class="sa-mono sa-muted">À PARTIR DE</span><b>' + S.euro(from) + '</b>') + '</span></button>';
 }
 
 function itemCard(it, isLook) {
-  var on = st.sel.indexOf(it.id) > -1, b = isLook ? busy(it) : pieceBusy(it), price = rentCalc(isLook ? it.value : it.price);
+  var on = st.sel.indexOf(it.id) > -1, b = isLook ? busy(it) : pieceBusy(it), price = isLook ? lookRent(it) : pieceRent(it);
   var img = isLook ? it.photo : S.img(it, "a"), name = isLook ? it.name : it.name, sub = isLook ? it.pieces.length + " pièces · " + it.pieces.join(", ") : it.id + " · " + it.size;
   return '<button class="lc-item" data-item="' + it.id + '" aria-pressed="' + on + '"' + (b ? ' aria-disabled="true"' : '') + '><span class="lc-item__img"><img src="' + img + '" alt="' + name + '"><span class="lc-item__check" aria-hidden="true">' + (on ? "✓" : "+") + '</span>' +
     '<span class="lc-item__avail' + (b ? ' is-busy' : '') + '">' + (b ? "Pris à ces dates" : (isLook ? find(it.pieces[0]).drop : "Fonds Archives")) + '</span></span>' +
@@ -298,7 +311,7 @@ function anyBusy() { return st.mode === "look" ? st.sel.some(function (id) { ret
 function toast(msg) { var t = document.querySelector(".sa-toast") || document.body.appendChild(Object.assign(document.createElement("div"), { className: "sa-toast", role: "status" })); t.textContent = msg; t.classList.add("is-on"); setTimeout(function () { t.classList.remove("is-on"); }, 2200); }
 var FAQ = S.accordion([
   { title: "Peut-on louer une seule pièce ?", html: "Oui. Les pièces du fonds Archives se louent seules ou dans leur look. Les pièces du Shop, qui sont à vendre, se louent seulement dans un look, tant qu’elles ne sont pas vendues." },
-  { title: "Comment est calculé le prix ?", html: "En pourcentage de la valeur estimée des pièces. Un look : 15 % pour 3 jours, 25 % pour une semaine, 35 % pour deux semaines, jamais moins de 30 €. Une pièce seule : 20 % pour 3 jours, 30 % pour une semaine, 40 % pour deux semaines, jamais moins de 45 €. Une location ne dépasse jamais la moitié de la valeur. Shoot pro : 20 % par jour." },
+  { title: "Comment est calculé le prix ?", html: "En pourcentage de la valeur estimée des pièces. Un look : 15 % pour 3 jours, 25 % pour une semaine, 35 % pour deux semaines, jamais moins de 45 €. Une pièce seule : 20 % pour 3 jours, 30 % pour une semaine, 40 % pour deux semaines, jamais moins de 45 €, et jamais plus que son look. Une location ne dépasse jamais la moitié de la valeur. Shoot pro : 20 % par jour." },
   { title: "La caution", html: "Une empreinte bancaire du montant de la valeur, sans débit. Elle est libérée sous 48 h après le contrôle de la pièce." },
   { title: "Nettoyage et petits accrocs", html: "Le nettoyage est inclus. En cas de dommage, un devis de réparation est fait avant toute retenue." },
   { title: "Les photos de la soirée", html: "8 photos retouchées livrées. Simé garde les droits et peut les publier." }
@@ -341,7 +354,7 @@ function availMsg(busyNow) {
   }
   return "<b>" + what + "</b> du " + long(start) + " au " + long(end) + " (" + d.label + "). Vous " + pron + " récupérez le " + fmt(start, true) + " et " + pron + " rendez le " + fmt(end, true) + ".";
 }
-function nextBtn(i, label, hint) { return '<div class="lt-next">' + S.button(label, { action: "next", id: String(i), disabled: !done(i) }) + '<p>' + hint + '</p></div>'; }
+function nextBtn(i, label, hint) { return '<div class="lt-next">' + (hint ? '<p>' + hint + '</p>' : '') + S.button(label, { action: "next", id: String(i), disabled: !done(i) }) + '</div>'; }
 function body(i) {
   var pk = st.pack ? packOf(st.pack) : PACKS[0];
   if (i === 0) return '<div class="lc-packs" role="radiogroup" aria-label="Formules">' + PACKS.map(function (p) { return packCard(p).replace('</button>', '<span class="lc-pack__go">' + (st.pack === p.id ? "Formule sélectionnée" : "Sélectionner") + '</span></button>'); }).join("") + '</div>' +
@@ -350,13 +363,13 @@ function body(i) {
     return ('<div class="lc-seg" role="group" aria-label="Type de location"><button data-mode="look" aria-pressed="' + (st.mode === "look") + '">Un look complet</button><button data-mode="piece" aria-pressed="' + (st.mode === "piece") + '">Des pièces d\'archive</button></div>') + '<div class="lc-grid">' + items.map(function (it) { return itemCard(it, st.mode === "look"); }).join("") + '</div>' +
       (reached === 1 ? nextBtn(1, "Continuer vers les dates", st.sel.length ? "<b>" + selLabel() + "</b> sélectionné" + (st.sel.length > 1 ? "s" : "") + ". Prix affichés pour " + durOf(st.dur).label + "." : "Sélectionnez au moins un look ou une pièce.") : ''); }
   if (i === 2) { var b = anyBusy();
-    return '<div class="lc-dates"><label class="sa-label">Début de la location<input type="date" id="date" min="2026-11-13" value="' + st.date + '"></label><div class="lc-chips" role="group" aria-label="Durée">' + DUR.map(function (d) { var ok = pk.durs.indexOf(d.id) > -1; return '<button class="lc-chip" data-dur="' + d.id + '" aria-pressed="' + (st.dur === d.id) + '"' + (ok ? "" : " disabled") + '><b>' + d.label + '</b><span>' + pctOf(d.id) + ' % de la valeur</span></button>'; }).join("") + '</div></div>' +
+    return '<div class="lc-dates"><label class="sa-label">Début de la location<input type="date" id="date" min="2026-11-13" value="' + st.date + '"></label><div class="lc-chips" role="group" aria-label="Durée">' + DUR.map(function (d) { var ok = pk.durs.indexOf(d.id) > -1; return '<button class="lc-chip" data-dur="' + d.id + '" aria-pressed="' + (st.dur === d.id) + '"' + (ok ? "" : " disabled") + '><b>' + d.label + '</b><span>' + (st.sel.length && d.id !== "pro" ? durPrice(d.id) : d.note || "") + '</span></button>'; }).join("") + '</div></div>' +
       (st.date ? '<p class="lt-avail' + (b ? " is-busy" : "") + '">' + availMsg(b) + '</p>' : '<p class="lc-note">Exemple : le look « Mary Jane kaki » est pris du 20 au 22 novembre.</p>') +
       (reached === 2 ? nextBtn(2, "Continuer vers les à-côtés", st.date ? "" : "Choisissez une date de début.") : ''); }
   if (i === 3) return '<div class="lc-opts">' +
       optRow("style", "Stylisme avec Lou-Ann", "Une séance pour composer et ajuster le look.", "dès " + S.euro(STYLE), { checked: st.opts.style, locked: pk.style }) +
       optRow("photo", "Photo de la soirée par Laury", "2 à 3 h, 8 photos retouchées. Simé garde les droits et peut publier.", "dès " + S.euro(PHOTO), { checked: st.opts.photo, locked: pk.photo }) +
-      optRow("extra", "Une journée de plus", "24 h de plus, même calcul.", "+5 % de la valeur", { checked: st.opts.extra }) + '</div><h3 class="sa-label lc-subhead">Retrait ou coursier</h3>' + S.noteLine("Paris uniquement", "Pour l’instant, la location se fait à Paris : retrait à l’atelier ou coursier.") + '<div class="lc-opts">' +
+      optRow("extra", "Une journée de plus", "24 h de plus.", value() ? "+" + S.euro(Math.round(value() * 5) / 100) : "selon la sélection", { checked: st.opts.extra }) + '</div><h3 class="sa-label lc-subhead">Retrait ou coursier</h3>' + S.noteLine("Paris uniquement", "Pour l’instant, la location se fait à Paris : retrait à l’atelier ou coursier.") + '<div class="lc-opts">' +
       optRow("atelier", "Retrait à l'atelier, Paris", "Essayage possible sur rendez-vous.", "Offert", { radio: true, name: "deliv", checked: st.delivery === "atelier" }) +
       optRow("coursier", "Coursier dans Paris", "Livraison et reprise le jour choisi.", "à confirmer", { radio: true, name: "deliv", checked: st.delivery === "coursier" }) + '</div>' +
       (reached === 3 ? nextBtn(3, "Voir le récapitulatif", "") : '');
@@ -364,10 +377,12 @@ function body(i) {
   var row = function (a, x, m) { return '<div class="lc-recap__row' + (m ? " is-muted" : "") + '"><span>' + a + '</span><span>' + x + '</span></div>'; };
   return '<div class="lt-review"><div><p style="margin:0;max-width:520px">Tout est prêt pour une bèl soirée. <span class="sa-muted">Bèl, « belle » en créole.</span></p><p class="sa-muted" style="font-size:14px;max-width:520px">Le nettoyage est inclus. La caution est une empreinte bancaire, sans débit. Un rappel part la veille du retour.</p></div>' +
     '<aside class="lc-recap"><div class="lc-recap__head"><span class="sa-label">Votre location</span><span class="sa-mono sa-muted">' + pk.name + '</span></div><div class="lc-recap__body">' +
-    row(selLabel() + " · valeur", S.euro(t.v), true) + row("Location " + d.label.toLowerCase() + " · " + pctOf(st.dur) + " %", S.euro(t.loc)) + (t.extra ? row("Journée en plus", S.euro(t.extra)) : "") +
+    row("Location " + d.label.toLowerCase() + " · " + selLabel(), S.euro(t.loc)) + (t.extra ? row("Journée en plus", S.euro(t.extra)) : "") +
     (st.opts.style ? row("Stylisme" + (pk.style ? " (inclus)" : ""), S.euro(STYLE)) : "") + (st.opts.photo ? row("Photo de soirée" + (pk.photo ? " (inclus)" : ""), S.euro(PHOTO)) : "") +
     row("Dates", st.date ? "Du " + fmt(new Date(st.date + "T12:00")) + " au " + fmt(endDate()) : "à choisir", !st.date) + '</div>' +
-    '<div class="lc-recap__total">' + row("Total", S.euro(t.total)) + '<p class="lc-recap__warn is-on" style="margin:0">Caution : empreinte bancaire de ' + S.euro(t.v) + ', sans débit, libérée sous 48 h après le retour.</p></div></aside></div>';
+    '<div class="lc-recap__total">' + row("Total", S.euro(t.total)) + '<p class="lc-recap__warn is-on" style="margin:0">Caution : empreinte bancaire de ' + S.euro(t.v) + ', sans débit, libérée sous 48 h après le retour.</p></div>' +
+    /* Le seul endroit où le pourcentage apparaît : le détail du calcul, replié */
+    '<details class="lc-calc"><summary class="sa-label">Comment le total est calculé</summary><p>Valeur de votre sélection : ' + S.euro(t.v) + '. La location coûte ' + pctOf(st.dur) + ' % de cette valeur pour ' + d.label.toLowerCase() + (st.mode === "look" ? ", avec un minimum de 45 € par look." : ", avec un minimum de 45 € par pièce, et jamais plus que le look qui la contient.") + ' Elle ne dépasse jamais la moitié de la valeur.' + (t.extra ? ' Journée en plus : 5 % de la valeur.' : '') + '</p></details></aside></div>';
 }
 /* Le rendu garde la position de lecture et le focus : un clic ne doit jamais renvoyer en haut de page */
 function render() {
@@ -392,11 +407,11 @@ var barOpen = false;
 function barDetail() {
   var pk = st.pack ? packOf(st.pack) : null, t = totals(), d = durOf(st.dur);
   var row = function (a, x, m) { return '<div class="lc-recap__row' + (m ? " is-muted" : "") + '"><span>' + a + '</span><span>' + x + '</span></div>'; };
-  var thumbs = st.sel.map(function (id) { var l = LOOKS.filter(function (x) { return x.id === id; })[0]; var it = l || find(id); return '<div class="lt-d__item"><img src="' + (l ? l.photo : S.img(it, "a")) + '" alt=""><span>' + (l ? "Look « " + l.name + " »" : it.name) + '<small class="sa-mono">' + (l ? l.pieces.join(", ") : it.id) + '</small></span><span class="sa-mono">' + S.euro(Math.max(FLOOR, Math.round((l ? l.value : it.price) * d.pct) / 100)) + '</span></div>'; }).join("");
+  var thumbs = st.sel.map(function (id) { var l = LOOKS.filter(function (x) { return x.id === id; })[0]; var it = l || find(id); return '<div class="lt-d__item"><img src="' + (l ? l.photo : S.img(it, "a")) + '" alt=""><span>' + (l ? "Look « " + l.name + " »" : it.name) + '<small class="sa-mono">' + (l ? l.pieces.join(", ") : it.id) + '</small></span><span class="sa-mono">' + S.euro(l ? lookRent(l) : pieceRent(it)) + '</span></div>'; }).join("");
   return '<div class="lt-d" id="bar-detail"' + (barOpen ? '' : ' hidden') + '><div class="sa-wrap lt-d__in">' +
     '<div class="lt-d__col"><span class="sa-label">Votre sélection</span>' + (thumbs || '<p class="sa-muted" style="margin:0;font-size:14px">Aucun look ni pièce pour l’instant.</p>') + '</div>' +
     '<div class="lt-d__col">' + row("Formule", pk ? pk.name : "à choisir", !pk) + row("Dates", st.date ? "Du " + fmt(new Date(st.date + "T12:00")) + " au " + fmt(endDate()) : "à choisir", !st.date) +
-      row("Location " + d.label.toLowerCase() + " · " + pctOf(st.dur) + " %", st.sel.length ? S.euro(t.loc) : "–") + (t.extra ? row("Journée en plus", S.euro(t.extra)) : "") +
+      row("Location " + d.label.toLowerCase(), st.sel.length ? S.euro(t.loc) : "–") + (t.extra ? row("Journée en plus", S.euro(t.extra)) : "") +
       (st.opts.style ? row("Stylisme" + (pk && pk.style ? " (inclus)" : ""), S.euro(STYLE)) : "") + (st.opts.photo ? row("Photo de soirée" + (pk && pk.photo ? " (inclus)" : ""), S.euro(PHOTO)) : "") +
       row(st.delivery === "atelier" ? "Retrait à l'atelier" : "Coursier Paris", st.delivery === "atelier" ? "Offert" : "à confirmer", true) +
       '<div class="lc-recap__row lt-d__tot"><span>Total</span><span>' + (st.sel.length ? S.euro(t.total) : "–") + '</span></div>' +
