@@ -161,6 +161,9 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 
 ## Règles transverses
 
+**Décidé (17 novembre, remplace les prix précédents)** : prix de location = un forfait de 15 € par location (nettoyage et préparation), compté une fois quel que soit le nombre de pièces, plus 10 % de la valeur pour 3 jours, 20 % pour une semaine, 30 % pour deux semaines. Même calcul pour un look ou des pièces d'archive. Le minimum de 45 € est supprimé. Une location ne dépasse jamais la moitié de la valeur. Restent à décider : réserver le fonds Archives aux pièces d'au moins 150 € de valeur ; déduire la location du prix d'achat d'une pièce du Shop.
+
+
 ### FAQ (16 novembre)
 - **Décidé** : la colonne Aide du pied de page devient **FAQ**, avec les quatre questions les plus posées en liens directs. La page Aide devient « Questions fréquentes » (`aide.html`) : 10 thèmes (récoltes, acheter, tailles et mesures, état et authenticité, livraison, retours, location, pros, codes promo, contact), une question par ligne, chacune avec son ancre (`aide.html#q-retard`).
 - **Recherche** (marché du vintage et de la location) : les tailles sont la première cause de retour et de question ; viennent ensuite l'état réel des pièces, l'authenticité, la politique de retour et les frais d'envoi. En location : la caution non rendue, les frais de retard, les dommages et l'essayage sont les premiers motifs de plainte, souvent aggravés par un service client lent. Pour les sorties limitées : pièces vendues pendant le paiement, sentiment d'injustice. Sur la seconde main en général (Vinted, études de consommation) : l'hygiène et l'état arrivent en tête des freins, devant la taille, la confiance, les retours et la transparence des prix ; les litiges portent sur les articles non conformes (taille, couleur, odeur, défaut caché) et sur les frais de retour.

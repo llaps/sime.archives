@@ -221,16 +221,14 @@ var S = window.SimeArchives;
 var P = S.photos, find = S.find;
 /* ── Tarifs (cahier des charges) ── */
 var DUR = [
-  { id: "3j", label: "3 jours", pct: 15, note: "minimum" },
-  { id: "1s", label: "1 semaine", pct: 25, note: "" },
-  { id: "2s", label: "2 semaines", pct: 35, note: "vacances" },
+  { id: "3j", label: "3 jours", pct: 10, note: "minimum" },
+  { id: "1s", label: "1 semaine", pct: 20, note: "" },
+  { id: "2s", label: "2 semaines", pct: 30, note: "vacances" },
   { id: "pro", label: "Shoot pro · 1 jour", pct: 20, note: "shoot, clip, campagne" }
 ];
-var FLOOR = 45, STYLE = 250, PHOTO = 250; /* minimum d'un look : 45 € (16 novembre) */
-/* Pièce seule (fonds Archives, décidé le 16 novembre) : 20 % de la valeur pour 3 jours, jamais moins de 45 €. Semaine et deux semaines : +5 points, comme pour 3 jours. */
-var PIECE_PLUS = 5, PIECE_FLOOR = 45;
-function pctOf(id) { return durOf(id).pct + (st.mode === "piece" && id !== "pro" ? PIECE_PLUS : 0); }
-function floorOf() { return st.mode === "piece" ? PIECE_FLOOR : FLOOR; }
+var STYLE = 250, PHOTO = 250; /* prix de la maquette, à confirmer */
+/* Prix (17 novembre) : forfait de 15 € par location + 10 % / 20 % / 30 % de la valeur (3 jours, 1 semaine, 2 semaines), même calcul pour un look ou des pièces, plus de minimum */
+function pctOf(id) { return durOf(id).pct; }
 var PACKS = [
   { id: "look", name: "La location", tag: "", desc: "Pour un vernissage, un mariage, un voyage.", inc: ["Un look stylé par Lou-Ann, ou des pièces d'archive", "Nettoyage inclus", "Retrait à l'atelier ou coursier dans Paris"], off: ["Stylisme", "Photo de la soirée"], style: false, photo: false, durs: ["3j", "1s", "2s"] },
   { id: "style", name: "Location + stylisme", tag: "", desc: "Lou-Ann compose le look avec vous.", inc: ["Le look ou les pièces", "Séance de stylisme avec Lou-Ann", "Retouches d'ajustement"], off: ["Photo de la soirée"], style: true, photo: false, durs: ["3j", "1s", "2s"] },
@@ -260,14 +258,15 @@ function value() {
 }
 function durOf(id) { return DUR.filter(function (d) { return d.id === id; })[0]; }
 /* Jamais plus de la moitié de la valeur : une location coûte toujours moins que la pièce (sauf Shoot pro, sur devis) */
-function calcFor(v, pct, floor) { return st.dur === "pro" ? Math.max(floor, Math.round(v * pct) / 100) : S.rentPrice(v, pct, floor); }
-function lookRent(l) { return calcFor(l.value, durOf(st.dur).pct, FLOOR); }
+function calcFor(v, pct) { return S.rentPrice(v, pct); }
+function lookRent(l) { return calcFor(l.value, pctOf(st.dur)); }
 /* Une pièce seule ne coûte jamais plus que son look, à durée égale */
-function pieceRent(p) { var r = calcFor(p.price, durOf(st.dur).pct + (st.dur !== "pro" ? PIECE_PLUS : 0), PIECE_FLOOR), lk = LOOKS.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0]; return lk ? Math.min(r, lookRent(lk)) : r; }
+function pieceRent(p) { var r = calcFor(p.price, pctOf(st.dur)), lk = LOOKS.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0]; return lk ? Math.min(r, lookRent(lk)) : r; }
 /* Prix de la sélection pour une durée donnée, sans changer la durée choisie */
 function durPrice(id) { var keep = st.dur; st.dur = id; var r = rental(); st.dur = keep; return S.euro(r); }
-function rentCalc(v) { return calcFor(v, pctOf(st.dur), floorOf()); }
-function rental() { if (!st.sel.length) return 0; return st.sel.reduce(function (s, id) { var l = LOOKS.filter(function (x) { return x.id === id; })[0]; return s + (st.mode === "look" ? (l ? lookRent(l) : 0) : pieceRent(find(id))); }, 0); }
+function rentCalc(v) { return calcFor(v, pctOf(st.dur)); }
+/* Le forfait est compté une fois par location, quel que soit le nombre de looks ou de pièces */
+function rental() { if (!st.sel.length) return 0; return rentCalc(value()); }
 function packOf(id) { return PACKS.filter(function (p) { return p.id === id; })[0]; }
 function busy(item) { return st.date && item.busy && item.busy.indexOf(st.date) > -1; }
 /* Disponibilités liées : une pièce est prise si un look qui la contient l'est (et dans l'application de location, l'inverse aussi) */
@@ -275,7 +274,8 @@ function pieceBusy(p) { return LOOKS.some(function (l) { return l.pieces.indexOf
 
 function packCard(p) {
   var minDur = durOf(p.durs[0]);
-  var from = FLOOR + (p.style ? STYLE : 0) + (p.photo ? PHOTO : 0);
+  var keep = st.dur; st.dur = "3j"; var cheapest = Math.min.apply(null, LOOKS.map(lookRent).concat(PIECES.map(pieceRent))); st.dur = keep;
+  var from = cheapest + (p.style ? STYLE : 0) + (p.photo ? PHOTO : 0);
   return '<button class="lc-pack" role="radio" aria-checked="' + (st.pack === p.id) + '" data-pack="' + p.id + '">' + (p.tag ? '<span class="lc-pack__badge">' + p.tag + '</span>' : '') + '<span class="lc-pack__radio" aria-hidden="true"></span>' +
     /* Pas de pourcentage ici (17 novembre) : un prix en euros, le calcul détaillé n'apparaît qu'au récapitulatif */
     '<span class="sa-mono sa-muted">' + (p.id === "pro" ? "À LA JOURNÉE" : "DÈS 3 JOURS") + '</span><h3>' + p.name + '</h3><span style="font-size:13px;line-height:19px">' + p.desc + '</span>' +
@@ -308,7 +308,7 @@ function anyBusy() { return st.mode === "look" ? st.sel.some(function (id) { ret
 function toast(msg) { var t = document.querySelector(".sa-toast") || document.body.appendChild(Object.assign(document.createElement("div"), { className: "sa-toast", role: "status" })); t.textContent = msg; t.classList.add("is-on"); setTimeout(function () { t.classList.remove("is-on"); }, 2200); }
 var FAQ = S.accordion([
   { title: "Peut-on louer une seule pièce ?", html: "Oui. Les pièces du fonds Archives se louent seules ou dans leur look. Les pièces du Shop, qui sont à vendre, se louent seulement dans un look, tant qu’elles ne sont pas vendues." },
-  { title: "Comment est calculé le prix ?", html: "En pourcentage de la valeur estimée des pièces. Un look : 15 % pour 3 jours, 25 % pour une semaine, 35 % pour deux semaines, jamais moins de 45 €. Une pièce seule : 20 % pour 3 jours, 30 % pour une semaine, 40 % pour deux semaines, jamais moins de 45 €, et jamais plus que son look. Une location ne dépasse jamais la moitié de la valeur. Shoot pro : 20 % par jour." },
+  { title: "Comment est calculé le prix ?", html: "Un forfait de 15 € par location (nettoyage et préparation), plus un pourcentage de la valeur des pièces : 10 % pour 3 jours, 20 % pour une semaine, 30 % pour deux semaines. Le forfait est compté une fois, quel que soit le nombre de pièces. Une location ne dépasse jamais la moitié de la valeur des pièces. Shoot pro : sur devis." },
   { title: "La caution", html: "Une empreinte bancaire du montant de la valeur, sans débit. Elle est libérée sous 48 h après le contrôle de la pièce." },
   { title: "Nettoyage et petits accrocs", html: "Le nettoyage est inclus. En cas de dommage, un devis de réparation est fait avant toute retenue." },
   { title: "Les photos de la soirée", html: "8 photos retouchées livrées. Simé garde les droits et peut les publier." }
@@ -379,7 +379,7 @@ function body(i) {
     row("Dates", st.date ? "Du " + fmt(new Date(st.date + "T12:00")) + " au " + fmt(endDate()) : "à choisir", !st.date) + '</div>' +
     '<div class="lc-recap__total">' + row("Total", S.euro(t.total)) + '<p class="lc-recap__warn is-on" style="margin:0">Caution : empreinte bancaire de ' + S.euro(t.v) + ', sans débit, libérée sous 48 h après le retour.</p></div>' +
     /* Le seul endroit où le pourcentage apparaît : le détail du calcul, replié */
-    '<details class="lc-calc"><summary class="sa-label">Comment le total est calculé</summary><p>Valeur de votre sélection : ' + S.euro(t.v) + '. La location coûte ' + pctOf(st.dur) + ' % de cette valeur pour ' + d.label.toLowerCase() + (st.mode === "look" ? ", avec un minimum de 45 € par look." : ", avec un minimum de 45 € par pièce, et jamais plus que le look qui la contient.") + ' Elle ne dépasse jamais la moitié de la valeur.' + (t.extra ? ' Journée en plus : 5 % de la valeur.' : '') + '</p></details></aside></div>';
+    '<details class="lc-calc"><summary class="sa-label">Comment le total est calculé</summary><p>Valeur de votre sélection : ' + S.euro(t.v) + '. La location coûte un forfait de 15 € (nettoyage et préparation), compté une fois, plus ' + pctOf(st.dur) + ' % de cette valeur pour ' + d.label.toLowerCase() + '. Elle ne dépasse jamais la moitié de la valeur.' + (t.extra ? ' Journée en plus : 5 % de la valeur.' : '') + '</p></details></aside></div>';
 }
 /* Le rendu garde la position de lecture et le focus : un clic ne doit jamais renvoyer en haut de page */
 function render() {

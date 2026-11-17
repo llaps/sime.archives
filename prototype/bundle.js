@@ -430,17 +430,17 @@
 
   /* ── Location : looks à louer et fonds Archives ─────────────── */
   /* Retrait automatique : dès qu'une pièce d'un look est vendue, le look sort de la location jusqu'à ce que Lou-Ann le recompose. */
-  /* Règle (16 novembre) : une location coûte toujours moins que la valeur des pièces. Le minimum s'applique, sans jamais dépasser la moitié de la valeur. */
-  function rentPrice(v, pct, floor) { return Math.min(Math.max(floor, Math.round(v * pct) / 100), Math.round(v * 50) / 100); }
-  /* Look : 15 % pour 3 jours, 45 € minimum (16 novembre) */
-  function lookPrice(l) { var v = l.pieces.reduce(function (s, id) { var q = find(id); return s + (q ? q.price : 0); }, 0); return rentPrice(v, 15, 45); }
+  /* Prix de location (17 novembre) : un forfait de 15 € par location (nettoyage, préparation), plus 10 % de la valeur pour 3 jours,
+     20 % pour une semaine, 30 % pour deux semaines. Plus de minimum. Une location ne dépasse jamais la moitié de la valeur. */
+  var RENT_FEE = 15;
+  function rentPrice(v, pct) { return Math.min(RENT_FEE + Math.round(v * pct) / 100, Math.round(v * 50) / 100); }
+  function lookPrice(l) { var v = l.pieces.reduce(function (s, id) { var q = find(id); return s + (q ? q.price : 0); }, 0); return rentPrice(v, 10); }
   function lookAvailable(l) { return !!l && l.pieces.every(function (id) { return !find(id).sold; }); }
   function rentLooks() { return looks.filter(lookAvailable); }
   /* Fonds Archives : pièces classées Archive au back office. Elles ne se vendent pas et se louent seules ou dans leur look. */
   function archivePieces() { return products.filter(function (p) { return p.tier === "Archive"; }); }
-  /* Prix d'une pièce seule : 20 % de sa valeur pour 3 jours, jamais moins de 45 € */
-  /* Une pièce seule ne coûte jamais plus que le look qui la contient (16 novembre) */
-  function piecePrice(p) { var r = rentPrice(p.price, 20, 45), lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0]; return lk ? Math.min(r, lookPrice(lk)) : r; }
+  /* Pièce seule : même calcul que le look. Elle ne coûte donc jamais plus que le look qui la contient (garde-fou conservé). */
+  function piecePrice(p) { var r = rentPrice(p.price, 10), lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0]; return lk ? Math.min(r, lookPrice(lk)) : r; }
   function lookNo(l) { return "LOOK " + l.id.slice(1).padStart(2, "0"); }
 
   /* Carte de look : photo du look porté, pièces qui le composent (vers leur page d'archive), prix des 3 jours */
