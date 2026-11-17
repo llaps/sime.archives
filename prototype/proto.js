@@ -88,7 +88,7 @@
     ["drop.html", "Page récolte", "Deux statuts : avant la récolte, récolte ouverte"],
     ["shop.html", "Shop", "Filtres, tri, colonnes, ajout rapide au panier"],
     ["piece.html#SA-001", "Fiche produit", "Photos, mesures, panier, fiche d’archive, recommandations"],
-    ["archives.html", "Archives à louer", "Les looks et les pièces du fonds Archives, à louer à Paris"],
+    ["archives.html", "Archives à louer", "Les looks et les pièces à louer seules, à Paris"],
     ["location.html", "Tarifs et options", "Le tunnel de réservation, de la formule au récapitulatif"],
     ["apropos.html", "À propos", "L’histoire de Simé"],
     ["aide.html", "Questions fréquentes", "Récoltes, achat, tailles, état, livraison, retours, location, pros"]

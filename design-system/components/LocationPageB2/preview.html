@@ -230,10 +230,10 @@ var STYLE = 250, PHOTO = 250; /* prix de la maquette, à confirmer */
 /* Prix (17 novembre) : forfait par location + pourcentage de la valeur : 20 € + 10 % (3 jours), 25 € + 20 % (1 semaine), 30 € + 30 % (2 semaines). Même calcul pour un look ou des pièces, plus de minimum */
 function pctOf(id) { return durOf(id).pct; }
 var PACKS = [
-  { id: "look", name: "La location", tag: "", desc: "Pour un vernissage, un mariage, un voyage.", inc: ["Un look stylé par Lou-Ann, ou des pièces d'archive", "Nettoyage inclus", "Retrait à l'atelier ou coursier dans Paris"], off: ["Stylisme", "Photo de la soirée"], style: false, photo: false, durs: ["3j", "1s", "2s"] },
+  { id: "look", name: "La location", tag: "", desc: "Pour un vernissage, un mariage, un voyage.", inc: ["Un look stylé par Lou-Ann, ou des pièces seules", "Nettoyage inclus", "Retrait à l'atelier ou coursier dans Paris"], off: ["Stylisme", "Photo de la soirée"], style: false, photo: false, durs: ["3j", "1s", "2s"] },
   { id: "style", name: "Location + stylisme", tag: "", desc: "Lou-Ann compose le look avec vous.", inc: ["Le look ou les pièces", "Séance de stylisme avec Lou-Ann", "Retouches d'ajustement"], off: ["Photo de la soirée"], style: true, photo: false, durs: ["3j", "1s", "2s"] },
   { id: "soiree", name: "Soirée complète", tag: "Le plus complet", desc: "La location, le stylisme et Laury photographie votre soirée.", inc: ["Le look ou les pièces", "Stylisme avec Lou-Ann", "Photo par Laury, 2 à 3 h", "8 photos retouchées"], off: [], style: true, photo: true, durs: ["3j", "1s", "2s"] },
-  { id: "pro", name: "Shoot pro", tag: "Stylistes, marques", desc: "Pour un éditorial, une campagne, un clip.", inc: ["Looks et pièces d'archive, à la journée", "Devis possible pour plusieurs jours"], off: [], style: false, photo: false, durs: ["pro"] }
+  { id: "pro", name: "Shoot pro", tag: "Stylistes, marques", desc: "Pour un éditorial, une campagne, un clip.", inc: ["Looks et pièces seules, à la journée", "Devis possible pour plusieurs jours"], off: [], style: false, photo: false, durs: ["pro"] }
 ];
 var LOOKS = [
   { id: "L1", name: "Nylon et voile", photo: P.look1, pieces: ["SA-001", "SA-002", "SA-013", "SA-003", "SA-004"], busy: [] },
@@ -247,8 +247,8 @@ var LOOKS = [
 /* Retrait automatique : un look dont une pièce est vendue sort de la location (voir S.lookAvailable) */
 LOOKS = LOOKS.filter(function (l) { return S.lookAvailable(S.looks.filter(function (x) { return x.id === l.id; })[0]); });
 LOOKS.forEach(function (l) { l.value = l.pieces.reduce(function (s, id) { return s + find(id).price; }, 0); });
-/* Pièces à l'unité : uniquement le fonds Archives (classées Archive au back office, jamais en vente) */
-var PIECES = S.archivePieces().filter(function (p) { return !p.sold; });
+/* Pièces à l'unité : toute pièce d'au moins 100 € de valeur, au Shop (non vendue) comme aux Archives (17 novembre) */
+var PIECES = S.soloPieces();
 
 var st = { pack: "soiree", mode: "look", sel: ["L1"], dur: "3j", date: "", opts: { style: true, photo: true, extra: false }, delivery: "atelier" };
 
@@ -287,7 +287,7 @@ function itemCard(it, isLook) {
   var on = st.sel.indexOf(it.id) > -1, b = isLook ? busy(it) : pieceBusy(it), price = isLook ? lookRent(it) : pieceRent(it);
   var img = isLook ? it.photo : S.img(it, "a"), name = isLook ? it.name : it.name, sub = isLook ? it.pieces.length + " pièces · " + it.pieces.join(", ") : it.id + " · " + it.size;
   return '<button class="lc-item" data-item="' + it.id + '" aria-pressed="' + on + '"' + (b ? ' aria-disabled="true"' : '') + '><span class="lc-item__img"><img src="' + img + '" alt="' + name + '"><span class="lc-item__check" aria-hidden="true">' + (on ? "✓" : "+") + '</span>' +
-    '<span class="lc-item__avail' + (b ? ' is-busy' : '') + '">' + (b ? "Pris à ces dates" : (isLook ? find(it.pieces[0]).drop : "Fonds Archives")) + '</span></span>' +
+    '<span class="lc-item__avail' + (b ? ' is-busy' : '') + '">' + (b ? "Pris à ces dates" : (isLook ? find(it.pieces[0]).drop : (it.tier === "Archive" ? "Fonds Archives" : "Shop"))) + '</span></span>' +
     '<h3>' + name + '</h3><span class="lc-item__meta"><span>' + sub + '</span></span><span class="lc-item__meta"><span>Valeur ' + S.euro(isLook ? it.value : it.price) + '</span><span style="color:var(--ink)">' + S.euro(price) + '</span></span></button>';
 }
 
@@ -307,7 +307,7 @@ function selLabel() { return st.sel.length ? (st.mode === "look" ? st.sel.length
 function anyBusy() { return st.mode === "look" ? st.sel.some(function (id) { return busy(LOOKS.filter(function (x) { return x.id === id; })[0]); }) : st.sel.some(function (id) { return pieceBusy(find(id)); }); }
 function toast(msg) { var t = document.querySelector(".sa-toast") || document.body.appendChild(Object.assign(document.createElement("div"), { className: "sa-toast", role: "status" })); t.textContent = msg; t.classList.add("is-on"); setTimeout(function () { t.classList.remove("is-on"); }, 2200); }
 var FAQ = S.accordion([
-  { title: "Peut-on louer une seule pièce ?", html: "Oui. Les pièces du fonds Archives d’au moins 150 € de valeur se louent seules ou dans leur look. Les autres se louent dans leur look. Les pièces du Shop, qui sont à vendre, se louent seulement dans un look, tant qu’elles ne sont pas vendues." },
+  { title: "Peut-on louer une seule pièce ?", html: "Oui, toute pièce d’au moins 100 € de valeur, au Shop comme aux Archives. En dessous, elle se loue dans son look, ou s’achète. Une pièce du Shop louée puis achetée : le prix de la location est déduit." },
   { title: "Comment est calculé le prix ?", html: "Un forfait par location (nettoyage et préparation), plus un pourcentage de la valeur des pièces : 20 € + 10 % pour 3 jours, 25 € + 20 % pour une semaine, 30 € + 30 % pour deux semaines. Le forfait est compté une fois, quel que soit le nombre de pièces. Une location ne dépasse jamais la moitié de la valeur des pièces. Shoot pro : sur devis." },
   { title: "La caution", html: "Une empreinte bancaire du montant de la valeur, sans débit. Elle est libérée sous 48 h après le contrôle de la pièce." },
   { title: "Nettoyage et petits accrocs", html: "Le nettoyage est inclus. En cas de dommage, un devis de réparation est fait avant toute retenue." },
@@ -321,7 +321,7 @@ var reached = 0;
 var NEXTS = ["Continuer avec cette formule", "Continuer vers les dates", "Continuer vers les à-côtés", "Voir le récapitulatif"];   /* dernière étape dépliée : les suivantes restent fermées tant que la cliente n'a pas validé */
 var SECS = [
   ["Votre formule", "Lisez les formules, comparez, choisissez. Rien n'est réservé tant que vous n'avez pas validé."],
-  ["Ce que vous portez", "Un look complet, tel que Lou-Ann l'a stylé pour le shoot, ou des pièces du fonds Archives, à l'unité."],
+  ["Ce que vous portez", "Un look complet, tel que Lou-Ann l'a stylé pour le shoot, ou des pièces seules (celles d'au moins 100 € de valeur)."],
   ["Vos dates", "La durée, puis le jour où vous passez la prendre. Simé vérifie la disponibilité tout de suite."],
   ["Les à-côtés", "Ce que votre formule inclut est déjà coché. Ajoutez ce que vous voulez."],
   ["Votre location", "Relisez : chaque partie au-dessus reste modifiable."]
@@ -357,7 +357,7 @@ function body(i) {
   if (i === 0) return '<div class="lc-packs" role="radiogroup" aria-label="Formules">' + PACKS.map(function (p) { return packCard(p).replace('</button>', '<span class="lc-pack__go">' + (st.pack === p.id ? "Formule sélectionnée" : "Sélectionner") + '</span></button>'); }).join("") + '</div>' +
     (reached === 0 ? nextBtn(0, st.pack ? "Continuer avec « " + pk.name + " »" : "Choisissez une formule", st.pack ? "Les formules restent affichées : vous pouvez changer d'avis à tout moment." : "Cliquez sur une carte pour la sélectionner.") : '');
   if (i === 1) { var items = st.mode === "look" ? LOOKS : PIECES;
-    return ('<div class="lc-seg" role="group" aria-label="Type de location"><button data-mode="look" aria-pressed="' + (st.mode === "look") + '">Un look complet</button><button data-mode="piece" aria-pressed="' + (st.mode === "piece") + '">Des pièces d\'archive</button></div>') + '<div class="lc-grid">' + items.map(function (it) { return itemCard(it, st.mode === "look"); }).join("") + '</div>' +
+    return ('<div class="lc-seg" role="group" aria-label="Type de location"><button data-mode="look" aria-pressed="' + (st.mode === "look") + '">Un look complet</button><button data-mode="piece" aria-pressed="' + (st.mode === "piece") + '">Des pièces seules</button></div>') + '<div class="lc-grid">' + items.map(function (it) { return itemCard(it, st.mode === "look"); }).join("") + '</div>' +
       (reached === 1 ? nextBtn(1, "Continuer vers les dates", st.sel.length ? "<b>" + selLabel() + "</b> sélectionné" + (st.sel.length > 1 ? "s" : "") + ". Prix affichés pour " + durOf(st.dur).label + "." : "Sélectionnez au moins un look ou une pièce.") : ''); }
   if (i === 2) { var b = anyBusy();
     return '<div class="lc-dates"><label class="sa-label">Début de la location<input type="date" id="date" min="2026-11-13" value="' + st.date + '"></label><div class="lc-chips" role="group" aria-label="Durée">' + DUR.map(function (d) { var ok = pk.durs.indexOf(d.id) > -1; return '<button class="lc-chip" data-dur="' + d.id + '" aria-pressed="' + (st.dur === d.id) + '"' + (ok ? "" : " disabled") + '><b>' + d.label + '</b><span>' + (st.sel.length && d.id !== "pro" ? durPrice(d.id) : d.note || "") + '</span></button>'; }).join("") + '</div></div>' +
@@ -467,7 +467,7 @@ root.addEventListener("change", function (e) {
 /* La barre de réservation s'efface quand on arrive sur le bloc pro : ce n'est plus le même parcours */
 (function () { var pro = document.getElementById("s-pro"); if (!pro || !("IntersectionObserver" in window)) return;
   new IntersectionObserver(function (es) { es.forEach(function (en) { document.body.classList.toggle("is-pro-view", en.isIntersecting); }); }, { threshold: 0.15 }).observe(pro); })();
-/* #piece=SA-001 : le look qui contient la pièce ; #seule=SA-005 : la pièce d'archive seule ; #pro=SA-001 : formule Shoot pro, pièce à l'unité */
+/* #piece=SA-001 : le look qui contient la pièce ; #seule=SA-005 : la pièce seule ; #pro=SA-001 : formule Shoot pro, pièce à l'unité */
 (function () { var m = (location.hash || "").match(/^#(piece|look|pro|seule)=([A-Za-z0-9-]+)$/); if (!m) return;
   if (m[1] === "seule") { st.pack = "look"; st.mode = "piece"; st.sel = [m[2]]; }
   else if (m[1] === "pro") { st.pack = "pro"; st.mode = "piece"; st.sel = [m[2]]; st.dur = "pro"; }

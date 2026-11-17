@@ -65,7 +65,7 @@
 
   /* Les pièces d'archive (tier « Archive », fonds Archives) ne se vendent pas : elles se louent uniquement.
      products = toutes les pièces (location, fiches) ; shopProducts = ce qui s'achète (Shop, récoltes, menus, filtres, recommandations). */
-  /* Looks de location (stylés par Lou-Ann). Tout le monde loue des looks complets, et les pièces du fonds Archives à l'unité (décidé le 16 novembre). */
+  /* Looks de location (stylés par Lou-Ann). Tout le monde loue des looks complets, et les pièces d'au moins 100 € à l'unité (17 novembre). */
   var looks = [
     { id: "L1", name: "Nylon et voile", photo: PH.look1, pieces: ["SA-001", "SA-002", "SA-013", "SA-003", "SA-004"] },
     { id: "L2", name: "Peau lainée et sequins", photo: PH.look4, pieces: ["SA-007", "SA-006"] },
@@ -438,10 +438,12 @@
   function lookAvailable(l) { return !!l && l.pieces.every(function (id) { return !find(id).sold; }); }
   function rentLooks() { return looks.filter(lookAvailable); }
   /* Fonds Archives : pièces classées Archive au back office. Elles ne se vendent pas et se louent seules ou dans leur look. */
-  /* Décidé le 17 novembre : seule une pièce d'archive d'au moins 150 € de valeur se loue seule. En dessous, elle se loue dans son look. */
-  var ARCHIVE_SOLO_MIN = 150;
-  function rentsAlone(p) { return p.tier === "Archive" && p.price >= ARCHIVE_SOLO_MIN; }
-  function archivePieces() { return products.filter(rentsAlone); }
+  /* Décidé le 17 novembre : toute pièce d'au moins 100 € de valeur se loue seule, au Shop (tant qu'elle n'est pas vendue) comme aux Archives.
+     En dessous de 100 €, elle se loue dans son look, ou s'achète. */
+  var SOLO_MIN = 100;
+  function rentsAlone(p) { return p.price >= SOLO_MIN && !p.sold; }
+  function archivePieces() { return products.filter(function (p) { return p.tier === "Archive"; }); }
+  function soloPieces() { return products.filter(rentsAlone); }
   /* Pièce seule : même calcul que le look. Elle ne coûte donc jamais plus que le look qui la contient (garde-fou conservé). */
   function piecePrice(p) { var r = rentPrice(p.price, 10, 20), lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0]; return lk ? Math.min(r, lookPrice(lk)) : r; }
   function lookNo(l) { return "LOOK " + l.id.slice(1).padStart(2, "0"); }
@@ -707,7 +709,7 @@
   window.SimeArchives = {
     products: products, shopProducts: shopProducts, looks: looks,
     lookFor: function (id) { return looks.filter(function (l) { return l.pieces.indexOf(id) > -1; })[0] || null; },
-    pieceViews: pieceViews, lookPrice: lookPrice, piecePrice: piecePrice, rentPrice: rentPrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, rentsAlone: rentsAlone, lookCard: lookCard, archiveCard: archiveCard, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
+    pieceViews: pieceViews, lookPrice: lookPrice, piecePrice: piecePrice, rentPrice: rentPrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, soloPieces: soloPieces, rentsAlone: rentsAlone, lookCard: lookCard, archiveCard: archiveCard, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
     button: button, announcementBar: announcementBar, header: header, logo: logo,
     productCard: productCard, listingToolbar: listingToolbar, filterDrawer: filterDrawer,
     cartDrawer: cartDrawer, dropCountdown: dropCountdown, editoQuote: editoQuote, noteLine: noteLine, inventoryLabel: inventoryLabel,

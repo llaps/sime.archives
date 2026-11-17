@@ -17,7 +17,7 @@
 <script>
 var S = window.SimeArchives;
 /* Retrait automatique : un look dont une pièce est vendue n'apparaît plus (essai : archives.html?vendu=SA-012) */
-var looks = S.rentLooks(), out = S.looks.length - looks.length, arch = S.archivePieces();
+var looks = S.rentLooks(), out = S.looks.length - looks.length, arch = S.soloPieces();
 document.getElementById("r").innerHTML = S.announcementBar() + S.header({ active: "location" }) +
   '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span><a href="#">Location & RP</a></span><span>Archives à louer</span></nav>' +
   '<div class="sa-plp-head"><div><span class="sa-mono sa-muted">FONDS ARCHIVES · LOCATION À PARIS</span><h1>Archives à louer</h1></div>' +
@@ -27,7 +27,7 @@ document.getElementById("r").innerHTML = S.announcementBar() + S.header({ active
     '<div data-panel="looks">' +
       (out ? '<p class="sa-mono sa-muted ar-note">' + out + ' look' + (out > 1 ? 's' : '') + ' en cours de recomposition.</p>' : '') +
       '<div class="sa-looks">' + looks.map(S.lookCard).join("") + '</div></div>' +
-    '<div data-panel="pieces" hidden><p class="sa-muted ar-note">Les pièces du fonds Archives ne se vendent pas. Elles se louent seules, ou dans le look stylé par Lou-Ann.</p>' +
+    '<div data-panel="pieces" hidden><p class="sa-muted ar-note">Toutes les pièces d’au moins 100 € se louent seules. Celles du fonds Archives ne se vendent pas ; celles du Shop peuvent aussi s’acheter, et la location est alors déduite.</p>' +
       '<div class="sa-grid" data-cols="4">' + arch.map(S.archiveCard).join("") + '</div></div>' +
   '</div>' +
   '<section class="sa-section sa-wrap"><span class="sa-mono sa-muted">COMMENT ÇA MARCHE</span><div class="ar-how" style="margin-top:var(--space-3)">' +
