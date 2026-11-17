@@ -19,6 +19,8 @@
     chemise: "photos/chemise-a.jpg", bottes: "photos/bottes-a.jpg",
     /* Photos du 17 novembre : gilet nylon, gilet peau lainée, jupe filet, jupe sequins */
     giletC: "photos/gilet-c.jpg", fourrureB: "photos/fourrure-b.jpg", fourrureC: "photos/fourrure-c.jpg", filet: "photos/jupe-filet-a.jpg", filetB: "photos/jupe-filet-b.jpg", tweedC: "photos/tweed-c.jpg",
+    /* Look Paille et daim (17 novembre) */
+    vesteBeige: "photos/veste-beige-a.jpg", topVoile: "photos/top-voile-a.jpg", daim: "photos/jupe-daim-a.jpg", pochette: "photos/ceinture-pochette-a.jpg", tongs: "photos/tongs-talon-a.jpg", tongsB: "photos/tongs-talon-b.jpg", look11: "photos/look-11.jpg",
     /* Shoot de novembre (looks 9 et 10) */
     robe: "photos/robe-mohair-a.jpg", robeB: "photos/robe-mohair-b.jpg", foulard: "photos/foulard-vichy-a.jpg", ceinture: "photos/sac-ceinture-a.jpg", ceintureB: "photos/sac-ceinture-b.jpg", bottesM: "photos/bottes-marron-a.jpg", bottesMB: "photos/bottes-marron-b.jpg", lin: "photos/veste-lin-a.jpg", linB: "photos/veste-lin-b.jpg", denim: "photos/jupe-denim-a.jpg", feutre: "photos/sac-feutre-a.jpg", feutreB: "photos/sac-feutre-b.jpg", tabi: "photos/sandales-a.jpg", look9: "photos/look-9.jpg", look10: "photos/look-10.jpg",
     panier: "photos/panier-a.jpg", panierB: "photos/panier-b.jpg"
@@ -48,7 +50,13 @@
     { id: "SA-018", with: ["SA-019", "SA-020", "SA-021"], brand: "À identifier", name: "Veste courte en lin à carreaux bleus, poches plaquées", era: "Années 90", eraLabel: "Années 90", type: "Veste", kind: "veste", material: "Lin", size: "M", price: 190, tone: "#3f6f9a", drop: "Récolte 04", tier: "Archive", city: "Paris", model: false, photos: [PH.lin, PH.linB, PH.look10] },
     { id: "SA-019", with: ["SA-018"], brand: "Sans marque", name: "Jupe longue évasée, denim brut", era: "Y2K", eraLabel: "Y2K", type: "Jupe", kind: "jupe", material: "Denim de coton", size: "38", price: 75, tone: "#2c3140", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.denim, PH.look10] },
     { id: "SA-020", with: ["SA-018"], brand: "Sans marque", name: "Cabas en laine feutrée, carreaux jaune et vert", era: "Contemporaine", eraLabel: "Contemporaine", type: "Accessoire", kind: "sac", material: "Laine feutrée", size: "TU", price: 95, tone: "#d9d24a", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.feutre, PH.feutreB, PH.look10] },
-    { id: "SA-021", with: ["SA-018"], brand: "Sans marque", name: "Sandales tabi à talon sculpté, crème", era: "Contemporaine", eraLabel: "Contemporaine", type: "Chaussures", kind: "chaussure", material: "Caoutchouc", size: "39", price: 65, tone: "#e6dfd0", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.tabi, PH.look10] }
+    { id: "SA-021", with: ["SA-018"], brand: "Sans marque", name: "Sandales tabi à talon sculpté, crème", era: "Contemporaine", eraLabel: "Contemporaine", type: "Chaussures", kind: "chaussure", material: "Caoutchouc", size: "39", price: 65, tone: "#e6dfd0", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.tabi, PH.look10] },
+    /* Look Paille et daim, même séance que le panier SA-012. Marques, tailles, prix et époques à confirmer. */
+    { id: "SA-022", with: ["SA-023", "SA-024", "SA-012"], brand: "Sans marque", name: "Veste courte à pressions, col tweed rapporté", era: "Y2K", eraLabel: "Y2K", type: "Veste", kind: "veste", material: "Sergé de coton, col en tweed", size: "M", price: 110, tone: "#cbbba4", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.vesteBeige, PH.look11] },
+    { id: "SA-023", with: ["SA-022"], brand: "Sans marque", name: "Top court froncé, voile crème superposé", era: "Y2K", eraLabel: "Y2K", type: "Haut", kind: "top", material: "Voile et tulle", size: "S", price: 45, tone: "#e8dcc6", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.topVoile, PH.look11] },
+    { id: "SA-024", with: ["SA-022", "SA-025"], brand: "Sans marque", name: "Jupe courte en daim brun", era: "Années 90", eraLabel: "Années 90", type: "Jupe", kind: "jupe", material: "Daim", size: "36", price: 85, tone: "#3b2620", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.daim, PH.look11] },
+    { id: "SA-025", with: ["SA-024"], brand: "Sans marque", name: "Ceinture à pochette, cuir brun", era: "Contemporaine", eraLabel: "Contemporaine", type: "Accessoire", kind: "sac", material: "Cuir", size: "TU", price: 40, tone: "#3a2a22", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.pochette, PH.look11] },
+    { id: "SA-026", with: ["SA-012"], brand: "Sans marque", name: "Tongs à talon carré, noir et crème", era: "Contemporaine", eraLabel: "Contemporaine", type: "Chaussures", kind: "chaussure", material: "Cuir", size: "38", price: 70, tone: "#1c1a18", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.tongs, PH.tongsB, PH.look11] }
   ];
 
   /* Les pièces d'archive (tier « Archive », fonds Archives) ne se vendent pas : elles se louent uniquement.
@@ -59,7 +67,7 @@
     { id: "L2", name: "Peau lainée et sequins", photo: PH.look4, pieces: ["SA-007", "SA-006"] },
     { id: "L3", name: "Mary Jane kaki", photo: PH.look2, pieces: ["SA-005", "SA-006"] },
     { id: "L4", name: "Plissé vert d'eau", photo: PH.look6, pieces: ["SA-010", "SA-011"] },
-    { id: "L5", name: "Panier paille", photo: PH.look8, pieces: ["SA-012"] },
+    { id: "L5", name: "Paille et daim", photo: PH.look11, pieces: ["SA-022", "SA-023", "SA-024", "SA-025", "SA-012", "SA-026"] },
     { id: "L6", name: "Mohair et vichy", photo: PH.look9, pieces: ["SA-014", "SA-015", "SA-016", "SA-017"] },
     { id: "L7", name: "Lin et denim", photo: PH.look10, pieces: ["SA-018", "SA-019", "SA-020", "SA-021"] }
   ];
