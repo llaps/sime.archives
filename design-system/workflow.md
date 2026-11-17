@@ -25,7 +25,7 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 - **En place** : barre d'annonce rotative qui reprend le message de la récolte.
 - **En place** : section « Nos éditos » sur l'accueil, alimentée automatiquement par les posts Instagram de shoot (app de flux Instagram, filtrée sur un hashtag maison, ex. #simeedito). Chaque photo ouvre son post dans un nouvel onglet.
 - **Bonnes pratiques** : produits identifiés dans les posts (Instagram Shopping relié à Shopify), lien en bio vers la récolte en cours et non vers l'accueil, paramètres UTM par post pour savoir ce qui vend.
-- **À valider** : une page d'atterrissage dédiée par récolte, plutôt que l'accueil.
+- **Décidé (17 novembre)** : une page d'arrivée par récolte : la page récolte ouverte est mise à jour chaque mois, pour chaque récolte.
 - **Indicateur** : taux de clic Instagram vers le site, ventes attribuées à Instagram.
 
 ### W-02 · Arrivée sur l'accueil
@@ -39,7 +39,7 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 - **La cliente** laisse son e-mail pour accéder à la récolte une heure avant.
 - **En place** : champ unique dans DropCountdown, confirmation en mono.
 - **Bonnes pratiques** : un seul champ, consentement explicite (RGPD), e-mail de confirmation immédiat, rappel automatique la veille et à H-1, lien d'accès personnel plutôt qu'un mot de passe partagé.
-- **À valider** : ajouter le numéro de téléphone en option pour un rappel SMS.
+- **Décidé (17 novembre)** : rappel par SMS seulement s'il ne coûte rien ; sinon, l'e-mail reste le seul canal (les SMS sont en général facturés à l'envoi).
 - **Indicateur** : inscrits par récolte, taux d'ouverture du rappel H-1.
 
 ### W-04 · Ouverture de la récolte
@@ -55,14 +55,14 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 - **La cliente** parcourt, filtre, compare.
 - **En place** : ShopPage, ListingToolbar (filtrer, trier, 2 / 3 / 4 colonnes), FilterDrawer (type, marque, époque, matière, disponibilité), encart éditorial.
 - **Bonnes pratiques** : filtres alimentés par les fiches produit (voir FilterDrawer), filtres actifs visibles et retirables un par un, nombre de résultats affiché, tri « Nouveautés » par défaut pendant une récolte, taille indiquée sur la vignette (une pièce = une taille).
-- **À valider** : un filtre « Ma taille » mémorisé, puisque chaque pièce est unique.
+- **Décidé (17 novembre)** : pas de filtre « Ma taille ».
 - **Indicateur** : taux de clic vers une fiche produit, usage des filtres.
 
 ### W-06 · Vignette produit
 - **La cliente** juge la pièce en un regard.
 - **En place** : ProductCard. Première vue en gros plan sur la pièce, look complet au survol, ajout rapide, favoris, numéro d'archive et époque.
 - **Bonnes pratiques** : deux vues minimum, prix toujours visible, état « Vendue » clair, ajout rapide sans quitter la liste.
-- **À valider** : afficher l'état de la pièce (Très bon, Bon) dès la vignette.
+- **Décidé (17 novembre)** : l'état de la pièce s'affiche dès la vignette (« État : très bon »). Champ `condition` des données, « Très bon » par défaut, à saisir au back office.
 - **Indicateur** : ajouts au panier depuis la liste.
 
 ### W-07 · Fiche produit
@@ -79,7 +79,7 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 - **En place** : CartDrawer en tiroir, réservation 15 min, code promo replié.
 - **Bonnes pratiques** : coût de livraison estimé avant le paiement (c'est la première cause d'abandon), seuil de livraison offerte affiché, suggestion « Complète le look » limitée à 2 ou 3 pièces, réservation réelle côté stock et pas seulement affichée.
 - **Décidé (13 novembre)** : les pièces achetées s'expédient dans toute la France, Outre-mer compris. La location reste à Paris (retrait à l'atelier ou coursier) pour commencer.
-- **À valider** : montant du seuil de livraison offerte, durée de réservation.
+- **Décidé (17 novembre)** : pas de livraison offerte ni de réservation au paiement. La livraison est facturée au coût réel : coursier moyen dans Paris, La Poste ailleurs en France et en Outre-mer. Les taxes de l'Outre-mer (octroi de mer) sont dites dans la FAQ.
 - **Indicateur** : taux d'abandon panier, panier moyen.
 
 ### W-09 · Paiement (Shopify Checkout)
@@ -102,7 +102,7 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 - **En place** : ArchivesPage (`archives.html`), la vitrine de la location. Onglets Looks (par défaut) et Pièces (fonds Archives, avec leur prix pour 3 jours), « Comment ça marche » en 3 étapes, bloc Pros. La porte Location de l'accueil et « Louer un look » y mènent.
 - **Décidé (17 novembre)** : plus de page d'archive séparée. Chaque pièce, en vente ou en location, n'a qu'une page : sa fiche produit, avec la fiche d'archive en chapitres en bas. Les cartes de looks et de pièces de la vitrine y mènent.
 - **En place** : LocationPage, une seule page en 4 étapes (pack, looks ou pièces, dates, options) avec récapitulatif fixe à droite (barre en bas sur mobile).
-- **À valider** : trois versions de la page, avec une préférence de Laury pour LocationPageB (12 novembre). LocationPage (tout sur une page, archivée le 12 novembre dans le groupe Archives), LocationPageB (pas à pas, une étape à la fois, total et bouton Continuer fixés en bas), LocationPageC (le look d'abord : grille des looks, puis durée, date, stylisme ou photo et retrait dans un panneau latéral).
+- **Décidé (17 novembre)** : LocationPageB2 est la version retenue du tunnel (une page, les étapes s'ouvrent l'une sous l'autre). LocationPage, LocationPageB et LocationPageC restent dans le design system pour mémoire.
 - **Indicateur** : visites Location issues d'une fiche produit.
 
 ### L-02 · Choisir un look
@@ -110,10 +110,10 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 - **Décidé (16 novembre, remplace la règle du 13)** : tout le monde loue les looks complets et les pièces du fonds Archives à l'unité. Seules les pièces classées Archive au back office (jamais en vente) se louent seules ; une pièce du Shop se loue seulement dans son look. Prix d'une pièce seule : 20 % de sa valeur pour 3 jours, 45 € minimum (semaine 30 %, deux semaines 40 %). Les pros gardent la formule Shoot pro, sur devis. Dit dans le tunnel (étape « Ce que vous portez »), dans la FAQ de la page location et dans la page Questions fréquentes.
 - **Vigilance** : disponibilités liées. Une pièce louée seule rend son look indisponible à ces dates, et inversement. L'application de location dans Shopify doit gérer ce lien.
 - **Décidé (16 novembre)** : semaine 30 % et deux semaines 40 % pour une pièce seule. Une location coûte toujours moins que la valeur des pièces : le minimum (30 € pour un look, 45 € pour une pièce) ne dépasse jamais la moitié de la valeur.
-- **À valider** : à la location, une pièce seule peut coûter plus cher que le look qui la contient (Mary Jane SA-005 seule : 45 € ; look « Mary Jane kaki » : 30 €).
+- **Décidé (17 novembre)** : un look coûte au moins 45 € (au lieu de 30 €). Une pièce seule ne coûte jamais plus que le look qui la contient, à durée égale : son prix est plafonné au prix du look.
 - **En place** : grille des looks du shoot, sélection, prix pour la durée choisie, tag de récolte ou « Pris à ces dates ». La bascule « Un look complet » / « Des pièces à l'unité » n'apparaît qu'avec la formule Shoot pro. Depuis une fiche produit, « Louer le look » ouvre le tunnel avec le look de la pièce sélectionné ; « Une demande pro ? Louer cette pièce seule » ouvre la formule Shoot pro avec la pièce.
 - **Décidé (16 novembre) · retrait automatique** : dès qu'une pièce d'un look est vendue, le look entier sort de la location (vitrine et tunnel) jusqu'à ce que Lou-Ann le recompose. Dans Shopify : stock de la pièce à zéro, looks masqués. Dans le prototype : `archives.html?vendu=SA-012` simule la vente.
-- **À valider** : retirer tout le look (en place) ou seulement la pièce, avec la mention « pièce remplacée au retrait ».
+- **Décidé (17 novembre)** : quand une pièce d'un look est vendue, tout le look sort de la location (en place).
 
 ### L-03 · Dates et formule
 - **Bonnes pratiques** : calendrier de disponibilité en direct (The Dress Rental App prévue), prix calculé tout de suite (15 %, 25 %, 35 %, 20 % shoot pro, plancher 30 €), caution et frais de nettoyage annoncés avant la validation.
@@ -123,7 +123,7 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 ### L-04 · Options stylisme et photo
 - **Bonnes pratiques** : options en cases à cocher avec prix, exemple de rendu photo, droits d'image dits clairement (Simé garde les droits et peut publier).
 - **En place** : 4 packs (Le look, Look + stylisme, Soirée complète, Shoot pro) ; les services inclus sont cochés et verrouillés, les autres en options (stylisme, photo, journée en plus) ; retrait à l'atelier ou coursier dans Paris.
-- **À valider** : prix réels du stylisme et de la photo (250 € en exemple), tarif du coursier dans Paris.
+- **À valider** : prix réels du stylisme et de la photo (250 € chacun dans la maquette) et tarif moyen du coursier dans Paris. Ce sont les montants affichés dans le tunnel.
 
 ### L-05 · Demande pro (stylistes, artistes, marques)
 - **Bonnes pratiques** : formulaire court (projet, dates, looks, budget), réponse promise sous 48 h, crédit « RP : @sime.archives » rappelé.
@@ -156,16 +156,20 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 
 **Décidé (13 novembre) · numéro d'archive, pour le back office** : format `SA-###` (SA pour Simé Archives, puis 3 chiffres). Le numéro est attribué à la saisie B-02, dans l'ordre d'entrée à l'inventaire. Il ne change jamais et n'est jamais réutilisé, même après la vente ou la suppression d'une pièce (SA-008 et SA-009, retirées le 13 novembre, restent vacants). Il ne dépend pas de la récolte. Il sert de référence (SKU) dans Shopify et figure sur l'étiquette d'inventaire, la vignette, la fiche, la fiche d'archive et la carte QR du colis. L'année d'entrée et le fonds (Shop ou Archives) sont des champs de la fiche, pas des parties du numéro.
 
-**À valider** : la liste de contrôle B-05 bloque-t-elle la publication (aucune pièce sans marque, sans mesures ou sans gros plan) ?
+**Décidé (17 novembre)** : la liste de contrôle B-05 ne bloque pas la publication. Le back office affiche une alerte sur chaque champ non rempli (marque, mesures, gros plan).
 
 ## Règles transverses
 
 ### FAQ (16 novembre)
 - **Décidé** : la colonne Aide du pied de page devient **FAQ**, avec les quatre questions les plus posées en liens directs. La page Aide devient « Questions fréquentes » (`aide.html`) : 10 thèmes (récoltes, acheter, tailles et mesures, état et authenticité, livraison, retours, location, pros, codes promo, contact), une question par ligne, chacune avec son ancre (`aide.html#q-retard`).
 - **Recherche** (marché du vintage et de la location) : les tailles sont la première cause de retour et de question ; viennent ensuite l'état réel des pièces, l'authenticité, la politique de retour et les frais d'envoi. En location : la caution non rendue, les frais de retard, les dommages et l'essayage sont les premiers motifs de plainte, souvent aggravés par un service client lent. Pour les sorties limitées : pièces vendues pendant le paiement, sentiment d'injustice. Sur la seconde main en général (Vinted, études de consommation) : l'hygiène et l'état arrivent en tête des freins, devant la taille, la confiance, les retours et la transparence des prix ; les litiges portent sur les articles non conformes (taille, couleur, odeur, défaut caché) et sur les frais de retour.
-- **À valider** : moyens de paiement et paiement en plusieurs fois (bonne pratique, pas encore décidé), délai de 48 h pour signaler une pièce non conforme, essayage au retrait à l'atelier, nettoyage des pièces et des chaussures, retour à la charge de la cliente en cas de changement d'avis, critères de prix, frais de retard à 5 % par jour (repris de l'option « journée en plus »), taxes à la réception pour l'Outre-mer, rétractation sur la location (à vérifier avec un juriste).
+- **Décidé (17 novembre)** : réponses de la FAQ validées : moyens de paiement (carte, Apple Pay, Google Pay, PayPal) et paiement en plusieurs fois dès 150 €, 48 h pour signaler une pièce non conforme, retour à la charge de la cliente si elle change d'avis (pris en charge par Simé si la pièce n'est pas conforme), essayage au retrait à l'atelier, frais de retard à 5 % de la valeur par jour, critères de prix, taxes de l'Outre-mer. À vérifier par un juriste : la rétractation sur la location. À confirmer par l'équipe : la méthode de nettoyage décrite dans la FAQ.
 
 - **Accessibilité** : contrastes du système, navigation clavier, textes alternatifs. L'European Accessibility Act s'applique au e-commerce depuis juin 2025. Les micro-entreprises qui vendent des services en sont exemptées, mais on vise le même niveau.
 - **Performance** : images compressées, peu d'applis Shopify, chargement visé sous 2,5 s sur mobile.
 - **Confiance** : défauts montrés, mesures réelles, retours clairs, mentions légales et CGV de location accessibles depuis chaque étape de paiement.
 - **Mesure** : un tableau de bord simple par récolte (visites, inscrits, ventes en 1 h et en 48 h, panier moyen, abandon) pour décider de la prochaine itération.
+
+### Looks et données (17 novembre)
+- **Décidé** : la jupe madras portée sous le denim est une pièce à part (SA-027, look Lin et denim). Chaussettes et collants ne se vendent pas, pour une question d'hygiène. La mannequin des looks Mohair et vichy et Lin et denim est Morgane, 1,78 m, qui porte du S. Le classement vente ou location (SA-014 et SA-018 dans le fonds Archives) sera ajusté au back office.
+- **À faire** : une photo seule de la jupe filet SA-013 (faite) et de la jupe madras SA-027 ; un texte de fiche d'archive par pièce ; les données réelles (marques, tailles, prix, époques, état) par Vanina.
