@@ -57,9 +57,11 @@ document.getElementById("r").innerHTML =
     (p.tier === "Archive" ? '<span class="sa-pdp__unique">Pièce d’archive · elle ne se vend pas, elle se loue</span>' : '<span class="sa-pdp__unique">Pièce unique · une taille, une seule fois</span>') +
     '<div class="sa-pdp__actions">' + (function () {
       var lk = S.lookFor(p.id), rentLook = lk ? S.button("Louer le look · dès " + S.euro(S.lookPrice(lk)), { variant: p.tier === "Archive" ? "primary" : "secondary", block: true, action: "rent" }).replace("<button ", '<button data-look="' + lk.id + '" ') : "";
-      /* Fonds Archives : la pièce seule se loue (forfait de 15 € + 10 % de sa valeur pour 3 jours), au même niveau que son look. Pièce du Shop : elle se loue seulement dans son look. */
-      if (p.tier === "Archive") return S.button("Louer cette pièce · dès " + S.euro(S.piecePrice(p)), { block: true, action: "rent-one" }).replace("<button ", '<button data-id="' + p.id + '" ') + rentLook.replace("sa-btn--primary", "sa-btn--secondary");
-      return S.button("Ajouter au panier",{block:true,action:"add",id:p.id}) + (p.sold ? "" : rentLook);
+      /* Fonds Archives : la pièce seule se loue (forfait de 20 € + 10 % de sa valeur pour 3 jours), au même niveau que son look. Pièce du Shop : elle se loue seulement dans son look. */
+      if (S.rentsAlone(p)) return S.button("Louer cette pièce · dès " + S.euro(S.piecePrice(p)), { block: true, action: "rent-one" }).replace("<button ", '<button data-id="' + p.id + '" ') + rentLook.replace("sa-btn--primary", "sa-btn--secondary");
+      if (p.tier === "Archive") return rentLook; /* pièce d'archive de moins de 150 € : elle se loue seulement dans son look */
+      /* Louer puis acheter (17 novembre) : le prix de la location est déduit si la cliente achète ensuite la pièce */
+      return S.button("Ajouter au panier",{block:true,action:"add",id:p.id}) + (p.sold ? "" : rentLook + (lk ? '<p class="sa-mono sa-muted" style="margin:8px 0 0;font-size:11px;line-height:16px">Louée, puis adoptée ? Le prix de la location est déduit de son prix.</p>' : ""));
     })() + '</div>' +
     '<div>' + S.accordion([
       {title:"La pièce",open:true,html:(GILET ? "Gilet sans manches, col montant. Nylon, zip court, cordon de serrage à la taille." : p.name + ". " + p.material + ", " + p.era.toLowerCase() + ".")},

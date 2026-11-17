@@ -430,17 +430,20 @@
 
   /* ── Location : looks à louer et fonds Archives ─────────────── */
   /* Retrait automatique : dès qu'une pièce d'un look est vendue, le look sort de la location jusqu'à ce que Lou-Ann le recompose. */
-  /* Prix de location (17 novembre) : un forfait de 15 € par location (nettoyage, préparation), plus 10 % de la valeur pour 3 jours,
-     20 % pour une semaine, 30 % pour deux semaines. Plus de minimum. Une location ne dépasse jamais la moitié de la valeur. */
-  var RENT_FEE = 15;
-  function rentPrice(v, pct) { return Math.min(RENT_FEE + Math.round(v * pct) / 100, Math.round(v * 50) / 100); }
-  function lookPrice(l) { var v = l.pieces.reduce(function (s, id) { var q = find(id); return s + (q ? q.price : 0); }, 0); return rentPrice(v, 10); }
+  /* Prix de location (17 novembre) : un forfait par location (nettoyage, préparation) plus un pourcentage de la valeur :
+     20 € + 10 % pour 3 jours, 25 € + 20 % pour une semaine, 30 € + 30 % pour deux semaines. Plus de minimum.
+     Une location ne dépasse jamais la moitié de la valeur. Le prix affiché « dès X € » est celui de 3 jours. */
+  function rentPrice(v, pct, fee) { return Math.min((fee == null ? 20 : fee) + Math.round(v * pct) / 100, Math.round(v * 50) / 100); }
+  function lookPrice(l) { var v = l.pieces.reduce(function (s, id) { var q = find(id); return s + (q ? q.price : 0); }, 0); return rentPrice(v, 10, 20); }
   function lookAvailable(l) { return !!l && l.pieces.every(function (id) { return !find(id).sold; }); }
   function rentLooks() { return looks.filter(lookAvailable); }
   /* Fonds Archives : pièces classées Archive au back office. Elles ne se vendent pas et se louent seules ou dans leur look. */
-  function archivePieces() { return products.filter(function (p) { return p.tier === "Archive"; }); }
+  /* Décidé le 17 novembre : seule une pièce d'archive d'au moins 150 € de valeur se loue seule. En dessous, elle se loue dans son look. */
+  var ARCHIVE_SOLO_MIN = 150;
+  function rentsAlone(p) { return p.tier === "Archive" && p.price >= ARCHIVE_SOLO_MIN; }
+  function archivePieces() { return products.filter(rentsAlone); }
   /* Pièce seule : même calcul que le look. Elle ne coûte donc jamais plus que le look qui la contient (garde-fou conservé). */
-  function piecePrice(p) { var r = rentPrice(p.price, 10), lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0]; return lk ? Math.min(r, lookPrice(lk)) : r; }
+  function piecePrice(p) { var r = rentPrice(p.price, 10, 20), lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0]; return lk ? Math.min(r, lookPrice(lk)) : r; }
   function lookNo(l) { return "LOOK " + l.id.slice(1).padStart(2, "0"); }
 
   /* Carte de look : photo du look porté, pièces qui le composent (vers leur page d'archive), prix des 3 jours */
@@ -704,7 +707,7 @@
   window.SimeArchives = {
     products: products, shopProducts: shopProducts, looks: looks,
     lookFor: function (id) { return looks.filter(function (l) { return l.pieces.indexOf(id) > -1; })[0] || null; },
-    pieceViews: pieceViews, lookPrice: lookPrice, piecePrice: piecePrice, rentPrice: rentPrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, lookCard: lookCard, archiveCard: archiveCard, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
+    pieceViews: pieceViews, lookPrice: lookPrice, piecePrice: piecePrice, rentPrice: rentPrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, rentsAlone: rentsAlone, lookCard: lookCard, archiveCard: archiveCard, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
     button: button, announcementBar: announcementBar, header: header, logo: logo,
     productCard: productCard, listingToolbar: listingToolbar, filterDrawer: filterDrawer,
     cartDrawer: cartDrawer, dropCountdown: dropCountdown, editoQuote: editoQuote, noteLine: noteLine, inventoryLabel: inventoryLabel,
