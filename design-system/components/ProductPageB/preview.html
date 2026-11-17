@@ -35,8 +35,8 @@
 var S = window.SimeArchives;
 
 var p = S.find("SA-001");
-/* Vues : gros plan sur la pièce d'abord, puis le look complet, puis les autres photos du shoot */
-var V = [[p.photos[0],"La pièce"],[S.lookOf(p),"Le look"],[p.photos[1],"Portée"],[S.photos.look3,"Lookbook"],[S.photos.look5,"Lookbook"],[S.photos.look2,"Lookbook"]];
+/* Vues : les photos de la pièce, puis celles de son look. Aucune photo d'un autre look. */
+var V = S.pieceViews(p);
 document.getElementById("r").innerHTML =
   S.announcementBar() + S.header({active:"shop"}) +
   '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Shop</a><span>Hauts</span><span>'+p.id+'</span></nav></div>' +

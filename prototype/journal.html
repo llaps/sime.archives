@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Archive · Simé Archives</title><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="bundle.js"></script>
 <style>html,body{margin:0;background:var(--paper)} .sa-page{height:100vh;overflow-y:auto;overflow-x:hidden;position:relative}
-.jr-sheet{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4px;padding-top:8px;height:clamp(320px,52vh,480px)}
+.jr-sheet{display:grid;grid-template-columns:var(--cols,2fr 1fr 1fr 1fr);gap:4px;padding-top:8px;height:clamp(320px,52vh,480px)}
 .jr-sheet figure{margin:0;position:relative;background:var(--packshot,#fff);overflow:hidden}
 .jr-sheet img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 30%}
 .jr-sheet .is-main{grid-row:span 1}
@@ -16,9 +16,9 @@ var p = S.find(((location.hash || "").match(/SA-\d{3}/) || ["SA-001"])[0]);
 document.title = p.id + " · " + p.name + " · Simé Archives";
 var others = S.archivePieces().filter(function (q) { return q.id !== p.id; });
 document.getElementById("r").innerHTML = S.announcementBar() + S.header({ active: "location" }) +
-  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a><span><a href="#">Location & RP</a></span><span><a href="#">Archives à louer</a></span><span>' + p.id + '</span></nav></div>' +
+  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Accueil</a>' + (p.tier === "Archive" ? '<span><a href="#">Location & RP</a></span><span><a href="#">Archives à louer</a></span>' : '<span><a href="#">Shop</a></span><span><a href="#" data-piece="' + p.id + '">' + p.id + '</a></span>') + '<span>' + (p.tier === "Archive" ? p.id : "Fiche d’archive") + '</span></nav></div>' +
   /* Les visuels de la pièce, en planche contact, avant le texte */
-  '<section class="sa-wrap jr-sheet" aria-label="Photos de la pièce">' + [[p.photos[0], "La pièce, gros plan"], [p.photos[1], "Portée"], [S.lookOf(p), "Le look complet"], [S.photos.look3, "Lookbook"]].map(function (v, i) { return '<figure' + (i === 0 ? ' class="is-main"' : '') + '><img src="' + v[0] + '" alt="' + p.name + ', ' + v[1].toLowerCase() + '"><figcaption class="sa-mono">' + String(i + 1).padStart(2, "0") + ' · ' + v[1] + '</figcaption></figure>'; }).join("") + '</section>' +
+  '<section class="sa-wrap jr-sheet" style="--cols:2fr repeat(' + Math.max(1, S.pieceViews(p).length - 1) + ',1fr)" aria-label="Photos de la pièce">' + S.pieceViews(p).map(function (v, i) { return '<figure' + (i === 0 ? ' class="is-main"' : '') + '><img src="' + v[0] + '" alt="' + p.name + ', ' + v[1].toLowerCase() + '"><figcaption class="sa-mono">' + String(i + 1).padStart(2, "0") + ' · ' + v[1] + '</figcaption></figure>'; }).join("") + '</section>' +
   '<section class="sa-section sa-wrap" style="display:grid;justify-items:center;padding-top:40px">' + S.archiveChapters(p) + '</section>' +
   '<section class="sa-section sa-wrap">' + S.editoQuote() + '</section>' +
   /* En bas de page : louer la pièce seule (fonds Archives) ou son look */

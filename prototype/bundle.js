@@ -37,7 +37,7 @@
     { id: "SA-010", brand: "NA-KD", name: "Veste plissée vert d'eau", era: "Contemporaine", eraLabel: "Contemporaine", type: "Veste", kind: "veste", material: "Polyester plissé", size: "M", price: 75, tone: "#a9c4b0", drop: "Récolte 03", city: "Paris", photos: [PH.chemise, PH.look6] },
     { id: "SA-011", brand: "Vivienne Westwood", name: "Bottes Pirate à boucles, bout Animal, cuir noir", era: "Contemporaine", eraLabel: "Contemporaine", type: "Chaussures", kind: "chaussure", material: "Cuir", size: "40", price: 350, tone: "#1c1a18", drop: "Récolte 03", tier: "Archive", city: "Paris", photos: [PH.bottes, PH.look6] },
     { id: "SA-012", brand: "Sans marque", name: "Panier paille, anses bois, artisan de Guadeloupe", era: "Années 90", eraLabel: "Années 90", type: "Accessoire", kind: "sac", material: "Paille et bois", size: "TU", price: 68, tone: "#b49a5e", drop: "Récolte 02", city: "Guadeloupe", photos: [PH.panier, PH.panierB, PH.look8] },
-    { id: "SA-013", with: ["SA-002"], brand: "Sans marque", name: "Jupe filet bleue", era: "Années 90", eraLabel: "Années 90", type: "Jupe", kind: "jupe", material: "Filet", size: "36", price: 45, tone: "#9fb4c8", drop: "Récolte 04", city: "Paris", photos: [PH.voileB, PH.voile, PH.look5] },
+    { id: "SA-013", with: ["SA-002"], brand: "Sans marque", name: "Jupe filet bleue", era: "Années 90", eraLabel: "Années 90", type: "Jupe", kind: "jupe", material: "Filet", size: "36", price: 45, tone: "#9fb4c8", drop: "Récolte 04", city: "Paris", photos: [PH.look1, PH.look5] } /* pas encore de photo de la jupe seule : seulement son look */,
     /* Shoot de novembre : deux looks. Marques, tailles, prix et époques à confirmer par Vanina ; mannequin à renseigner (model: false masque la ligne mannequin). */
     { id: "SA-014", with: ["SA-016", "SA-017", "SA-015"], brand: "À identifier", name: "Robe courte sans manches, mohair écossais rouge", era: "Années 60", eraLabel: "Années 60", type: "Robe", kind: "jupe", material: "Mohair et laine", size: "36", price: 160, tone: "#c8302a", drop: "Récolte 04", tier: "Archive", city: "Paris", model: false, photos: [PH.robe, PH.robeB, PH.look9] },
     { id: "SA-015", with: ["SA-014"], brand: "Sans marque", name: "Foulard carré vichy gris et blanc", era: "Contemporaine", eraLabel: "Contemporaine", type: "Accessoire", kind: "sac", material: "Coton", size: "TU", price: 25, tone: "#b9b8b2", drop: "Récolte 04", city: "Paris", model: false, photos: [PH.foulard, PH.look9] },
@@ -82,6 +82,15 @@
   var GRAIN = "<filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .11 0 0 0 0 .1 0 0 0 0 .09 0 0 0 .14 0'/></filter>";
   function madras(id) {
     return "<pattern id='" + id + "' width='24' height='24' patternUnits='userSpaceOnUse'><rect width='24' height='24' fill='#b35a3c'/><rect width='24' height='6' fill='#e3e04a' opacity='.75'/><rect width='5' height='24' fill='#2a49b8' opacity='.55'/><rect y='14' width='24' height='2' fill='#1c1a18' opacity='.4'/><rect x='16' width='2' height='24' fill='#f2ede4' opacity='.5'/></pattern>";
+  }
+  /* Vues d'une pièce, sans mélange : d'abord ses propres photos, puis les photos de SON look uniquement */
+  function isLookPhoto(src) { for (var k in PH) if (/^look\d+$/.test(k) && PH[k] === src) return true; return false; }
+  function pieceViews(p) {
+    var own = (p.photos || []).filter(function (s) { return !isLookPhoto(s); });
+    var lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0];
+    var lookPh = [lk && lk.photo].concat((p.photos || []).filter(isLookPhoto)).filter(function (s, i, a) { return s && a.indexOf(s) === i; });
+    return own.map(function (s, i) { return [s, i === 0 ? "La pièce" : "Détail"]; })
+      .concat(lookPh.map(function (s) { return [s, "Le look" + (lk ? " · " + lk.name : "")]; }));
   }
   /* Vue de survol : toujours le look complet porté (dernière photo de la pièce) */
   function lookOf(p) { return p.photos && p.photos.length ? p.photos[p.photos.length - 1] : img(p, "b"); }
@@ -325,6 +334,7 @@
   /* Fiche d'archive, version B : tout est visible, en chapitres numérotés, avec un sommaire collant */
   function archiveChapters(p) {
     p = p || products[0];
+    if (p.id !== "SA-001") return archiveChaptersData(p);
     var ch = [["piece", "La pièce", "Ce que vous avez entre les mains"], ["histoire", "Son histoire", "La marque, l'époque, le contexte"], ["regard", "La touche Simé", "Comment la porter aujourd'hui"], ["plus", "Pour aller plus loin", "Sources et liens"]];
     var body = {
       piece: "<p class='sa-first'>Le premier détail, c'est le son. Un nylon gris, presque papier, qui froisse comme une enveloppe. Col montant, zip court, emmanchures nettes : un vêtement de pluie qui a perdu ses manches et gagné la ville.</p>" +
@@ -336,7 +346,7 @@
         if (!lk) return "";
         var others = lk.pieces.filter(function (id) { return id !== p.id; }).map(find);
         return "<div class='sa-sheet__look'><span class='sa-label'>Le look de Lou-Ann · " + esc(lk.name) + "</span>" +
-          "<div class='sa-sheet__look-grid'>" + others.map(function (q) { return "<a class='sa-sheet__look-item' href='#' data-piece='" + q.id + "'><img src='" + img(q, "a") + "' alt=''><span class='sa-mono sa-muted'>" + q.id + "</span><span>" + esc(q.name) + "</span></a>"; }).join("") + "</div>" +
+          "<div class='sa-sheet__look-grid'>" + others.map(function (q) { return "<a class='sa-sheet__look-item' href='#' " + (q.tier === "Archive" ? "data-archive" : "data-piece") + "='" + q.id + "'><img src='" + img(q, "a") + "' alt=''><span class='sa-mono sa-muted'>" + q.id + "</span><span>" + esc(q.name) + "</span></a>"; }).join("") + "</div>" +
           "<button class='sa-btn sa-btn--link' data-action='rent' data-look='" + lk.id + "'>Louer le look complet →</button></div>";
       })(),
       plus: "<p><a href='#'>Le défilé</a> · <a href='#'>Le lookbook</a> · <a href='#'>Une interview</a></p><p class='sa-mono sa-muted'>Texte d'exemple, à réécrire et sourcer par l'auteure. Images : photos Simé uniquement.</p>"
@@ -345,6 +355,26 @@
       "<header class='sa-chap__head'><div class='sa-sheet__kicker sa-label'><span>" + esc(p.brand) + "</span><span>" + esc(p.era) + "</span><span>" + p.id + "</span></div>" +
       "<h2 class='sa-sheet__title'>Le nylon qui voulait être une fourrure</h2><p class='sa-sheet__by'>Par <b>Vanina</b> · Paris, 12 novembre 2026 · <span class='sa-mono'>Lecture 3 min</span></p></header>" +
       "<nav class='sa-chap__toc' aria-label='Sommaire de la fiche'><ol>" + ch.map(function (c, i) { return "<li><a href='#ch-" + c[0] + "' data-chap='" + c[0] + "'" + (i === 0 ? " aria-current='true'" : "") + "><span class='sa-mono'>0" + (i + 1) + "</span><span><b>" + c[1] + "</b><small>" + c[2] + "</small></span></a></li>"; }).join("") + "</ol></nav>" +
+      "<div class='sa-chap__body sa-prose'>" + ch.map(function (c, i) { return "<section class='sa-chap__sec' id='ch-" + c[0] + "'><h3><span class='sa-mono sa-muted'>0" + (i + 1) + "</span> " + c[1] + "</h3>" + body[c[0]] + "</section>"; }).join("") + "</div></article>";
+  }
+
+  /* Fiche d'archive d'une pièce sans texte rédigé : uniquement ses données et SON look, rien emprunté à une autre pièce */
+  function archiveChaptersData(p) {
+    var lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0];
+    var others = lk ? lk.pieces.filter(function (id) { return id !== p.id; }).map(find) : [];
+    var ch = [["piece", "La pièce"], ["histoire", "Son histoire"], ["regard", "La touche Simé"]];
+    var body = {
+      piece: "<dl class='sa-specs'><dt>Type</dt><dd>" + esc(p.type) + "</dd><dt>Matière</dt><dd>" + esc(p.material) + "</dd><dt>Taille</dt><dd>" + esc(p.size) + "</dd><dt>Époque</dt><dd>" + esc(p.era) + "</dd><dt>Provenance</dt><dd>Trouvée par Vanina, " + esc(p.city) + "</dd></dl>",
+      histoire: "<p>" + (p.brand === "Sans marque" || p.brand === "À identifier" ? "Marque " + (p.brand === "Sans marque" ? "inconnue" : "en cours d'identification") : esc(p.brand)) + ", " + esc(p.era.toLowerCase()) + ". Le récit de la pièce est en cours d'écriture.</p>",
+      regard: lk ? "<p>Lou-Ann l'a stylée dans le look « " + esc(lk.name) + " »" + (others.length ? ", avec " + others.map(function (q) { return esc(q.name.split(",")[0].toLowerCase()) + " " + q.id; }).join(", ") : "") + ".</p>" +
+        "<div class='sa-sheet__look'><span class='sa-label'>Le look de Lou-Ann · " + esc(lk.name) + "</span>" +
+        (others.length ? "<div class='sa-sheet__look-grid'>" + others.map(function (q) { return "<a class='sa-sheet__look-item' href='#' " + (q.tier === "Archive" ? "data-archive" : "data-piece") + "='" + q.id + "'><img src='" + img(q, "a") + "' alt=''><span class='sa-mono sa-muted'>" + q.id + "</span><span>" + esc(q.name) + "</span></a>"; }).join("") + "</div>" : "") +
+        "<button class='sa-btn sa-btn--link' data-action='rent' data-look='" + lk.id + "'>Louer le look complet →</button></div>" : "<p>Pas encore stylée dans un look.</p>"
+    };
+    return "<article class='sa-chap' data-sa='chapters'>" +
+      "<header class='sa-chap__head'><div class='sa-sheet__kicker sa-label'><span>" + esc(p.brand) + "</span><span>" + esc(p.era) + "</span><span>" + p.id + "</span></div>" +
+      "<h2 class='sa-sheet__title'>" + esc(p.name) + "</h2></header>" +
+      "<nav class='sa-chap__toc' aria-label='Sommaire de la fiche'><ol>" + ch.map(function (c, i) { return "<li><a href='#ch-" + c[0] + "' data-chap='" + c[0] + "'" + (i === 0 ? " aria-current='true'" : "") + "><span class='sa-mono'>0" + (i + 1) + "</span><span>" + c[1] + "</span></a></li>"; }).join("") + "</ol></nav>" +
       "<div class='sa-chap__body sa-prose'>" + ch.map(function (c, i) { return "<section class='sa-chap__sec' id='ch-" + c[0] + "'><h3><span class='sa-mono sa-muted'>0" + (i + 1) + "</span> " + c[1] + "</h3>" + body[c[0]] + "</section>"; }).join("") + "</div></article>";
   }
 
@@ -400,7 +430,7 @@
     var n = l.pieces.length;
     return "<article class='sa-look'><a class='sa-look__img' href='#' data-action='rent' data-look='" + l.id + "' aria-label='Réserver le look " + esc(l.name) + "'><img src='" + l.photo + "' alt='" + esc(l.name) + ", le look porté' loading='lazy'></a>" +
       "<div class='sa-look__info'><span class='sa-mono sa-muted'>" + lookNo(l) + " · " + n + " PIÈCE" + (n > 1 ? "S" : "") + "</span><h3>" + esc(l.name) + "</h3>" +
-      "<ul class='sa-look__pieces'>" + l.pieces.map(function (id) { var q = find(id); return "<li><a href='#' data-archive='" + id + "'><span class='sa-mono sa-muted'>" + id + "</span><span>" + esc(q.name) + "</span></a></li>"; }).join("") + "</ul>" +
+      "<ul class='sa-look__pieces'>" + l.pieces.map(function (id) { var q = find(id); return "<li><a href='#' " + (q.tier === "Archive" ? "data-archive" : "data-piece") + "='" + id + "'><span class='sa-mono sa-muted'>" + id + "</span><span>" + esc(q.name) + "</span></a></li>"; }).join("") + "</ul>" +
       "<div class='sa-look__foot'><span>" + euro(lookPrice(l)) + " <span class='sa-muted'>les 3 jours</span></span><button class='sa-btn sa-btn--link' data-action='rent' data-look='" + l.id + "'>Réserver ce look</button></div></div></article>";
   }
   /* Carte d'archive : la pièce seule, vers sa page d'archive, avec son prix de location. Pas de panier : elle ne se vend pas. */
@@ -669,7 +699,7 @@
   window.SimeArchives = {
     products: products, shopProducts: shopProducts, looks: looks,
     lookFor: function (id) { return looks.filter(function (l) { return l.pieces.indexOf(id) > -1; })[0] || null; },
-    lookPrice: lookPrice, piecePrice: piecePrice, rentPrice: rentPrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, lookCard: lookCard, archiveCard: archiveCard, rentArchive: rentArchive, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
+    pieceViews: pieceViews, lookPrice: lookPrice, piecePrice: piecePrice, rentPrice: rentPrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, lookCard: lookCard, archiveCard: archiveCard, rentArchive: rentArchive, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
     button: button, announcementBar: announcementBar, header: header, logo: logo,
     productCard: productCard, listingToolbar: listingToolbar, filterDrawer: filterDrawer,
     cartDrawer: cartDrawer, dropCountdown: dropCountdown, editoQuote: editoQuote, noteLine: noteLine, inventoryLabel: inventoryLabel,

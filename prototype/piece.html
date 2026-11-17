@@ -35,11 +35,12 @@ var S = window.SimeArchives;
 
 var p = S.find((location.hash || "").replace("#", "")) || S.find("SA-001");
 var GILET = p.id === "SA-001";
-/* Vues : gros plan sur la pièce d'abord, puis le look complet, puis les autres photos du shoot */
-var V = [[p.photos[0],"La pièce"],[S.lookOf(p),"Le look"],[p.photos[1],"Portée"],[S.photos.look3,"Lookbook"],[S.photos.look5,"Lookbook"],[S.photos.look2,"Lookbook"]];
+/* Vues : les photos de la pièce, puis celles de son look. Aucune photo d'un autre look. */
+var V = S.pieceViews(p);
 document.getElementById("r").innerHTML =
-  S.announcementBar() + S.header({active:"shop"}) +
-  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane"><a href="#">Shop</a><span>' + p.type + '</span><span>'+p.id+'</span></nav></div>' +
+  S.announcementBar() + S.header({active: p.tier === "Archive" ? "location" : "shop"}) +
+  /* Fil d'Ariane : une pièce du fonds Archives vit dans la location, une pièce en vente dans le Shop */
+  '<div class="sa-wrap"><nav class="sa-crumbs" aria-label="Fil d’Ariane">' + (p.tier === "Archive" ? '<a href="#">Location & RP</a><span><a href="#">Archives à louer</a></span>' : '<a href="#">Shop</a><span>' + p.type + '</span>') + '<span>'+p.id+'</span></nav></div>' +
   '<div class="sa-pdpb"><div class="sa-pdpb__gallery" data-gallery>' +
     '<figure class="sa-pdpb__main" data-main><img src="'+V[0][0]+'" alt="'+p.name+', '+V[0][1].toLowerCase()+'">' +
       '<button class="sa-pdpb__nav sa-pdpb__nav--prev" data-go="-1" aria-label="Photo précédente">'+S.icon("arrow")+'</button>' +
