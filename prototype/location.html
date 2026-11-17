@@ -307,7 +307,7 @@ function anyBusy() { return st.mode === "look" ? st.sel.some(function (id) { ret
 function toast(msg) { var t = document.querySelector(".sa-toast") || document.body.appendChild(Object.assign(document.createElement("div"), { className: "sa-toast", role: "status" })); t.textContent = msg; t.classList.add("is-on"); setTimeout(function () { t.classList.remove("is-on"); }, 2200); }
 var FAQ = S.accordion([
   { title: "Peut-on louer une seule pièce ?", html: "Oui, toute pièce d’au moins 100 € de valeur, au Shop comme aux Archives. En dessous, elle se loue dans son look, ou s’achète. Une pièce du Shop louée puis achetée : le prix de la location est déduit." },
-  { title: "Comment est calculé le prix ?", html: "Un forfait par location (nettoyage et préparation), plus un pourcentage de la valeur des pièces : 20 € + 10 % pour 3 jours, 25 € + 20 % pour une semaine, 30 € + 30 % pour deux semaines. Le forfait est compté une fois, quel que soit le nombre de pièces. Une location ne dépasse jamais la moitié de la valeur des pièces. Shoot pro : sur devis." },
+  { title: "Comment est calculé le prix ?", html: "Un forfait par location (nettoyage et préparation), plus un pourcentage de la valeur des pièces : 20 € + 10 % pour 3 jours, 25 € + 20 % pour une semaine, 30 € + 30 % pour deux semaines. Le forfait est compté une fois, quel que soit le nombre de pièces. Une location coûte au moins 30 €, et ne dépasse pas la moitié de la valeur des pièces. Shoot pro : sur devis." },
   { title: "La caution", html: "Une empreinte bancaire du montant de la valeur, sans débit. Elle est libérée sous 48 h après le contrôle de la pièce." },
   { title: "Nettoyage et petits accrocs", html: "Le nettoyage est inclus. En cas de dommage, un devis de réparation est fait avant toute retenue." },
   { title: "Les photos de la soirée", html: "8 photos retouchées livrées. Simé garde les droits et peut les publier." }
@@ -378,7 +378,7 @@ function body(i) {
     row("Dates", st.date ? "Du " + fmt(new Date(st.date + "T12:00")) + " au " + fmt(endDate()) : "à choisir", !st.date) + '</div>' +
     '<div class="lc-recap__total">' + row("Total", S.euro(t.total)) + '<p class="lc-recap__warn is-on" style="margin:0">Caution : empreinte bancaire de ' + S.euro(t.v) + ', sans débit, libérée sous 48 h après le retour.</p></div>' +
     /* Le seul endroit où le pourcentage apparaît : le détail du calcul, replié */
-    '<details class="lc-calc"><summary class="sa-label">Comment le total est calculé</summary><p>Valeur de votre sélection : ' + S.euro(t.v) + '. La location coûte un forfait de ' + S.euro(d.fee) + ' (nettoyage et préparation), compté une fois, plus ' + pctOf(st.dur) + ' % de cette valeur pour ' + d.label.toLowerCase() + '. Elle ne dépasse jamais la moitié de la valeur.' + (t.extra ? ' Journée en plus : 5 % de la valeur.' : '') + '</p></details></aside></div>';
+    '<details class="lc-calc"><summary class="sa-label">Comment le total est calculé</summary><p>Valeur de votre sélection : ' + S.euro(t.v) + '. La location coûte un forfait de ' + S.euro(d.fee) + ' (nettoyage et préparation), compté une fois, plus ' + pctOf(st.dur) + ' % de cette valeur pour ' + d.label.toLowerCase() + '. Elle coûte au moins 30 €, et ne dépasse pas la moitié de la valeur.' + (t.extra ? ' Journée en plus : 5 % de la valeur.' : '') + '</p></details></aside></div>';
 }
 /* Le rendu garde la position de lecture et le focus : un clic ne doit jamais renvoyer en haut de page */
 function render() {

@@ -433,7 +433,9 @@
   /* Prix de location (17 novembre) : un forfait par location (nettoyage, préparation) plus un pourcentage de la valeur :
      20 € + 10 % pour 3 jours, 25 € + 20 % pour une semaine, 30 € + 30 % pour deux semaines. Plus de minimum.
      Une location ne dépasse jamais la moitié de la valeur. Le prix affiché « dès X € » est celui de 3 jours. */
-  function rentPrice(v, pct, fee) { return Math.min((fee == null ? 20 : fee) + Math.round(v * pct) / 100, Math.round(v * 50) / 100); }
+  /* Minimum de 30 € par location (17 novembre). Il l'emporte sur la limite de la moitié de la valeur. */
+  var RENT_MIN = 30;
+  function rentPrice(v, pct, fee) { return Math.max(RENT_MIN, Math.min((fee == null ? 20 : fee) + Math.round(v * pct) / 100, Math.round(v * 50) / 100)); }
   function lookPrice(l) { var v = l.pieces.reduce(function (s, id) { var q = find(id); return s + (q ? q.price : 0); }, 0); return rentPrice(v, 10, 20); }
   function lookAvailable(l) { return !!l && l.pieces.every(function (id) { return !find(id).sold; }); }
   function rentLooks() { return looks.filter(lookAvailable); }
