@@ -274,8 +274,8 @@ function pieceBusy(p) { return LOOKS.some(function (l) { return l.pieces.indexOf
 
 function packCard(p) {
   var minDur = durOf(p.durs[0]);
-  var keep = st.dur; st.dur = "3j"; var cheapest = Math.min.apply(null, LOOKS.map(lookRent).concat(PIECES.map(pieceRent))); st.dur = keep;
-  var from = cheapest + (p.style ? STYLE : 0) + (p.photo ? PHOTO : 0);
+  /* « À partir de » : un prix rond, le minimum d'une location (30 €), plus le stylisme et la photo inclus dans la formule (17 novembre) */
+  var from = 30 + (p.style ? STYLE : 0) + (p.photo ? PHOTO : 0);
   return '<button class="lc-pack" role="radio" aria-checked="' + (st.pack === p.id) + '" data-pack="' + p.id + '">' + (p.tag ? '<span class="lc-pack__badge">' + p.tag + '</span>' : '') + '<span class="lc-pack__radio" aria-hidden="true"></span>' +
     /* Pas de pourcentage ici (17 novembre) : un prix en euros, le calcul détaillé n'apparaît qu'au récapitulatif */
     '<span class="sa-mono sa-muted">' + (p.id === "pro" ? "À LA JOURNÉE" : "DÈS 3 JOURS") + '</span><h3>' + p.name + '</h3><span style="font-size:13px;line-height:19px">' + p.desc + '</span>' +
