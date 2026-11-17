@@ -4,7 +4,7 @@
   var MAP = [
     ["drop.html#acces", ["Recevoir l’accès anticipé"]],
     ["drop.html", ["Voir la récolte à venir", "La prochaine récolte →"]],
-    ["drop.html?statut=ouvert", ["Récolte 04 en cours", "Récolte en cours", "La récolte en cours", "Voir la récolte", "Voir la Récolte", "Toute la récolte →"]],
+    ["drop.html?statut=ouvert", ["Récolte 02 en cours", "Récolte en cours", "La récolte en cours", "Voir la récolte", "Voir la Récolte", "Toute la récolte →"]],
     ["shop.html", ["Shop", "Le Shop", "Toutes les pièces", "Tout le Shop", "Entrer →", "Récoltes passées", "Archives de créateurs", "Par marque"]],
     ["archives.html", ["Archives à louer", "Les looks à louer", "Louer un look"]],
     ["location.html", ["Location & RP", "Louer", "Tarifs et options", "Location look", "Location pièces", "Options", "Réserver →", "Formules et options", "Disponibilités et réservation", "Formules et tarifs", "Option stylisme et photo", "Pros · demande de devis", "Stylistes", "Artistes & musiciens", "Marques · demande de devis"]],

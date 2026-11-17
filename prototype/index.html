@@ -96,7 +96,7 @@ var strip = [P.look6, P.look2, P.look7, P.look4, P.look5, P.look8];
 /* Prochain jeudi 19 h : la page d'accueil annonce la récolte, la page récolte montre le compte à rebours et les pièces */
 function nextDrop() { return S.nextRecolte(); } /* premier jeudi du mois, 19 h */
 var nd = nextDrop();
-var cur = S.shopProducts.filter(function (p) { return p.drop === "Récolte 04" && !p.sold; });
+var cur = S.shopProducts.filter(function (p) { return p.drop === "Récolte 02" && !p.sold; });
 
 document.getElementById("r").innerHTML =
   S.announcementBar() + S.header() +
@@ -105,12 +105,12 @@ document.getElementById("r").innerHTML =
     '<div class="hm-hero__cta"><a class="hm-btn hm-btn--solid" href="#">La récolte en cours</a><a class="hm-btn" href="#">Louer un look</a></div></div></section>' +
 
   '<section class="sa-section sa-wrap hm-rec">' +
-    '<div class="hm-rec__head"><div><span class="hm-tag hm-tag--live">En ce moment · récolte ouverte</span><h2>Récolte 04 · Technique et légère</h2></div><a class="sa-btn sa-btn--link hm-rec__all" href="#">Toute la récolte →</a></div>' +
+    '<div class="hm-rec__head"><div><span class="hm-tag hm-tag--live">En ce moment · récolte ouverte</span><h2>Récolte 02 · Technique et légère</h2></div><a class="sa-btn sa-btn--link hm-rec__all" href="#">Toute la récolte →</a></div>' +
     '<div class="sa-grid" data-cols="4">' + cur.slice(0, 4).map(S.productCard).join("") + '</div>' +
   '</section>' +
 
   '<section class="sa-wrap hm-upwrap"><div class="hm-up">' +
-    '<div class="hm-up__txt"><span class="hm-tag">À venir · Récolte 05</span><h2><a class="hm-up__link" href="#">La prochaine récolte <span aria-hidden="true">→</span></a></h2>' +
+    '<div class="hm-up__txt"><span class="hm-tag">À venir · Récolte 03</span><h2><a class="hm-up__link" href="#">La prochaine récolte <span aria-hidden="true">→</span></a></h2>' +
       '<p class="hm-up__ig">Les pièces sont présentées sur <a href="https://www.instagram.com/sime.archives/" target="_blank" rel="noopener">@sime.archives</a> avant l’ouverture.</p><p class="hm-up__early"><span class="sa-label">Accès anticipé · 18 h</span>Entrez une heure avant tout le monde.</p>' +
       '<form class="sa-form hm-up__form" data-sa="early"><label class="sa-sr" for="home-mail">E-mail</label><div class="sa-field"><input id="home-mail" type="email" placeholder="Votre e-mail" required><button class="sa-label" type="submit">Recevoir mon accès</button></div><p class="sa-form-ok">Mèsi. Votre lien d’accès arrivera <span data-sa="recolte-jour">jeudi</span> à 18 h.</p></form>' +
     '</div>' +
