@@ -346,7 +346,7 @@
         if (!lk) return "";
         var others = lk.pieces.filter(function (id) { return id !== p.id; }).map(find);
         return "<div class='sa-sheet__look'><span class='sa-label'>Le look de Lou-Ann · " + esc(lk.name) + "</span>" +
-          "<div class='sa-sheet__look-grid'>" + others.map(function (q) { return "<a class='sa-sheet__look-item' href='#' " + (q.tier === "Archive" ? "data-archive" : "data-piece") + "='" + q.id + "'><img src='" + img(q, "a") + "' alt=''><span class='sa-mono sa-muted'>" + q.id + "</span><span>" + esc(q.name) + "</span></a>"; }).join("") + "</div>" +
+          "<div class='sa-sheet__look-grid'>" + others.map(function (q) { return "<a class='sa-sheet__look-item' href='#' " + "data-piece" + "='" + q.id + "'><img src='" + img(q, "a") + "' alt=''><span class='sa-mono sa-muted'>" + q.id + "</span><span>" + esc(q.name) + "</span></a>"; }).join("") + "</div>" +
           "<button class='sa-btn sa-btn--link' data-action='rent' data-look='" + lk.id + "'>Louer le look complet →</button></div>";
       })(),
       plus: "<p><a href='#'>Le défilé</a> · <a href='#'>Le lookbook</a> · <a href='#'>Une interview</a></p><p class='sa-mono sa-muted'>Texte d'exemple, à réécrire et sourcer par l'auteure. Images : photos Simé uniquement.</p>"
@@ -368,7 +368,7 @@
       histoire: "<p>" + (p.brand === "Sans marque" || p.brand === "À identifier" ? "Marque " + (p.brand === "Sans marque" ? "inconnue" : "en cours d'identification") : esc(p.brand)) + ", " + esc(p.era.toLowerCase()) + ". Le récit de la pièce est en cours d'écriture.</p>",
       regard: lk ? "<p>Lou-Ann l'a stylée dans le look « " + esc(lk.name) + " »" + (others.length ? ", avec " + others.map(function (q) { return esc(q.name.split(",")[0].toLowerCase()) + " " + q.id; }).join(", ") : "") + ".</p>" +
         "<div class='sa-sheet__look'><span class='sa-label'>Le look de Lou-Ann · " + esc(lk.name) + "</span>" +
-        (others.length ? "<div class='sa-sheet__look-grid'>" + others.map(function (q) { return "<a class='sa-sheet__look-item' href='#' " + (q.tier === "Archive" ? "data-archive" : "data-piece") + "='" + q.id + "'><img src='" + img(q, "a") + "' alt=''><span class='sa-mono sa-muted'>" + q.id + "</span><span>" + esc(q.name) + "</span></a>"; }).join("") + "</div>" : "") +
+        (others.length ? "<div class='sa-sheet__look-grid'>" + others.map(function (q) { return "<a class='sa-sheet__look-item' href='#' " + "data-piece" + "='" + q.id + "'><img src='" + img(q, "a") + "' alt=''><span class='sa-mono sa-muted'>" + q.id + "</span><span>" + esc(q.name) + "</span></a>"; }).join("") + "</div>" : "") +
         "<button class='sa-btn sa-btn--link' data-action='rent' data-look='" + lk.id + "'>Louer le look complet →</button></div>" : "<p>Pas encore stylée dans un look.</p>"
     };
     return "<article class='sa-chap' data-sa='chapters'>" +
@@ -430,29 +430,16 @@
     var n = l.pieces.length;
     return "<article class='sa-look'><a class='sa-look__img' href='#' data-action='rent' data-look='" + l.id + "' aria-label='Réserver le look " + esc(l.name) + "'><img src='" + l.photo + "' alt='" + esc(l.name) + ", le look porté' loading='lazy'></a>" +
       "<div class='sa-look__info'><span class='sa-mono sa-muted'>" + lookNo(l) + " · " + n + " PIÈCE" + (n > 1 ? "S" : "") + "</span><h3>" + esc(l.name) + "</h3>" +
-      "<ul class='sa-look__pieces'>" + l.pieces.map(function (id) { var q = find(id); return "<li><a href='#' " + (q.tier === "Archive" ? "data-archive" : "data-piece") + "='" + id + "'><span class='sa-mono sa-muted'>" + id + "</span><span>" + esc(q.name) + "</span></a></li>"; }).join("") + "</ul>" +
+      "<ul class='sa-look__pieces'>" + l.pieces.map(function (id) { var q = find(id); return "<li><a href='#' " + "data-piece" + "='" + id + "'><span class='sa-mono sa-muted'>" + id + "</span><span>" + esc(q.name) + "</span></a></li>"; }).join("") + "</ul>" +
       "<div class='sa-look__foot'><span>" + euro(lookPrice(l)) + " <span class='sa-muted'>les 3 jours</span></span><button class='sa-btn sa-btn--link' data-action='rent' data-look='" + l.id + "'>Réserver ce look</button></div></div></article>";
   }
-  /* Carte d'archive : la pièce seule, vers sa page d'archive, avec son prix de location. Pas de panier : elle ne se vend pas. */
+  /* Carte d'archive : la pièce seule, vers sa fiche produit, avec son prix de location. Pas de panier : elle ne se vend pas. */
   function archiveCard(p) {
     var lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1 && lookAvailable(l); })[0];
-    return "<a class='sa-arch' href='#' data-archive='" + p.id + "'><span class='sa-arch__img'><img src='" + img(p, "a") + "' alt='" + esc(p.name) + "' loading='lazy'></span>" +
+    return "<a class='sa-arch' href='#' data-piece='" + p.id + "'><span class='sa-arch__img'><img src='" + img(p, "a") + "' alt='" + esc(p.name) + "' loading='lazy'></span>" +
       "<span class='sa-mono sa-muted'>" + p.id + " · " + esc(p.eraLabel || p.era) + "</span><span class='sa-label'>" + esc(p.brand) + "</span><span>" + esc(p.name) + "</span>" +
       "<span class='sa-arch__price'>" + euro(piecePrice(p)) + " <span class='sa-muted'>les 3 jours</span></span>" + (lk ? "<span class='sa-mono sa-muted'>Aussi dans le " + lookNo(lk).toLowerCase() + "</span>" : "") + "</a>";
   }
-  /* Bas de page d'archive : louer la pièce seule (fonds Archives) ou le look qui la porte, au même niveau. Les pros : Shoot pro, sur devis. */
-  function rentArchive(p) {
-    var lk = looks.filter(function (l) { return l.pieces.indexOf(p.id) > -1; })[0];
-    var ok = lk && lookAvailable(lk), solo = p.tier === "Archive" && !p.sold;
-    var opt = function (img_, kicker, title, text, btn) { return "<div class='sa-rentbox__opt'>" + (img_ ? "<img src='" + img_ + "' alt=''>" : "") + "<div><span class='sa-mono sa-muted'>" + kicker + "</span><h3>" + title + "</h3><p>" + text + "</p>" + btn + "</div></div>"; };
-    return "<section class='sa-rentbox' aria-labelledby='rent-t'><div class='sa-rentbox__head'><span class='sa-mono sa-muted'>LOUER · PARIS</span><h2 id='rent-t'>Porter cette archive</h2><p class='sa-muted'>Retrait à l'atelier ou coursier dans Paris. Nettoyage inclus.</p></div>" +
-      "<div class='sa-rentbox__opts'>" +
-      (solo ? opt(img(p, "a"), "LA PIÈCE SEULE", esc(p.name), euro(piecePrice(p)) + " les 3 jours.", "<button class='sa-btn sa-btn--primary' data-action='rent-one' data-id='" + p.id + "'>Louer cette pièce</button>") : "") +
-      (ok ? opt(lk.photo, "LE LOOK COMPLET · " + lk.pieces.length + " PIÈCES", esc(lk.name), "Stylé par Lou-Ann. " + euro(lookPrice(lk)) + " les 3 jours.", "<button class='sa-btn sa-btn--" + (solo ? "secondary" : "primary") + "' data-action='rent' data-look='" + lk.id + "'>Louer le look</button>")
-          : lk ? opt("", "LE LOOK COMPLET", esc(lk.name), "En cours de recomposition par Lou-Ann. Il revient bientôt.", "") : "") +
-      "</div><p class='sa-rentbox__pro sa-mono sa-muted'>Pros · un shoot, un clip, une campagne : <a href='#' data-action='rent-pro' data-id='" + p.id + "'>formule Shoot pro, sur devis</a></p></section>";
-  }
-
   function footer() {
     return "<footer class='sa-footer sa-wrap'><div class='sa-footer__grid'>" +
       "<div><p class='sa-footer__sign'>Ce qui a été semé revient autrement.</p><p class='sa-footer__gloss sa-mono sa-muted'>Simé : « semé », en créole.</p><form class='sa-form' data-sa='news'><span class='sa-label'>La lettre des récoltes</span><div class='sa-field'><label class='sa-sr' for='news-mail'>E-mail</label><input id='news-mail' type='email' placeholder='Votre e-mail' required><button class='sa-label' type='submit'>OK</button></div><p class='sa-form-ok'>Mèsi. À <span data-sa='recolte-jour'>jeudi</span>, 18 h.</p></form></div>" +
@@ -699,7 +686,7 @@
   window.SimeArchives = {
     products: products, shopProducts: shopProducts, looks: looks,
     lookFor: function (id) { return looks.filter(function (l) { return l.pieces.indexOf(id) > -1; })[0] || null; },
-    pieceViews: pieceViews, lookPrice: lookPrice, piecePrice: piecePrice, rentPrice: rentPrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, lookCard: lookCard, archiveCard: archiveCard, rentArchive: rentArchive, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
+    pieceViews: pieceViews, lookPrice: lookPrice, piecePrice: piecePrice, rentPrice: rentPrice, lookAvailable: lookAvailable, rentLooks: rentLooks, archivePieces: archivePieces, lookCard: lookCard, archiveCard: archiveCard, nextRecolte: nextThursday19, photos: PH, img: img, lookOf: lookOf, modelLine: modelLine, related: related, rail: rail, icon: icon, euro: euro, find: find,
     button: button, announcementBar: announcementBar, header: header, logo: logo,
     productCard: productCard, listingToolbar: listingToolbar, filterDrawer: filterDrawer,
     cartDrawer: cartDrawer, dropCountdown: dropCountdown, editoQuote: editoQuote, noteLine: noteLine, inventoryLabel: inventoryLabel,

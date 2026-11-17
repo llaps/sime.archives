@@ -16,7 +16,7 @@ Statuts : **En place** (prototypé dans le système), **À valider** (proposé, 
 | L · Location & RP | L-01 à L-07 | Transformer une envie de look en réservation confirmée |
 | B · Coulisses (équipe) | B-01 à B-08 | Publier une récolte en 2 à 3 h de travail par personne |
 
-Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Location & RP a deux sous-entrées : **Archives à louer** (la vitrine de la location) et **Tarifs et options** (le tunnel). Décidé le 16 novembre : le Journaling n'a plus d'entrée propre, chaque archive a sa page, construite comme le Journaling.
+Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Location & RP a deux sous-entrées : **Archives à louer** (la vitrine de la location) et **Tarifs et options** (le tunnel). Décidé le 16 novembre : le Journaling n'a plus d'entrée propre. Décidé le 17 : l'histoire de chaque pièce se lit en bas de sa fiche produit, sans page séparée.
 
 ## W · Parcours d'achat
 
@@ -100,7 +100,7 @@ Navigation : trois entrées, **Shop**, **Location & RP**, **À propos**. Locatio
 - **La cliente** arrive par le menu, la porte de l'accueil ou « Louer ce look » sur une fiche.
 - **Décidé (16 novembre)** : mieux dissocier achat et location, et rendre la location aussi visible que le Shop. Méga-menu et menu mobile : Archives à louer, Tarifs et options.
 - **En place** : ArchivesPage (`archives.html`), la vitrine de la location. Onglets Looks (par défaut) et Pièces (fonds Archives, avec leur prix pour 3 jours), « Comment ça marche » en 3 étapes, bloc Pros. La porte Location de l'accueil et « Louer un look » y mènent.
-- **En place** : page d'archive (`journal.html#SA-005`), même structure que le Journaling (planche contact, fiche d'archive en chapitres), avec en bas de page le bloc « Porter cette archive » : la pièce seule et le look qui la porte, au même niveau, puis le lien Shoot pro. Puis d'autres archives à louer.
+- **Décidé (17 novembre)** : plus de page d'archive séparée. Chaque pièce, en vente ou en location, n'a qu'une page : sa fiche produit, avec la fiche d'archive en chapitres en bas. Les cartes de looks et de pièces de la vitrine y mènent.
 - **En place** : LocationPage, une seule page en 4 étapes (pack, looks ou pièces, dates, options) avec récapitulatif fixe à droite (barre en bas sur mobile).
 - **À valider** : trois versions de la page, avec une préférence de Laury pour LocationPageB (12 novembre). LocationPage (tout sur une page, archivée le 12 novembre dans le groupe Archives), LocationPageB (pas à pas, une étape à la fois, total et bouton Continuer fixés en bas), LocationPageC (le look d'abord : grille des looks, puis durée, date, stylisme ou photo et retrait dans un panneau latéral).
 - **Indicateur** : visites Location issues d'une fiche produit.

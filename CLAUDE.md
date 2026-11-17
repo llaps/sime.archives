@@ -37,7 +37,7 @@ Chaque page suit le même schéma : `<div class="sa-page" id="r">`, puis un scri
 
 Ils ne tournent pas en l'état : ils attendent l'arborescence d'export de Claude Design (`tools/ds/project/…`) et écrivent dans `tools/proto/`. `gen_lc.py` s'exécute depuis `tools/` (chemins relatifs) et génère les variantes LocationPage à partir de `lc_parts.py`. `recolte.py` remplace « drop » par « récolte » avec les accords. Tant qu'ils ne sont pas adaptés, modifier directement les fichiers de `prototype/` (et reporter dans `design-system/`).
 
-Correspondance des pages : `index.html` ← HomePage, `drop.html` ← DropPage, `shop.html` ← ShopPage, `piece.html` ← ProductPageB (pièce choisie par l'ancre, `piece.html#SA-004`), `location.html` ← LocationPageB2, `archives.html` ← ArchivesPage (vitrine de la location) ; `journal.html` (page d'archive, pièce choisie par l'ancre, `journal.html#SA-005`), `apropos.html` et `aide.html` (Questions fréquentes, ancres `#q-…`) sont écrites dans `build_proto.py` (`journal.html` a depuis été modifiée à la main).
+Correspondance des pages : `index.html` ← HomePage, `drop.html` ← DropPage, `shop.html` ← ShopPage, `piece.html` ← ProductPageB (pièce choisie par l'ancre, `piece.html#SA-004`), `location.html` ← LocationPageB2, `archives.html` ← ArchivesPage (vitrine de la location) ; `apropos.html` et `aide.html` (Questions fréquentes, ancres `#q-…`) sont écrites dans `build_proto.py`. Il n'y a plus de page d'archive séparée (`journal.html`, supprimée le 17 novembre) : la fiche d'archive se lit en bas de la fiche produit ; `build_proto.py` la génère encore.
 
 ## Commandes
 

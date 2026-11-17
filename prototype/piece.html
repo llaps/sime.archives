@@ -51,7 +51,7 @@ document.getElementById("r").innerHTML =
     S.inventoryLabel(p, {compact:true}) +
     '<span class="sa-label">'+p.brand+'</span><h1 class="sa-pdp__title">'+p.name+'</h1>' +
     (p.tier === "Archive" ? '<div class="sa-pdp__price"><span class="sa-label">Fonds Archives</span><span class="sa-mono sa-muted">Location uniquement</span></div>' : '<div class="sa-pdp__price"><span class="sa-price" style="font-size:16px">'+S.euro(p.price)+'</span><span class="sa-mono sa-muted">TVA sur marge</span></div>') +
-    '<p style="margin:0">' + (GILET ? 'Un nylon gris qui froisse comme une enveloppe. Col montant zippé, cordon à la taille, emmanchures nettes.' : p.name + '. ' + p.material + ', ' + p.era.toLowerCase() + '.') + ' <a href="#" style="text-decoration:underline;text-underline-offset:3px">Lire la fiche d’archive</a></p>' +
+    '<p style="margin:0">' + (GILET ? 'Un nylon gris qui froisse comme une enveloppe. Col montant zippé, cordon à la taille, emmanchures nettes.' : p.name + '. ' + p.material + ', ' + p.era.toLowerCase() + '.') + ' <a href="#" data-action="read-sheet" style="text-decoration:underline;text-underline-offset:3px">Lire la fiche d’archive</a></p>' +
     '<div class="sa-pdp__size"><span class="sa-card__size">'+p.size+'</span><span class="sa-mono sa-muted">Aisselles 46 cm · Longueur 58 cm</span></div>' +
     S.modelLine(p) +
     (p.tier === "Archive" ? '<span class="sa-pdp__unique">Pièce d’archive · elle ne se vend pas, elle se loue</span>' : '<span class="sa-pdp__unique">Pièce unique · une taille, une seule fois</span>') +
@@ -72,6 +72,8 @@ document.getElementById("r").innerHTML =
   '<section class="sa-section sa-wrap" style="border-top:1px solid var(--photocopy)">' + S.related(p) + '</section>' +
   S.footer() + S.cartDrawer();
 S.init(document);
+/* « Lire la fiche d'archive » : descend jusqu'aux chapitres, plus bas sur la même page */
+document.addEventListener("click", function (e) { if (!e.target.closest("[data-action='read-sheet']")) return; e.preventDefault(); e.stopPropagation(); var c = document.querySelector("[data-sa='chapters']"); if (c) c.scrollIntoView({ behavior: "smooth", block: "start" }); }, true);
 (function () {
   var g = document.querySelector("[data-gallery]"), main = g.querySelector("[data-main]"), im = main.querySelector("img"), cur = 0;
   var thumbs = g.querySelectorAll("[data-thumb]");

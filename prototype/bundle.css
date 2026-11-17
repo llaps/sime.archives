@@ -431,21 +431,3 @@
 }
 
 .sa-arch__price { font-size: 13px; }
-.sa-rentbox { padding: var(--space-6) 0; border-top: 1px solid var(--ink); }
-.sa-rentbox__head h2 { margin: var(--space-2) 0 var(--space-2); font-family: var(--font-display, var(--font-sans)); font-stretch: 112%; font-weight: 500; font-size: 40px; line-height: 1.05; }
-.sa-rentbox__head p { margin: 0 0 var(--space-5); }
-.sa-rentbox__opts { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--space-5); border-top: 1px dashed var(--rule-strong); padding-top: var(--space-5); }
-.sa-rentbox__opt { display: grid; grid-template-columns: 140px 1fr; gap: var(--space-4); align-items: start; }
-.sa-rentbox__opt + .sa-rentbox__opt { border-left: 1px dashed var(--rule-strong); padding-left: var(--space-5); }
-.sa-rentbox__opt img { width: 100%; aspect-ratio: 3/4; object-fit: cover; background: var(--packshot, #fff); }
-.sa-rentbox__opt h3 { margin: var(--space-2) 0; font-weight: 500; font-size: 18px; line-height: 1.25; }
-.sa-rentbox__opt p { margin: 0 0 var(--space-4); }
-.sa-rentbox__pro { margin: var(--space-5) 0 0; padding-top: var(--space-4); border-top: 1px dashed var(--rule-strong); font-size: 12px; }
-.sa-rentbox__pro a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-@media (max-width: 900px) {
-  .sa-rentbox__opts { grid-auto-flow: row; }
-  .sa-rentbox__opts { grid-template-columns: minmax(0, 1fr); }
-  .sa-rentbox__opt + .sa-rentbox__opt { border-left: 0; padding-left: 0; border-top: 1px dashed var(--rule-strong); padding-top: var(--space-5); }
-  .sa-rentbox__opt { grid-template-columns: 96px 1fr; }
-  .sa-rentbox h2 { font-size: 30px; }
-}
