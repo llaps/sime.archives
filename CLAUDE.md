@@ -53,6 +53,8 @@ Vérifier un changement : charger les pages avec Playwright (préinstallé) et c
 
 Le dépôt est public. `.github/workflows/pages.yml` publie `prototype/` sur GitHub Pages à chaque push sur `main` : https://llaps.github.io/sime.archives/. À la publication, le workflow ajoute `?v=<commit>` aux liens vers `tokens.css`, `bundle.css`, `bundle.js` et `proto.js` pour contourner le cache des navigateurs ; ne pas versionner ces liens à la main. La session cloud ne peut pas ouvrir `github.io` : vérifier le statut du déploiement via l'API GitHub Actions.
 
+Mesure d'audience : Cloudflare Web Analytics (sans cookie), depuis le 18 novembre. Chaque page de `prototype/` porte le script `static.cloudflareinsights.com/beacon.min.js` juste avant `</body>` : l'ajouter à toute nouvelle page. La session cloud ne joint pas Cloudflare (la requête échoue ici, c'est normal) ; les visites se lisent dans le tableau de bord Cloudflare de Laury.
+
 ## Règles à respecter
 
 - Français, vouvoiement, phrases courtes, pas de superlatifs ni de tirets cadratins. Simé parle de « Simé », jamais « on » ni « la maison ».
